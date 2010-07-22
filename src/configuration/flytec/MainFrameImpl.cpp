@@ -22,11 +22,11 @@
 #include <qmessagebox.h>
 #include <qtoolbox.h>
 #include <qwidget.h>
-#include <qwidgetstack.h>
+#include <q3widgetstack.h>
 #include <qstatusbar.h>
-#include <qprogressbar.h>
+#include <q3progressbar.h>
 #include <qfile.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 
 #include "CorrFrameImpl.h"
 #include "VarioFrameImpl.h"
@@ -46,9 +46,10 @@
 #include "IGPSDevice.h"
 #include "SmsFrameImpl.h"
 
-MainFrameImpl::MainFrameImpl(QWidget* parent, const char* name, WFlags fl)
-	:MainFrame(parent,name,fl)
+MainFrameImpl::MainFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+:Q3MainWindow(parent)
 {
+  setupUi(this);
 	QWidget *pWidget;
 	VelocityFrameImpl *pVelocityFrame;
 	AcousticFrameImpl *pAcousticFrame;
@@ -148,8 +149,9 @@ void MainFrameImpl::addPage( QWidget * pFrame, int * pPos)
 	
 	widgetStack->addWidget(pFrame, *pPos);
 	(*pPos)++;
-	pWidget = new QWidget(toolBox,  pFrame->caption());
-	pWidget->setBackgroundMode(QWidget::PaletteBackground);
+//	pWidget = new QWidget(toolBox,  pFrame->caption());
+        pWidget = new QWidget(toolBox);
+	pWidget->setBackgroundMode(Qt::PaletteBackground);
 	toolBox->addItem(pWidget,  pFrame->caption());
 }
 
@@ -157,21 +159,21 @@ void MainFrameImpl::open()
 {
 	QFile file;
 	const QDir *pDir;
-	QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "Flytec Config Files (*.flt)", this,
+	Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "Flytec Config Files (*.flt)", this,
 					"Flytec config file open", true);
 
 	if(fileDlg.exec() == QDialog::Accepted)
 	{
 		pDir = fileDlg.dir();
-		IFlyHighRC::pInstance()->setLastDir(fileDlg.dir()->absPath());
+		IFlyHighRC::pInstance()->setLastDir(fileDlg.dir()->absolutePath());
 		delete pDir;
 		
 		file.setName(fileDlg.selectedFile());
 		
-		if(file.open(IO_WriteOnly))
+		if(file.open(QIODevice::WriteOnly))
 		{
 			storeFrames();
-			file.writeBlock(m_flytecMem);
+			file.write(m_flytecMem);
 			file.close();
 		}
 	}
@@ -181,21 +183,21 @@ void MainFrameImpl::save()
 {
 	QFile file;
 	const QDir *pDir;
-	QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "Flytec Config Files (*.flt)", this,
+	Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "Flytec Config Files (*.flt)", this,
 					"Flytec config file open", true);
 
 	if(fileDlg.exec() == QDialog::Accepted)
 	{
 		pDir = fileDlg.dir();
-		IFlyHighRC::pInstance()->setLastDir(pDir->absPath());
+		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
 		
 		file.setName(fileDlg.selectedFile());
 	
-		if(file.open(IO_WriteOnly))
+		if(file.open(QIODevice::WriteOnly))
 		{
 			storeFrames();
-			file.writeBlock(m_flytecMem);
+			file.write(m_flytecMem);
 			file.close();
 		}
 	}
@@ -251,4 +253,4 @@ void MainFrameImpl::updateFrames()
 	}
 }
 
-#include "MainFrameImpl.moc"
+#include "moc_MainFrameImpl.cxx"

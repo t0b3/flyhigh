@@ -18,16 +18,18 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
  
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldatabase.h>
+//Added by qt3to4:
+#include <QSqlQuery>
 #include "ISql.h"
 #include "Error.h"
 #include "Routes.h"
 #include "WayPoint.h"
 #include "WayPoints.h"
 
-Routes::Routes(QSqlDatabase *pDB)
-	:DataBaseSub(pDB)
+Routes::Routes(QSqlDatabase DB)
+	:DataBaseSub(DB)
 {
 }
 

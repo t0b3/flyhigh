@@ -21,12 +21,12 @@
 #include <qbuffer.h>
 #include <qpushbutton.h>
 #include <qcursor.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qstringlist.h>
 #include <qspinbox.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include "FlightFormImpl.h"
 #include "ISql.h"
 #include "IGliderForm.h"
@@ -36,9 +36,10 @@
 #include "WayPoint.h"
 
 FlightFormImpl::FlightFormImpl(QWidget* parent, const QString &caption, Flight *pFlight)
- :FlightForm(parent, caption, true)
+: QDialog(parent)
 {
-	FlightForm::setCaption(caption);
+        setupUi(this);
+	setCaption(caption);
 	setFlight(pFlight);
 }
 
@@ -248,5 +249,5 @@ void FlightFormImpl::limitDistance()
 	lineEditDistance->setText(text);
 }
 
-#include "FlightFormImpl.moc"
+#include "moc_FlightFormImpl.cxx"
 

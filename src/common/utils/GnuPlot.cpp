@@ -37,6 +37,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "Error.h"
 #include "GnuPlot.h"
 
@@ -208,7 +209,7 @@ void GnuPlot::plotX(PlotVectorType &x, const QString &title)
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f\n", x[valueNr]);
-			file.writeBlock(line.ascii(), line.length());
+			file.write(line.ascii(), line.length());
 		}
 		file.close();
 	
@@ -239,7 +240,7 @@ void GnuPlot::plotXY(PlotVectorType &x, PlotVectorType &y, const QString &title)
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f %f\n", x[valueNr], y[valueNr]);
-			file.writeBlock(line.ascii(), line.length());
+			file.write(line.ascii(), line.length());
 		}
 		file.close();
 	
@@ -270,7 +271,7 @@ void GnuPlot::plotXY(TimeVectorType &x, PlotVectorType &y, const QString &title)
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%s %f\n", x[valueNr].toString(Qt::ISODate).ascii(), y[valueNr]);
-			file.writeBlock(line.ascii(), line.length());
+			file.write(line.ascii(), line.length());
 		}
 		file.close();
 	
@@ -301,7 +302,7 @@ void GnuPlot::plotXYZ(PlotVectorType &x, PlotVectorType &y, PlotVectorType &z, c
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f %f %f\n", x[valueNr], y[valueNr], z[valueNr]);
-			file.writeBlock(line.ascii(), line.length());
+			file.write(line.ascii(), line.length());
 		}
 		file.close();
 	
@@ -377,7 +378,7 @@ bool GnuPlot::openTmpFile(QFile &file)
 		if(success)
 		{
 			file.setName(name);
-			success = file.open(IO_WriteOnly);
+			success = file.open(QIODevice::WriteOnly);
 			
 			if(success)
 			{

@@ -1,3 +1,4 @@
+#include "qcolor.h"
 #include "MapTile.h"
 
 MapTile::MapTile(const QString &name, uint sizeX, uint sizeY)

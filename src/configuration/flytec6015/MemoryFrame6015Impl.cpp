@@ -20,12 +20,12 @@
 
 #include <qspinbox.h>
 #include <qcombobox.h>
-#include "Flytec6015.h"
 #include "MemoryFrame6015Impl.h"
 
-MemoryFrame6015Impl::MemoryFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: MemoryFrame6015(parent,name,fl)
+MemoryFrame6015Impl::MemoryFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 MemoryFrame6015Impl::~MemoryFrame6015Impl()
@@ -34,18 +34,13 @@ MemoryFrame6015Impl::~MemoryFrame6015Impl()
 
 void MemoryFrame6015Impl::update(QByteArray &arr)
 {
-	Flytec6015 *pDev;
-	uint uiValue;
+/*
+	// Recording Interval
+	spinBox_Intervall->setValue(arr[REC_INTERVAL_POS]);
 
-	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
-
-	// recording interval
-	uiValue = pDev->memoryRead(MemFa, REC_INTERVALL, UInt8).toUInt();
-	spinBox_Intervall->setValue(uiValue);
-
-	// flight end detection
-	uiValue = pDev->memoryRead(MemFa, DIV_FLAGS, UInt16).toUInt();
-	comboBox_FlightEnd->setCurrentItem((uiValue & MASK_FLIGHT_END) >> POS_FLIGHT_END);
+	// Stop Mode
+	comboBox_Mode->setCurrentItem(arr[REC_STOP_MODE_POS]);
+*/
 }
 
 void MemoryFrame6015Impl::store(QByteArray &arr)
@@ -59,5 +54,5 @@ void MemoryFrame6015Impl::store(QByteArray &arr)
 */
 }
 
-#include "MemoryFrame6015Impl.moc"
+#include "moc_MemoryFrame6015Impl.cxx"
 

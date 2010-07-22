@@ -34,9 +34,9 @@ void IGCFileParser::parse(const QByteArray &igcData)
 	char record[MAX_REC_SIZE];
 
 	m_flightPointList.clear();
-	buff.setBuffer(igcData);
+	buff.setBuffer(const_cast<QByteArray*>(&igcData));
 
-	if(buff.open(IO_ReadOnly))
+	if(buff.open(QIODevice::ReadOnly))
 	{
 		while(buff.readLine(record, MAX_REC_SIZE) > 0)
 		{

@@ -21,15 +21,18 @@
 #ifndef _MainWindow_h_
 #define _MainWindow_h_
 
-#include <qmainwindow.h>
+#include <q3mainwindow.h>
+//Added by qt3to4:
+#include <Q3PopupMenu>
+#include <QCloseEvent>
 
-class QPopupMenu;
+class Q3PopupMenu;
 class QWorkspace;
 class MDIWindow;
 
 class TrackWindow;
 
-class MainWindow: public QMainWindow
+class MainWindow: public Q3MainWindow
 {
 	Q_OBJECT
 	public:
@@ -63,13 +66,13 @@ class MainWindow: public QMainWindow
 		
 	private:
 		QWorkspace* m_pWorkSpace;
-		QPopupMenu* m_pWindowsMenu;
-		QPopupMenu* m_pDevicesMenu;
-		QPopupMenu* m_pSpecialMenu;
+		Q3PopupMenu* m_pWindowsMenu;
+		Q3PopupMenu* m_pDevicesMenu;
+		Q3PopupMenu* m_pSpecialMenu;
 		MDIWindow* m_pActiveWin;
 		int m_specialMenuId;
 
-		void showWindow(QMainWindow *pWin);
+		void showWindow(Q3MainWindow *pWin);
 		void setCurrentDevice(int id);
 };
 

@@ -32,9 +32,10 @@ extern "C"
 	#include "flytec_al.h"
 }
 
-DeviceFrameImpl::DeviceFrameImpl(QWidget* parent, const char* name, WFlags fl)
-: DeviceFrame(parent,name,fl)
+DeviceFrameImpl::DeviceFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 	updateGlider();
 }
 
@@ -213,12 +214,12 @@ void DeviceFrameImpl::store(QByteArray &arr)
 	
 	if(callsign != dbPilot.callSign().left(callsign.length()))
 	{
-		syncRes = QMessageBox::question(this, "Different callsigns", "Callsign in database differ from callsign in dialog. Set callsign?",
-				"DB to GPS", "Ignore");
+		syncRes = QMessageBox::question(this, "Different callsigns", "Callsign in database differ from callsign in dialog. Set callsign?");
+//                ,"DB to GPS", "Ignore");
 		
 		switch(syncRes)
 		{
-			case 0: // From database
+                  case QMessageBox::Ok: // From database
 				callsign = dbPilot.callSign();
 				lineEdit_PilotName->setText(callsign);
 			break;
@@ -277,5 +278,5 @@ void DeviceFrameImpl::selectGlider(const QString &name)
 	}
 }
 
-#include "DeviceFrameImpl.moc"
+#include "moc_DeviceFrameImpl.cxx"
 

@@ -22,6 +22,8 @@
 #include <qstring.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <string>
 #include "AirSpaceItem.h"
 #include "OpenAirFileParser.h"
 #include "WayPoint.h"
@@ -40,9 +42,9 @@ void OpenAirFileParser::parse(QByteArray &openAirData)
 	QString strValue;
 	
 	m_airspaceList.clear();
-	buff.setBuffer(openAirData);
+	buff.setBuffer(&openAirData);
 
-	if(buff.open(IO_ReadOnly))
+	if(buff.open(QIODevice::ReadOnly))
 	{
 		while(buff.readLine(pRecord, MAX_REC_SIZE) > 0)
 		{
@@ -130,7 +132,7 @@ void OpenAirFileParser::parseString(char *pRecord, QString &str)
 		end = locStr.size();
 	}
 
-	str = locStr.substr(3, end - 3);
+	str = locStr.substr(3, end - 3).c_str();
 }
 
 void OpenAirFileParser::parseHeight(char *pRecord, int &height)

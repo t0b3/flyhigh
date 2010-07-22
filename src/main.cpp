@@ -22,7 +22,6 @@
 #include "MainWindow.h"
 #include "IFlyHighRC.h"
 #include "IGPSDevice.h"
-#include "Images.h"
 #include "ISql.h"
 
 int main( int argc, char ** argv ) 
@@ -37,7 +36,7 @@ int main( int argc, char ** argv )
 	
 	pMainWin = new MainWindow();
 	appl.setMainWidget(pMainWin);
-	pMainWin->setIcon(Images::pInstance()->getImage("flyhigh.png"));
+	pMainWin->setIcon(QPixmap(":/icons/flyhigh.png"));
 	
 	pMainWin->show();
 	appl.connect(&appl, SIGNAL(lastWindowClosed()), &appl, SLOT(quit()));

@@ -7,15 +7,15 @@
 #include <qapplication.h>
 #include <qeventloop.h>
 #include <qwidget.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstring.h>
 #include <qtimer.h>
 #include "MDIWindow.h"
 
 #define UPDATE_TIME 1000 // 1 second
 
-MDIWindow::MDIWindow(QWidget* parent, const char* name, int wflags)
-	:QMainWindow(parent, name, wflags)
+MDIWindow::MDIWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags)
+	:Q3MainWindow(parent, name, wflags)
 {
 	m_pUpdateTimer = new QTimer(this);
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));

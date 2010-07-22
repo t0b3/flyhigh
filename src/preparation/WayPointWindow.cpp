@@ -21,12 +21,11 @@
 #include <qcursor.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qdatetime.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include "IDataBase.h"
-#include "Images.h"
 #include "ISql.h"
 #include "IGPSDevice.h"
 #include "ProgressDlg.h"
@@ -34,15 +33,15 @@
 #include "WayPointWindow.h"
 #include "WayPoint.h"
 
-WayPointWindow::WayPointWindow(QWidget* parent, const char* name, int wflags, IDataBase::SourceType src)
+WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags, IDataBase::SourceType src)
 	:TableWindow(parent, name, wflags)
 {
 	QString caption;
 	QStringList nameList;
-	QTable *pTable = TableWindow::getTable();
-	QPopupMenu *pMenu;
+	Q3Table *pTable = TableWindow::getTable();
+	Q3PopupMenu *pMenu;
 
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	pMenu->insertItem("&Update", this, SLOT(file_update()));
 	
@@ -69,18 +68,18 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, int wflags, ID
 	pMenu->insertItem("Export all...", this, SLOT(exportTable()));
 	
 	TableWindow::setCaption(caption);
-	TableWindow::setIcon(Images::pInstance()->getImage("document.xpm"));
+	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
-	pTable->setSelectionMode(QTable::SingleRow);
+	pTable->setSelectionMode(Q3Table::SingleRow);
 
 	// header
 	nameList += "Name";
 	nameList += "Country";
 	nameList += "Spot";
-	nameList += "Longitude\n[°,min]";
-	nameList += "Latitude\n[°,min]";
+	nameList += "Longitude\n[ï¿½,min]";
+	nameList += "Latitude\n[ï¿½,min]";
 	nameList += "Altitude\n[m]";
 	nameList += "Description";
 	setupHeader(nameList);
@@ -114,7 +113,7 @@ bool WayPointWindow::periodicalUpdate()
 void WayPointWindow::file_update()
 {
 	WayPoint wp;
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	ProgressDlg progDlg(this);
 	uint wpNr;
 	uint maxWpNr;
@@ -199,7 +198,7 @@ void WayPointWindow::file_AddToSqlDB()
 void WayPointWindow::setWpToRow(uint row, WayPoint &wp)
 {
 	QString str;
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 
 	pTable->setText(row, Country, wp.country());
 	pTable->setText(row, Spot, wp.spot());

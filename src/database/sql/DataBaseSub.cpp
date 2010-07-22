@@ -19,28 +19,29 @@
  ***************************************************************************/
 
 #include <qdatetime.h>
-#include <qsqlcursor.h>
-#include <qsqldatabase.h>
+#include <q3sqlcursor.h>
+//Added by qt3to4:
+#include <QSqlQuery>
 #include "DataBaseSub.h"
 
-DataBaseSub::DataBaseSub(QSqlDatabase *pDB)
+DataBaseSub::DataBaseSub(QSqlDatabase db)
 {
-	m_pDB = pDB;
+	m_DB = db;
 }
 
 DataBaseSub::~DataBaseSub()
 {
 }
 
-QSqlDatabase* DataBaseSub::db()
+QSqlDatabase DataBaseSub::db()
 {
-	return m_pDB;
+	return m_DB;
 }
 
 int DataBaseSub::newId(const QString &table)
 {
 	QString sqls = "SELECT MAX(Id) FROM " + table;
-	QSqlQuery query(db());
+        QSqlQuery query(m_DB);
 	int newid = -1;
 	
 	if(query.exec(sqls) &&
@@ -56,7 +57,7 @@ void DataBaseSub::setLastModified(const QString &field)
 {
 	QString sqls;
 	QString date;
-	QSqlQuery query(db());
+	QSqlQuery query(m_DB);
 	
 	date = QDateTime::currentDateTime().toString("yyyy.MM.dd hh:mm:ss");
 	
@@ -78,7 +79,7 @@ int DataBaseSub::lastModified(const QString &field)
 {
 	QString sqls;
 	QString date;
-	QSqlQuery query(db());
+        QSqlQuery query(m_DB);
 	int time = 1;
 	
 	sqls.sprintf("SELECT Time FROM LastModified WHERE Name = '%s'", field.ascii());

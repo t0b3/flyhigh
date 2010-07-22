@@ -19,11 +19,11 @@
  ***************************************************************************/
 
 #include <qpushbutton.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qstringlist.h>
-#include <qtextedit.h>
+#include <q3textedit.h>
 #include "Glider.h"
 #include "IGliderForm.h"
 #include "ISql.h"
@@ -31,9 +31,11 @@
 #include "ServicingFormImpl.h"
 
 ServicingFormImpl::ServicingFormImpl(QWidget* parent, const QString &caption, Servicing *pServicing)
-	:ServicingForm(parent, caption, true)
+	:QDialog(parent)
 {
-	ServicingForm::setCaption(caption);
+        setupUi(this);
+	setCaption(caption);
+        Q_CHECK_PTR(pServicing);
 	setServicing(pServicing);
 	updateGlider();
 }
@@ -87,4 +89,4 @@ void ServicingFormImpl::setServicing(Servicing *pServicing)
 	}
 }
 
-#include "ServicingFormImpl.moc"
+#include "moc_ServicingFormImpl.cxx"

@@ -23,9 +23,10 @@
 #include "CorrFrame6015Impl.h"
 #include "Flytec6015.h"
 
-CorrFrame6015Impl::CorrFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-	:CorrFrame6015(parent,name,fl)
+CorrFrame6015Impl::CorrFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+	:QWidget(parent)
 {
+  setupUi(this);
 }
 
 CorrFrame6015Impl::~CorrFrame6015Impl()
@@ -69,4 +70,4 @@ void CorrFrame6015Impl::store(QByteArray &arr)
 */
 }
 
-#include "CorrFrame6015Impl.moc"
+#include "moc_CorrFrame6015Impl.cxx"

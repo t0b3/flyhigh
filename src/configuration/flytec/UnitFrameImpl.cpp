@@ -26,9 +26,10 @@ extern "C"
 	#include "flytec_al.h"
 }
 
-UnitFrameImpl::UnitFrameImpl(QWidget* parent, const char* name, WFlags fl)
-: UnitFrame(parent,name,fl)
+UnitFrameImpl::UnitFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 UnitFrameImpl::~UnitFrameImpl()
@@ -90,5 +91,5 @@ void UnitFrameImpl::store(QByteArray &arr)
 	arr[UNITS_POS] = ch;
 }
 
-#include "UnitFrameImpl.moc"
+#include "moc_UnitFrameImpl.cxx"
 

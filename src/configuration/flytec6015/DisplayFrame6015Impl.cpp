@@ -27,11 +27,11 @@
 #include <qslider.h>
 #include "DisplayFrame6015Impl.h"
 #include "Flytec6015.h"
-#include "Images.h"
 
-DisplayFrame6015Impl::DisplayFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: DisplayFrame6015(parent,name,fl)
+DisplayFrame6015Impl::DisplayFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 DisplayFrame6015Impl::~DisplayFrame6015Impl()
@@ -116,5 +116,5 @@ void DisplayFrame6015Impl::insertItems( QComboBox * pItem )
 
 
 
-#include "DisplayFrame6015Impl.moc"
+#include "moc_DisplayFrame6015Impl.cxx"
 

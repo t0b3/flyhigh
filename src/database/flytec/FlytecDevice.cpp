@@ -186,12 +186,12 @@ bool FlytecDevice::loadIGCFile(Flight &flight)
 	bool success = false;
 	int prog = 0;
 
-	buff.setBuffer(track);
+	buff.setBuffer(&track);
 	m_cancel = false;
 
 	if(ft_trackReq(flight.number()) == 0)
 	{
-		buff.open(IO_WriteOnly);
+		buff.open(QIODevice::WriteOnly);
 	
 		while(ft_trackRec(&line[0], &size) == 0)
 		{
@@ -203,7 +203,7 @@ bool FlytecDevice::loadIGCFile(Flight &flight)
 				return false;
 			}
 
-			buff.writeBlock((char*)&line[0], size);
+			buff.write((char*)&line[0], size);
 			success = true;
 		}
 
@@ -334,7 +334,7 @@ bool FlytecDevice::add(Route &route)
 			}
 			
 			name = route.wayPointList().at(wpNr).name();
-			ft_string2ftstring(toFtString(name.ascii()), ftRoute.name);
+			ft_string2ftstring(toFtString(name.ascii()).ascii(), ftRoute.name);
 			ftRoute.actSent = wpNr + 1;
 			success = (ft_routeSnd(&ftRoute) == 0);
 			
@@ -639,7 +639,7 @@ QString FlytecDevice::toFtString(const QString &inStr)
 {
 	QString locStr;
 
-	locStr = inStr.upper();
+	locStr = inStr.toUpper();
 
 	if(locStr.length() > FT_STRING_SIZE)
 	{

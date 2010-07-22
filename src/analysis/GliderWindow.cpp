@@ -20,36 +20,35 @@
 
 #include <qcursor.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstringlist.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qwidget.h>
 #include "ContainerDef.h"
 #include "GliderWindow.h"
 #include "IDataBase.h"
 #include "IGliderForm.h"
-#include "Images.h"
 #include "ISql.h"
 #include "ProgressDlg.h"
 
-GliderWindow::GliderWindow(QWidget* parent, const char* name, int wflags)
+GliderWindow::GliderWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags)
 	:TableWindow(parent, name, wflags)
 {
 	QStringList nameList;
-	QTable *pTable = TableWindow::getTable();
-	QPopupMenu *pMenu;
+	Q3Table *pTable = TableWindow::getTable();
+	Q3PopupMenu *pMenu;
 
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	pMenu->insertItem("&New...", this, SLOT(file_new()));
 	pMenu->insertItem("&Delete", this, SLOT(file_delete()));
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
 	TableWindow::setCaption("Gliders");
-	TableWindow::setIcon(Images::pInstance()->getImage("document.xpm"));
+	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
-	pTable->setSelectionMode(QTable::SingleRow);
+	pTable->setSelectionMode(Q3Table::SingleRow);
 	m_pDb = ISql::pInstance();
 	
 	// header
@@ -115,7 +114,7 @@ void GliderWindow::file_delete()
 
 void GliderWindow::file_update()
 {
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	ProgressDlg progDlg(this);
 	uint gliderNr;
 	uint maxGliderNr;
@@ -141,7 +140,7 @@ void GliderWindow::file_update()
 void GliderWindow::setGliderToRow(uint row, Glider &glider)
 {
 	QString str;
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	
 	pTable->setText(row, Manufacturer, glider.manufacturer());
 	pTable->setText(row, Model, glider.model());

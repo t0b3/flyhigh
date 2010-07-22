@@ -497,7 +497,7 @@ double Protocol6015::ftString2Deg(const QString &token)
 {
 	Tokenizer subTokenizer;
 	QString subToken;
-	char dir;
+	QChar dir;
 	double deg;
 
 	subTokenizer.getFirstToken(token, ' ', subToken);
@@ -623,7 +623,7 @@ bool Protocol6015::writeParArray(MemType memType, int par, const QByteArray &val
 	for(byteNr=0; byteNr<value.size(); byteNr++)
 	{
 		byte.setNum(value.at(byteNr), 16);
-		tlg += byte.upper();
+		tlg += byte.toUpper();
 	}
 
 	success = writePar(memType, par, tlg);

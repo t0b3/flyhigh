@@ -25,9 +25,10 @@
 #include "GPSFrame6015Impl.h"
 #include "IFlyHighRC.h"
 
-GPSFrame6015Impl::GPSFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: GPSFrame6015(parent,name,fl)
+GPSFrame6015Impl::GPSFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 GPSFrame6015Impl::~GPSFrame6015Impl()
@@ -42,13 +43,13 @@ void GPSFrame6015Impl::update(QByteArray &arr)
 
 	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
 
-	// grid system
-	uiValue = pDev->memoryRead(MemFa, UNIT_FLAGS, UInt16).toUInt();
-	comboBox_GridSys->setCurrentItem((uiValue & MASK_UNIT_GRID) >> 9);
-
 	// utc offset
 	iValue = pDev->memoryRead(MemFa, UTC_OFFSET, Int8).toInt();
 	spinBox_UTCoffset->setValue(iValue);
+
+	// grid system
+	uiValue = pDev->memoryRead(MemFa, UNIT_FLAGS, UInt16).toUInt();
+	comboBox_GridSys->setCurrentItem((uiValue & MASK_UNIT_GRID) >> 9);
 }
 
 void GPSFrame6015Impl::store(QByteArray &arr)
@@ -70,5 +71,5 @@ void GPSFrame6015Impl::store(QByteArray &arr)
 //	arr[GEO_ID_POS] = spinBox_GeoID->value();
 }
 
-#include "GPSFrame6015Impl.moc"
+#include "moc_GPSFrame6015Impl.cxx"
 

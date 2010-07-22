@@ -21,13 +21,13 @@
 #include <qcursor.h>
 #include <qdir.h>
 #include <qfile.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qstring.h>
 #include <qstringlist.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qdatetime.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qprinter.h>
 #include <qtimer.h>
 #include <qwidget.h>
@@ -43,7 +43,6 @@
 #include "IWayPointForm.h"
 #include "ISql.h"
 #include "Flight.h"
-#include "Images.h"
 #include "IGCFileParser.h"
 #include "KmlWriter.h"
 #include "OLCOptimizer.h"
@@ -51,15 +50,15 @@
 #include "ProgressDlg.h"
 #include "MapView.h"
 
-FlightWindow::FlightWindow(QWidget* parent, const char* name, int wflags, IDataBase::SourceType src)
+FlightWindow::FlightWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags, IDataBase::SourceType src)
 	:TableWindow(parent, name, wflags)
 {
 	QString caption;
 	QStringList nameList;
-	QTable *pTable = TableWindow::getTable();
-	QPopupMenu *pMenu;
+	Q3Table *pTable = TableWindow::getTable();
+	Q3PopupMenu *pMenu;
 	
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	pMenu->insertItem("&Update", this, SLOT(file_update()));
 
@@ -91,7 +90,7 @@ FlightWindow::FlightWindow(QWidget* parent, const char* name, int wflags, IDataB
 - altitude / time
 - 3D plot of flight*/
 	
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&Plot", pMenu);
 	pMenu->insertItem("&Speed vs Time", this, SLOT(plot_speedVsTime()));
 	pMenu->insertItem("&Alt vs Time", this, SLOT(plot_altVsTime()));
@@ -100,11 +99,11 @@ FlightWindow::FlightWindow(QWidget* parent, const char* name, int wflags, IDataB
 	pMenu->insertItem("&Map View", this, SLOT(showOnMap()));
 	
 	TableWindow::setCaption(caption);
-	TableWindow::setIcon(Images::pInstance()->getImage("document.xpm"));
+	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
-	pTable->setSelectionMode(QTable::SingleRow);
+	pTable->setSelectionMode(Q3Table::SingleRow);
 	
 	// header
 	nameList += "Nr";
@@ -158,7 +157,7 @@ bool FlightWindow::periodicalUpdate()
 void FlightWindow::file_update()
 {
 	Pilot pilot;
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	ProgressDlg progDlg(this);
 	uint flightNr;
 	uint maxFlightNr;
@@ -187,7 +186,7 @@ void FlightWindow::setFlightToRow(uint row, Flight &flight)
 	WayPoint wp;
 	QString str;
 	QTime duration;
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	
 	str.sprintf("%i",flight.number());
 	pTable->setText(row, Nr, str);
@@ -354,7 +353,7 @@ void FlightWindow::file_import()
 	int landPtId;
 	int duration;
 
-	QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "IGC Files (*.igc; *.IGC)", this,
+	Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "IGC Files (*.igc; *.IGC)", this,
 			"IGC file import", true);
 
 	if(fileDlg.exec() == QDialog::Accepted)
@@ -363,11 +362,11 @@ void FlightWindow::file_import()
 		ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), pilot);
 
 		pDir = fileDlg.dir();
-		IFlyHighRC::pInstance()->setLastDir(pDir->absPath());
+		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
 		file.setName(fileDlg.selectedFile());
 		
-		if(file.open(IO_ReadOnly))
+		if(file.open(QIODevice::ReadOnly))
 		{
 			flight.setIgcData(file.readAll());
 			file.close();
@@ -496,25 +495,25 @@ void FlightWindow::file_exportIGC()
 			// IGC file
 			igcParser.parse(m_flightList[row].igcData());
 			
-			QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "IGC Files (*.igc)", this,
+			Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "IGC Files (*.igc)", this,
 					"IGC file export", true);
 
 			olcWebForm.setFlight(m_flightList[row]);
 			olcWebForm.olcFileName(fileName);
 			fileDlg.setSelection(fileName);
-			fileDlg.setMode(QFileDialog::AnyFile);
+			fileDlg.setMode(Q3FileDialog::AnyFile);
 
 			if(fileDlg.exec() == QDialog::Accepted)
 			{
 				pDir =  fileDlg.dir();
-				IFlyHighRC::pInstance()->setLastDir(pDir->absPath());
+				IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 				delete pDir;
 				fileName = fileDlg.selectedFile();
 				file.setName(fileName + ".igc");
 				
-				if(file.open(IO_WriteOnly))
+				if(file.open(QIODevice::WriteOnly))
 				{
-					file.writeBlock(m_flightList[row].igcData());
+					file.write(m_flightList[row].igcData());
 					file.close();
 				}
 				
@@ -598,18 +597,18 @@ void FlightWindow::file_exportKML()
 		{
 			// IGC file
 			igcParser.parse(m_flightList[row].igcData());
-			QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "KML Files (*.kml)", this,
+			Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "KML Files (*.kml)", this,
 					"KML file export", true);
 
 			fileName = m_flightList[row].startPt().name();
 			fileName += m_flightList[row].date().toString("_dd_MM_yyyy");
 			fileDlg.setSelection(fileName);
-			fileDlg.setMode(QFileDialog::AnyFile);
+			fileDlg.setMode(Q3FileDialog::AnyFile);
 
 			if(fileDlg.exec() == QDialog::Accepted)
 			{
 				pDir =  fileDlg.dir();
-				IFlyHighRC::pInstance()->setLastDir(pDir->absPath());
+				IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 				delete pDir;
 				fileName = fileDlg.selectedFile();
 

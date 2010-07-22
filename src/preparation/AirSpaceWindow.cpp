@@ -21,33 +21,32 @@
 #include <qcursor.h>
 #include <qdialog.h>
 #include <qfile.h>
-#include <qfiledialog.h>
-#include <qheader.h>
+#include <q3filedialog.h>
+#include <q3header.h>
 #include <qinputdialog.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstring.h>
-#include <qtable.h>
+#include <q3table.h>
 #include <qwidget.h>
 #include "AirSpace.h"
 #include "AirSpaceWindow.h"
 #include "IGPSDevice.h"
-#include "Images.h"
 #include "IAirSpaceForm.h"
 #include "IFlyHighRC.h"
 #include "ISql.h"
 #include "OpenAirFileParser.h"
 #include "ProgressDlg.h"
 
-AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, int wflags, IDataBase::SourceType src)
+AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags, IDataBase::SourceType src)
 	:TableWindow(parent, name, wflags)
 {
 	QString caption;
 	QStringList nameList;
-	QTable *pTable = TableWindow::getTable();
-	QPopupMenu *pMenu;
+	Q3Table *pTable = TableWindow::getTable();
+	Q3PopupMenu *pMenu;
 
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	
 	switch(src)
@@ -72,11 +71,11 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, int wflags, ID
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
 	
 	TableWindow::setCaption(caption);
-	TableWindow::setIcon(Images::pInstance()->getImage("document.xpm"));
+	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
-	pTable->setSelectionMode(QTable::SingleRow);
+	pTable->setSelectionMode(Q3Table::SingleRow);
 
 	// header	
 	nameList += "Name";
@@ -121,7 +120,7 @@ bool AirSpaceWindow::periodicalUpdate()
 
 void AirSpaceWindow::file_open()
 {
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	const QDir *pDir;
 	QByteArray openAirData;
 	QString fileName;
@@ -131,18 +130,18 @@ void AirSpaceWindow::file_open()
 	uint airspaceNr;
 	uint maxAirspaceNr;
 	
-	QFileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "OpenAir Files (*.txt; *.fas)", this,
+	Q3FileDialog fileDlg(IFlyHighRC::pInstance()->lastDir(), "OpenAir Files (*.txt; *.fas)", this,
 					"OpenAir Files", true);
 
 	if(fileDlg.exec() == QDialog::Accepted)
 	{
 		TableWindow::setCursor(QCursor(Qt::WaitCursor));
 		pDir = fileDlg.dir();
-		IFlyHighRC::pInstance()->setLastDir(pDir->absPath());
+		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
 		file.setName(fileDlg.selectedFile());
 		
-		if(file.open(IO_ReadOnly))
+		if(file.open(QIODevice::ReadOnly))
 		{
 			openAirData = file.readAll();
 			file.close();
@@ -184,7 +183,7 @@ void AirSpaceWindow::file_delete()
 
 void AirSpaceWindow::file_update()
 {
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	uint airspaceNr;
 	uint maxAirspaceNr;
 
@@ -230,7 +229,7 @@ void AirSpaceWindow::selectionChanged()
 
 void AirSpaceWindow::setAirSpaceToRow(uint row, AirSpace &airspace)
 {
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 
 	pTable->setText(row, Name, airspace.name());
 	pTable->setText(row, High, airspace.high());

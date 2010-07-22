@@ -20,12 +20,13 @@
 
 #include <qcombobox.h>
 #include <qspinbox.h>
-#include "Flytec6015.h"
+
 #include "VelocityFrame6015Impl.h"
 
-VelocityFrame6015Impl::VelocityFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: VelocityFrame6015(parent,name,fl)
+VelocityFrame6015Impl::VelocityFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 VelocityFrame6015Impl::~VelocityFrame6015Impl()
@@ -34,18 +35,26 @@ VelocityFrame6015Impl::~VelocityFrame6015Impl()
 
 void VelocityFrame6015Impl::update(QByteArray &arr)
 {
-	Flytec6015 *pDev;
-	uint uiValue;
+/*
+	u_int16_t c16value;
 
-	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
+	// best L/D
+	spinBox_BestLD->setValue(arr[BEST_LD_POS]);
 
-	// Speedgain Windweel
-	uiValue = pDev->memoryRead(MemFa, WIND_WHEEL_GAIN, UInt8).toUInt();
-	spinBox_Windweel->setValue(uiValue);
+	// speed best L/D
+	spinBox_SpeedBestLD->setValue(arr[SPEED_BEST_LD_POS]);
 
-	// Stallspeed
-	uiValue = pDev->memoryRead(MemFa, STALL_SPEED, UInt16).toUInt();
-	spinBox_Stallspeed->setValue(uiValue);
+	// Windweel Gain
+	spinBox_Windweel->setValue(arr[SPEED_GAIN_WHEEL_POS]);
+
+	// Stall Speed
+	spinBox_Stallspeed->setValue(arr[STALL_SPEED_POS]);
+
+	// Stall Altitude
+	c16value = arr[STALL_ALT_POS] << 8;
+	c16value += arr[STALL_ALT_POS+1];
+	spinBox_Stallaltitude->setValue(c16value);
+*/
 }
 
 void VelocityFrame6015Impl::store(QByteArray &arr)
@@ -72,5 +81,5 @@ void VelocityFrame6015Impl::store(QByteArray &arr)
 */
 }
 
-#include "VelocityFrame6015Impl.moc"
+#include "moc_VelocityFrame6015Impl.cxx"
 

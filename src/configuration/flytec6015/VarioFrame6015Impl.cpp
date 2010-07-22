@@ -18,14 +18,15 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qslider.h>
+#include <qcombobox.h>
 #include <qspinbox.h>
-#include "Flytec6015.h"
+
 #include "VarioFrame6015Impl.h"
 
-VarioFrame6015Impl::VarioFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: VarioFrame6015(parent,name,fl)
+VarioFrame6015Impl::VarioFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 VarioFrame6015Impl::~VarioFrame6015Impl()
@@ -34,26 +35,19 @@ VarioFrame6015Impl::~VarioFrame6015Impl()
 
 void VarioFrame6015Impl::update(QByteArray &arr)
 {
-	Flytec6015 *pDev;
-	uint uiValue;
-
-	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
-
+/*
 	// Response Delay
-	uiValue = pDev->memoryRead(MemFa, FILT_TYPE, UInt8).toUInt();
-	slider_RespDelay->setValue(uiValue);
+//	spinBox_RespDelay->setValue(arr[RESP_DELAY_POS] * 200);
 
-	// Digital Filter Time
-	uiValue = pDev->memoryRead(MemFa, VARIO_DIG_FK, UInt8).toUInt();
-	spinBox_FiltTime->setValue(uiValue);
+	// Vario Mode
+//	comboBox_Variomode->setCurrentItem(arr[VARIOMODE_POS]);
 
-	// Min/Max Filter Time
-	uiValue = pDev->memoryRead(MemFa, VARIO_MIN_MAX_FK, UInt8).toUInt();
-	spinBox_FiltTimeMinMax->setValue(uiValue);
-
-	// Min/Max Rise Reject
-	uiValue = pDev->memoryRead(MemFa, MAX_RISE_REJ, UInt16).toUInt();
-	spinBox_TimeRiseRej->setValue(uiValue);
+	// Integration Time
+	spinBox_ITime->setValue(arr[I_TIME_POS]);
+	
+	// Total Enery Compensation
+//	spinBox_TEC->setValue(arr[TEC_POS]);
+*/
 }
 
 void VarioFrame6015Impl::store(QByteArray &arr)
@@ -73,5 +67,5 @@ void VarioFrame6015Impl::store(QByteArray &arr)
 */
 }
 
-#include "VarioFrame6015Impl.moc"
+#include "moc_VarioFrame6015Impl.cxx"
 

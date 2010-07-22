@@ -19,16 +19,17 @@
  ***************************************************************************/
 
 #include <qcombobox.h>
-#include <qdatetimeedit.h>
+#include <q3datetimeedit.h>
 #include <qlineedit.h>
 #include "FlyHighRCFrameImpl.h"
 #include "IFlyHighRC.h"
 #include "IGliderForm.h"
 #include "ISql.h"
 
-FlyHighRCFrameImpl::FlyHighRCFrameImpl(QWidget* parent, const char* name, WFlags fl)
-	:FlyHighRCFrame(parent, name)
+FlyHighRCFrameImpl::FlyHighRCFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+	:QDialog(parent)
 {
+        setupUi(this);
 	(void)fl;
 
 	ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), m_curPilot);
@@ -96,11 +97,7 @@ void FlyHighRCFrameImpl::ok()
 	m_curPilot.setLastName(lineEdit_LastName->text());
 	m_curPilot.setBirthDate(dateEditDateOfBirth->date());
 	m_curPilot.setCallSign(lineEdit_GliderID->text());
-
-	if(m_gliderList.size() > 0)
-	{
-		m_curPilot.setGlider(m_gliderList.at(comboBoxModel->currentItem()));
-	}
+	m_curPilot.setGlider(m_gliderList.at(comboBoxModel->currentItem()));
 
 	if(m_curPilot.id() < 0)
 	{
@@ -121,4 +118,4 @@ void FlyHighRCFrameImpl::ok()
 	}
 }
 
-#include "FlyHighRCFrameImpl.moc"
+#include "moc_FlyHighRCFrameImpl.cxx"

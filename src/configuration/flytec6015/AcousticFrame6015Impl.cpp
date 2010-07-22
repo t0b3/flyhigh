@@ -26,9 +26,10 @@
 #include "AcousticFrame6015Impl.h"
 #include "Flytec6015.h"
 
-AcousticFrame6015Impl::AcousticFrame6015Impl(QWidget* parent, const char* name, WFlags fl)
-: AcousticFrame6015(parent,name,fl)
+AcousticFrame6015Impl::AcousticFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 AcousticFrame6015Impl::~AcousticFrame6015Impl()
@@ -52,7 +53,7 @@ void AcousticFrame6015Impl::update(QByteArray &arr)
 	checkBox_SinkAlarm->setChecked(uiValue & MASK_SINK_ALARM);
 	checkBox_RiseAcoustic->setChecked(uiValue & MASK_RISE_ACC);
 	checkBox_StallAlarm->setChecked(uiValue & MASK_STALL_ALARM);
-	comboBox_RisePitch->setCurrentItem((uiValue & MASK_RISE_PITCH) >> POS_RISE_PITCH);
+	comboBox_RisePitch->setCurrentItem((uiValue & MASK_RISE_PITCH) >> 1);
 
 	// Frequency gain
 	uiValue = pDev->memoryRead(MemFa, FREQ_GAIN, UInt8).toUInt();
@@ -163,5 +164,5 @@ void AcousticFrame6015Impl::store(QByteArray &arr)
 }
 
 
-#include "AcousticFrame6015Impl.moc"
+#include "moc_AcousticFrame6015Impl.cxx"
 

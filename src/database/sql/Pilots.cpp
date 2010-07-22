@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include <qdatetime.h>
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldatabase.h>
 #include <qsqlquery.h>
 #include "Error.h"
@@ -26,8 +26,8 @@
 #include "Gliders.h"
 #include "Pilots.h"
 
-Pilots::Pilots(QSqlDatabase *pDB)
- :DataBaseSub(pDB)
+Pilots::Pilots(QSqlDatabase DB)
+ :DataBaseSub(DB)
 {
 }
 
@@ -37,9 +37,9 @@ Pilots::~Pilots()
 
 bool Pilots::add(Pilot &pilot)
 {
-	QSqlCursor cur("Pilots");
+	Q3SqlCursor cur("Pilots");
 	QSqlRecord *pRec;
-	QSqlQuery query(db());
+        QSqlQuery query(db());
 	bool success;
 
 	// insert record
@@ -60,7 +60,7 @@ bool Pilots::add(Pilot &pilot)
 
 bool Pilots::update(Pilot &pilot)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	bool success;
 	QString birthDate;
@@ -108,7 +108,7 @@ bool Pilots::pilot(int id, Pilot &pilot)
 
 bool Pilots::setId(Pilot &pilot)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	QString dbModel;
 	bool success;

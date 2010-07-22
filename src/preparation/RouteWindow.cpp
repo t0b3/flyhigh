@@ -19,13 +19,12 @@
  ***************************************************************************/
  
 #include <qcursor.h>
-#include <qheader.h>
+#include <q3header.h>
 #include <qmenubar.h>
-#include <qpopupmenu.h>
+#include <q3popupmenu.h>
 #include <qstring.h>
-#include <qtable.h>
+#include <q3table.h>
 #include "IGPSDevice.h"
-#include "Images.h"
 #include "ProgressDlg.h"
 #include "IRouteForm.h"
 #include "ISql.h"
@@ -33,15 +32,15 @@
 #include "RouteWindow.h"
 #include "WayPoint.h"
 
-RouteWindow::RouteWindow(QWidget* parent, const char* name, int wflags, IDataBase::SourceType src)
+RouteWindow::RouteWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags, IDataBase::SourceType src)
 	:TableWindow(parent, name, wflags)
 {
 	QString caption;
 	QStringList nameList;
-	QTable *pTable = TableWindow::getTable();
-	QPopupMenu *pMenu;
+	Q3Table *pTable = TableWindow::getTable();
+	Q3PopupMenu *pMenu;
 
-	pMenu = new QPopupMenu(this);
+	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	
 	switch(src)
@@ -68,11 +67,11 @@ RouteWindow::RouteWindow(QWidget* parent, const char* name, int wflags, IDataBas
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
 	
 	TableWindow::setCaption(caption);
-	TableWindow::setIcon(Images::pInstance()->getImage("document.xpm"));
+	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
-	pTable->setSelectionMode(QTable::SingleRow);
+	pTable->setSelectionMode(Q3Table::SingleRow);
 
 	// header
 	nameList += "Name";
@@ -115,7 +114,7 @@ void RouteWindow::file_delete()
 void RouteWindow::file_update()
 {
 	ProgressDlg progDlg(this);
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	uint routeNr;
 	uint maxRouteNr;
 
@@ -227,7 +226,7 @@ void RouteWindow::file_AddToSqlDB()
 
 void RouteWindow::setRouteToRow(uint row, Route &route)
 {
-	QTable *pTable = TableWindow::getTable();
+	Q3Table *pTable = TableWindow::getTable();
 	
 	pTable->setText(row, Name, route.name());
 }

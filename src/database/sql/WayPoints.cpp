@@ -18,20 +18,20 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldatabase.h>
 #include <qsqlquery.h>
 #include "Error.h"
 #include "WayPoints.h"
 
-WayPoints::WayPoints(QSqlDatabase *pDB)
-	:DataBaseSub(pDB)
+WayPoints::WayPoints(QSqlDatabase DB)
+	:DataBaseSub(DB)
 {
 }
 
 bool WayPoints::add(WayPoint &wp)
 {
-	QSqlCursor cur("WayPoints");
+	Q3SqlCursor cur("WayPoints");
 	QSqlRecord *pRec;
 	
 	// insert record

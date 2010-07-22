@@ -27,9 +27,10 @@ extern "C"
 	#include "flytec_al.h"
 }
 
-MemoryFrameImpl::MemoryFrameImpl(QWidget* parent, const char* name, WFlags fl)
-: MemoryFrame(parent,name,fl)
+MemoryFrameImpl::MemoryFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 MemoryFrameImpl::~MemoryFrameImpl()
@@ -54,5 +55,5 @@ void MemoryFrameImpl::store(QByteArray &arr)
 	arr[REC_STOP_MODE_POS] = comboBox_Mode->currentItem();
 }
 
-#include "MemoryFrameImpl.moc"
+#include "moc_MemoryFrameImpl.cxx"
 

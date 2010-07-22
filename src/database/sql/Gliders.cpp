@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qsqlcursor.h>
+#include <q3sqlcursor.h>
 #include <qsqldatabase.h>
 #include <qsqlquery.h>
 #include "Error.h"
@@ -26,14 +26,14 @@
 #include "Gliders.h"
 #include "ISql.h"
 
-Gliders::Gliders(QSqlDatabase *pDB)
-	:DataBaseSub(pDB)
+Gliders::Gliders(QSqlDatabase DB)
+	:DataBaseSub(DB)
 {
 }
 
 bool Gliders::add(Glider &glider)
 {
-	QSqlCursor cur("Gliders");
+	Q3SqlCursor cur("Gliders");
 	QSqlRecord *pRec;
 
 	// insert record
@@ -50,7 +50,7 @@ bool Gliders::add(Glider &glider)
 
 bool Gliders::delGlider(Glider &glider)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	bool success;
 	 
@@ -64,7 +64,7 @@ bool Gliders::delGlider(Glider &glider)
 
 bool Gliders::glider(const QString &modelOfGlider, Glider &glider)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	QString dbModel;
 	bool success = false;
@@ -99,7 +99,7 @@ bool Gliders::glider(const QString &modelOfGlider, Glider &glider)
 bool Gliders::gliderList(Glider::GliderListType &gliderList)
 {
 	Glider glider;
-	QSqlQuery query(db());
+        QSqlQuery query(db());
 	QString sqls = "SELECT * FROM Gliders ORDER BY Manufacturer, Model ASC";
 	bool success;
 	
@@ -125,7 +125,7 @@ bool Gliders::gliderList(Glider::GliderListType &gliderList)
 
 bool Gliders::glider(int id, Glider &glider)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	bool success;
 	
@@ -149,7 +149,7 @@ bool Gliders::glider(int id, Glider &glider)
 
 bool Gliders::setGliderId(Glider &glider)
 {
-	QSqlQuery query(db());
+  QSqlQuery query(db());
 	QString sqls;
 	QString dbModel;
 	bool success;

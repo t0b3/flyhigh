@@ -29,9 +29,10 @@ extern "C"
 	#include "flytec_al.h"
 }
 
-GPSFrameImpl::GPSFrameImpl(QWidget* parent, const char* name, WFlags fl)
-: GPSFrame(parent,name,fl)
+GPSFrameImpl::GPSFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
+: QWidget(parent)
 {
+  setupUi(this);
 }
 
 GPSFrameImpl::~GPSFrameImpl()
@@ -74,5 +75,5 @@ void GPSFrameImpl::store(QByteArray &arr)
 //	arr[GEO_ID_POS] = spinBox_GeoID->value();
 }
 
-#include "GPSFrameImpl.moc"
+#include "moc_GPSFrameImpl.cxx"
 
