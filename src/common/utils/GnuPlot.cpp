@@ -342,7 +342,7 @@ void GnuPlot::setOutput(const QString &name)
 	QString term;
 	
 	// terminal by extension
-	pos = name.findRev(".");
+        pos = name.lastIndexOf(".");
 	term = name.right(pos+1);
 	
 	if(term == "png")

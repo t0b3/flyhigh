@@ -112,7 +112,7 @@ bool AirSpaces::airspace(const QString &name, AirSpace &airspace)
 					break;
 				}
 				
-				pos = strEdgePt.find(';');
+                                pos = strEdgePt.indexOf(';');
 				lon = strEdgePt.left(pos).toDouble();
 				lat = strEdgePt.right(strEdgePt.length() - pos - 1).toDouble();
 				
@@ -166,7 +166,7 @@ bool AirSpaces::airspaceList(AirSpace::AirSpaceListType &airspaceList)
 					break;
 				}
 				
-				pos = strEdgePt.find(';');
+                                pos = strEdgePt.indexOf(';');
 				lon = strEdgePt.left(pos).toDouble();
 				lat = strEdgePt.right(strEdgePt.length() - pos - 1).toDouble();
 				

@@ -95,7 +95,7 @@ void IGCFileParser::parseHRecord(const char *record)
 	{
 		colonValue(record, m_model);
 /*		// HFGTYGLIDERTYPE:Spirit
-		start = rec.find(':') + 1;
+                start = rec.indexOf(':') + 1;
 		length = rec.length() - 2; // without \r\n
 		
 		// strip white space @ end
@@ -190,7 +190,7 @@ void IGCFileParser::colonValue(const char *record, QString &str)
 	int start;
 	int end;
 	
-	start = rec.find(':') + 1;
+        start = rec.indexOf(':') + 1;
 	length = rec.length() - 2; // without \r\n
 	
 	// strip white space @ end

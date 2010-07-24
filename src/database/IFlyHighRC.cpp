@@ -230,15 +230,15 @@ void IFlyHighRC::parseSerialLine(QBuffer &buff)
 	{
 		parseValue(line, var, val);
 		
-		if(DeviceLineVar.find(var) == 0)
+                if(DeviceLineVar.indexOf(var) == 0)
 		{
 			setDeviceLine(val);
 		}
-		else if(DeviceSpeedVar.find(var) == 0)
+                else if(DeviceSpeedVar.indexOf(var) == 0)
 		{
 			setDeviceSpeed(m_deviceSpeedList.findIndex(val));
 		}
-		else if(DeviceNameVar.find(var) == 0)
+                else if(DeviceNameVar.indexOf(var) == 0)
 		{
 			setDeviceName(m_deviceNameList.findIndex(val));
 		}
@@ -272,7 +272,7 @@ void IFlyHighRC::parseDateTime(QBuffer &buff)
 	{
 		parseValue(line, var, val);
 		
-		if(DateTimeUtcVar.find(var) == 0)
+                if(DateTimeUtcVar.indexOf(var) == 0)
 		{
 			setUtcOffset(atoi(val.ascii()));
 		}
@@ -303,7 +303,7 @@ void IFlyHighRC::parseDirectory(QBuffer &buff)
 	{
 		parseValue(line, var, val);
 		
-		if(DirectoryLastVar.find(var) == 0)
+                if(DirectoryLastVar.indexOf(var) == 0)
 		{
 			m_lastDir = val;
 		}
@@ -331,7 +331,7 @@ void IFlyHighRC::parsePilot(QBuffer &buff)
 	{
 		parseValue(line, var, val);
 		
-		if(PilotId.find(var) == 0)
+                if(PilotId.indexOf(var) == 0)
 		{
 			setPilotId(atoi(val.ascii()));
 		}
@@ -355,8 +355,8 @@ void IFlyHighRC::parseValue(char *line, QString &var, QString &val)
 	int valEnd;
 	int varEnd;
 	
-	varEnd = str.find('=');
-	valEnd = str.find('\n');
+        varEnd = str.indexOf('=');
+        valEnd = str.indexOf('\n');
 	var = str.left(varEnd);
 	val = str.mid(varEnd + 1, valEnd -  varEnd - 1);
 }

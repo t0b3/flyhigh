@@ -164,8 +164,8 @@ void OpenAirFileParser::parseAirspaceClass(char *pRecord, AirSpace *pAirspace)
 	int begin;
 	int end;
 	
-	begin = str.find(' ') + 1;
-	end = str.find('\r');
+        begin = str.indexOf(' ') + 1;
+        end = str.indexOf('\r');
 	str = str.mid(begin, end-begin);
 
 	pAirspace->setAirspaceClass(str);
@@ -213,7 +213,7 @@ void OpenAirFileParser::parseArc(char *pRecord, AirSpace *pAirspace)
 	double endLon;
 
 	parseCoordinate(pRecord + 3, beginLat, beginLon);
-	parseCoordinate(pRecord+str.find(',')+1, endLat, endLon);
+        parseCoordinate(pRecord+str.indexOf(',')+1, endLat, endLon);
 
 	// center
 	pCenter = new AirSpaceItemPoint(AirSpaceItem::Center);
