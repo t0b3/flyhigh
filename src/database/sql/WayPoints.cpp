@@ -192,10 +192,10 @@ bool WayPoints::setId(WayPoint &wp)
 	bool success;
 	int id = -1;
 
-	sqls.sprintf("SELECT * FROM WayPoints WHERE "
-		"Name = '%s' AND "
-		"Spot = '%s' AND "
-		"Country = '%s'", wp.name().ascii(), wp.spot().ascii(), wp.country().ascii());
+        sqls = QString("SELECT * FROM WayPoints WHERE "
+                "Name = '%1' AND "
+                "Spot = '%2' AND "
+                "Country = '%3'").arg(wp.name(),wp.spot(),wp.country());
 
 	success = (query.exec(sqls) && query.first());
 

@@ -88,7 +88,7 @@ void GnuPlot::clear()
 	{
 		for(fileNr=0; fileNr<m_filesToDel.size(); fileNr++)
 		{
-			remove(m_filesToDel[fileNr].ascii());
+                        remove(m_filesToDel[fileNr].toAscii().constData());
 		}
 		m_filesToDel.clear();
 	}
@@ -125,33 +125,27 @@ void GnuPlot::execCmd(const QString &cmd)
 	if(m_pGnuPipe != NULL)
 	{
 		locCmd += "\n";
-		fputs(locCmd.ascii(), m_pGnuPipe);
+                fputs(locCmd.toAscii().constData(), m_pGnuPipe);
 		fflush(m_pGnuPipe);
 	}
 }
 
 void GnuPlot::setLabelX(const QString &label)
 {
-	QString cmdstr;
-
-	cmdstr.sprintf("set xlabel \"%s\"", label.ascii());
+        QString cmdstr = QString("set xlabel \"%1\"").arg(label);
 	execCmd(cmdstr);
 }
 
 void GnuPlot::setLabelY(const QString &label)
 {
-	QString cmdstr;
-
-	cmdstr.sprintf("set ylabel \"%s\"", label.ascii());
-	execCmd(cmdstr);
+        QString cmdstr = QString("set ylabel \"%1\"").arg(label);
+        execCmd(cmdstr);
 }
 
 void GnuPlot::setLabelZ(const QString &label)
 {
-	QString cmdstr;
-
-	cmdstr.sprintf("set zlabel \"%s\"", label.ascii());
-	execCmd(cmdstr);
+        QString cmdstr = QString("set zlabel \"%1\"").arg(label);
+        execCmd(cmdstr);
 }
 
 // 
@@ -164,11 +158,11 @@ void GnuPlot::plotSlope(double a, double b, const QString &title)
 
 	if(m_nplots > 0)
 	{
-		cmdstr.sprintf("replot %f * x + % f title \"%s\" with %s", a, b, title.ascii(), m_style.ascii());
+                cmdstr = QString("replot %1 * x + %2 title \"%3\" with %4").arg(a).arg(b).arg(title).arg(m_style);
 	}
 	else
 	{
-		cmdstr.sprintf("plot %f * x + % f title \"%s\" with %s", a, b, title.ascii(), m_style.ascii());
+                cmdstr = QString("plot %1 * x + %2 title \"%3\" with %4").arg(a).arg(b).arg(title).arg(m_style);
 	}
 	
 	setAxisData('x', Float);
@@ -185,12 +179,12 @@ void GnuPlot::plotEquation(const QString &equation, const QString &title)
 	
 	if(m_nplots > 0)
 	{
-		cmdstr.sprintf("replot %s title \"%s\" with %s", equation.ascii(), title.ascii(), m_style.ascii());
+                cmdstr = QString("replot %1 title \"%2\" with %3").arg(equation).arg(title).arg(m_style);
 	}
 	else
 	{
-		cmdstr.sprintf("plot %s title \"%s\" with %s", equation.ascii(), title.ascii(), m_style.ascii());
-	}
+                cmdstr = QString("plot %1 title \"%2\" with %3").arg(equation).arg(title).arg(m_style);
+        }
 
 	setAxisData('x', Float);
 	execCmd(cmdstr);
@@ -209,17 +203,17 @@ void GnuPlot::plotX(PlotVectorType &x, const QString &title)
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f\n", x[valueNr]);
-			file.write(line.ascii(), line.length());
+                        file.write(line.toAscii(), line.length());
 		}
 		file.close();
 	
 		if(m_nplots > 0)
 		{
-			cmdstr.sprintf("replot \"%s\" with %s", file.name().ascii(), m_style.ascii());
+                        cmdstr = QString("replot \"%1\" with %2").arg(file.fileName()).arg(m_style);
 		}
 		else
 		{
-			cmdstr.sprintf("plot \"%s\" title \"%s\" with %s", file.name().ascii(), title.ascii(), m_style.ascii());
+                        cmdstr = QString("plot \"%1\" title \"%2\" with %3").arg(file.fileName()).arg(title).arg(m_style);
 		}
 		
 		setAxisData('x', Float);
@@ -240,17 +234,17 @@ void GnuPlot::plotXY(PlotVectorType &x, PlotVectorType &y, const QString &title)
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f %f\n", x[valueNr], y[valueNr]);
-			file.write(line.ascii(), line.length());
+                        file.write(line.toAscii(), line.length());
 		}
 		file.close();
 	
 		if(m_nplots > 0)
 		{
-			cmdstr.sprintf("replot \"%s\" with %s", file.name().ascii(), m_style.ascii());
+                        cmdstr = QString("replot \"%1\" with %2").arg(file.fileName()).arg(m_style);
 		}
 		else
 		{
-			cmdstr.sprintf("plot \"%s\" title \"%s\" with %s", file.name().ascii(), title.ascii(), m_style.ascii());
+                        cmdstr = QString("plot \"%1\" title \"%2\" with %3").arg(file.fileName()).arg(title).arg(m_style);
 		}
 		
 		setAxisData('x', Float);
@@ -270,18 +264,18 @@ void GnuPlot::plotXY(TimeVectorType &x, PlotVectorType &y, const QString &title)
 	{
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
-			line.sprintf("%s %f\n", x[valueNr].toString(Qt::ISODate).ascii(), y[valueNr]);
-			file.write(line.ascii(), line.length());
+                        line = QString("%1 %2\n").arg(x[valueNr].toString(Qt::ISODate)).arg(y[valueNr]);
+                        file.write(line.toAscii(), line.length());
 		}
 		file.close();
 	
 		if(m_nplots > 0)
 		{
-			cmdstr.sprintf("replot \"%s\" using 1:2 with %s", file.name().ascii(), m_style.ascii());
+                        cmdstr = QString("replot \"%1\" using 1:2 with %2").arg(file.fileName()).arg(m_style);
 		}
 		else
 		{
-			cmdstr.sprintf("plot \"%s\" using 1:2 title \"%s\" with %s", file.name().ascii(), title.ascii(), m_style.ascii());
+                        cmdstr = QString("plot \"%1\" using 1:2 title \"%2\" with %3").arg(file.fileName()).arg(title).arg(m_style);
 		}
 		
 		setAxisData('x', Time);
@@ -302,17 +296,17 @@ void GnuPlot::plotXYZ(PlotVectorType &x, PlotVectorType &y, PlotVectorType &z, c
 		for(valueNr=0; valueNr<x.size(); valueNr++)
 		{
 			line.sprintf("%f %f %f\n", x[valueNr], y[valueNr], z[valueNr]);
-			file.write(line.ascii(), line.length());
+                        file.write(line.toAscii(), line.length());
 		}
 		file.close();
 	
 		if(m_nplots > 0)
 		{
-			cmdstr.sprintf("replot \"%s\" title \"%s\" with %s", file.name().ascii(), title.ascii(), m_style.ascii());
+                        cmdstr = QString("replot \"%1\" title \"%2\" with %3").arg(file.fileName()).arg(title).arg(m_style);
 		}
 		else
 		{
-			cmdstr.sprintf("splot \"%s\" title \"%s\" with %s", file.name().ascii(), title.ascii(), m_style.ascii());
+                        cmdstr = QString("splot \"%1\" title \"%2\" with %3").arg(file.fileName()).arg(title).arg(m_style);
 		}
 		
 		setAxisData('x', Float);
@@ -348,13 +342,13 @@ void GnuPlot::setOutput(const QString &name)
 	if(term == "png")
 	{
 		execCmd("set terminal png");
-		cmdstr.sprintf("set output \"%s\"", name.ascii());
+                cmdstr = QString("set output \"%1\"").arg(name);
 		execCmd(cmdstr);
 	}
 	else if(term == "ps")
 	{
 		execCmd("set terminal ps");
-		cmdstr.sprintf("set output \"%s\"", name.ascii());
+                cmdstr = QString("set output \"%1\"").arg(name);
 		execCmd(cmdstr);
 	}
 	else
@@ -377,7 +371,7 @@ bool GnuPlot::openTmpFile(QFile &file)
 		
 		if(success)
 		{
-			file.setName(name);
+                        file.setFileName(name);
 			success = file.open(QIODevice::WriteOnly);
 			
 			if(success)

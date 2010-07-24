@@ -66,8 +66,7 @@ void Upgrade::setDataBaseVersion(const DataBaseVersion &tabVers)
 	QString version;
 	QSqlQuery query(db());
 	
-	version = tabVers.toString("yyyy-MM-dd hh:mm:ss").ascii();
-	sqls.sprintf("UPDATE LastModified SET Time = '%s' WHERE Name = 'DataBaseVersion'",
-				version.ascii());
+        version = tabVers.toString("yyyy-MM-dd hh:mm:ss");
+        sqls = QString("UPDATE LastModified SET Time = '%1' WHERE Name = 'DataBaseVersion'").arg(version);
 	query.exec(sqls);
 }

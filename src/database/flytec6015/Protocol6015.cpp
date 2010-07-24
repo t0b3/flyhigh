@@ -606,9 +606,9 @@ bool Protocol6015::writeParString(MemType memType, int par, const QString &value
 	bool success;
 
 	ftString = qString2ftString(value, StringSize);
-	arrValue.setRawData(ftString.ascii(), ftString.length());
+        arrValue = ftString.toAscii();
 	success = writeParArray(memType, par, arrValue);
-	arrValue.resetRawData(ftString.ascii(), ftString.length());
+        arrValue.clear();
 
 	return success;
 }

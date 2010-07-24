@@ -118,7 +118,7 @@ bool Flytec6015::loadIGCFile(Flight &flight)
 				return false;
 			}
 
-			buff.write(line.ascii(), line.length());
+                        buff.write(line.toAscii(), line.length());
 			success = true;
 		}
 

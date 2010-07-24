@@ -274,7 +274,7 @@ void IFlyHighRC::parseDateTime(QBuffer &buff)
 		
                 if(DateTimeUtcVar.indexOf(var) == 0)
 		{
-			setUtcOffset(atoi(val.ascii()));
+                        setUtcOffset(val.toInt());
 		}
 		else
 		{
@@ -333,7 +333,7 @@ void IFlyHighRC::parsePilot(QBuffer &buff)
 		
                 if(PilotId.indexOf(var) == 0)
 		{
-			setPilotId(atoi(val.ascii()));
+                        setPilotId(val.toInt());
 		}
 		else
 		{

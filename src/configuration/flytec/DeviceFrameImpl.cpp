@@ -179,7 +179,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 		}
 	}
 	
-	ft_string2ftstring(pilotName.ascii(), (char*)&arr[PILOT_NAME_POS]);
+        ft_string2ftstring(pilotName.toAscii().constData(), (char*)&arr[PILOT_NAME_POS]);
 	
 	// glider
 	m_gliderList.at(comboBoxModel->currentItem()).fullName(glider);
@@ -207,7 +207,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 		glider = m_gliderList.at(comboBoxModel->currentItem()).model();
 	}
 
-	ft_string2ftstring(glider.ascii(), (char*)&arr[GLYDER_TYPE_POS]);
+        ft_string2ftstring(glider.toAscii().constData(), (char*)&arr[GLYDER_TYPE_POS]);
 
 	// callsign
 	callsign = lineEdit_GliderID->text();
@@ -229,7 +229,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 	}
 	
 	// glider id
-	ft_string2ftstring(callsign.ascii(), (char*)&arr[GLYDER_ID_POS]);
+        ft_string2ftstring(callsign.toAscii().constData(), (char*)&arr[GLYDER_ID_POS]);
 
 	// battery type
 	arr[BATT_TYPE_POS] = comboBox_BattType->currentItem();

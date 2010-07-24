@@ -155,11 +155,10 @@ bool Gliders::setGliderId(Glider &glider)
 	bool success;
 	int id = -1;
 
-	sqls.sprintf("SELECT * FROM Gliders WHERE "
-		"Manufacturer = '%s' AND "
-		"Model = '%s' AND "
-		"Serial = '%s'",
-		glider.manufacturer().ascii(), glider.model().ascii(), glider.serial().ascii());
+        sqls = QString("SELECT * FROM Gliders WHERE "
+                "Manufacturer = '%1' AND "
+                "Model = '%2' AND "
+                "Serial = '%3'").arg(glider.manufacturer(),glider.model(),glider.serial());
 
 	success = (query.exec(sqls) && query.first());
 

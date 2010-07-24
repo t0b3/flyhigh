@@ -38,7 +38,7 @@ void FlytecDevice::open()
 {
 	bool success;
 
-	success = (ft_init(IFlyHighRC::pInstance()->deviceLine().ascii()) == 0);
+        success = (ft_init(IFlyHighRC::pInstance()->deviceLine().toAscii().constData()) == 0);
 	Error::verify(success, Error::FLYTEC_OPEN);
 }
 
@@ -222,7 +222,7 @@ bool FlytecDevice::add(WayPoint &wp)
 	bool success;
 	ft_WayPointType ftWp;
 	
-	ft_string2ftstring(toFtString(wp.name()).ascii(), ftWp.name);
+        ft_string2ftstring(toFtString(wp.name()).toAscii().constData(), ftWp.name);
 	ftWp.latitude = wp.latitude();
 	ftWp.longitude = wp.longitude();
 	ftWp.altitude = wp.altitude();
@@ -238,7 +238,7 @@ bool FlytecDevice::delWayPoint(WayPoint &wp)
 {
 	bool success;
 	
-	success = (ft_wayPointDel(wp.name().ascii()) == 0);
+        success = (ft_wayPointDel(wp.name().toAscii().constData()) == 0);
 	Error::verify(success, Error::FLYTEC_CMD);
 	IGPSDevice::setLastModified(IGPSDevice::WayPoints);
 	
@@ -310,7 +310,7 @@ bool FlytecDevice::add(Route &route)
 	}
 
 	// now write the route
-	ft_string2ftstring(toFtString(route.name()).ascii(), ftRoute.name);
+        ft_string2ftstring(toFtString(route.name()).toAscii().constData(), ftRoute.name);
 	ftRoute.routeNum = 1;
 	nofWp = route.wayPointList().size();
 	ftRoute.totalSent = nofWp + 1;
@@ -334,7 +334,7 @@ bool FlytecDevice::add(Route &route)
 			}
 			
 			name = route.wayPointList().at(wpNr).name();
-			ft_string2ftstring(toFtString(name.ascii()).ascii(), ftRoute.name);
+                        ft_string2ftstring(toFtString(name).toAscii().constData(), ftRoute.name);
 			ftRoute.actSent = wpNr + 1;
 			success = (ft_routeSnd(&ftRoute) == 0);
 			
@@ -410,7 +410,7 @@ bool FlytecDevice::delRoute(Route &route)
 {
 	bool success;
 	
-	success = (ft_routeDel(route.name().ascii()) == 0);
+        success = (ft_routeDel(route.name().toAscii().constData()) == 0);
 	IGPSDevice::setLastModified(IGPSDevice::Routes);
 	
 	return success;
@@ -433,13 +433,13 @@ bool FlytecDevice::add(AirSpace &airspace)
 	// first sentence
 	ftCTR.totalSent = nofMember + 2; // inclusive first and second sentence
 	ftCTR.actSent = 0;
-	ft_string2ftstring(toFtString(airspace.name()).ascii(), ftCTR.sent.first.name);
+        ft_string2ftstring(toFtString(airspace.name()).toAscii().constData(), ftCTR.sent.first.name);
 	ftCTR.sent.first.warnDist = airspace.warnDist();
 	success = (ft_ctrSnd(&ftCTR) == 0);
 
 	// second sentence
 	ftCTR.actSent = 1;
-	ft_string2ftstring(toFtString(airspace.remark()).ascii(), ftCTR.sent.second.remark);
+        ft_string2ftstring(toFtString(airspace.remark()).toAscii().constData(), ftCTR.sent.second.remark);
 	success &= (ft_ctrSnd(&ftCTR) == 0);
 
 	if(success)
@@ -617,7 +617,7 @@ bool FlytecDevice::delAirSpace(AirSpace &airspace)
 {
 	bool success;
 	
-	success = (ft_ctrDel(airspace.name().ascii()) == 0);
+        success = (ft_ctrDel(airspace.name().toAscii().constData()) == 0);
 
 	if(success)
 	{
