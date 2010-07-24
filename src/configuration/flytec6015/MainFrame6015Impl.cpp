@@ -144,7 +144,7 @@ void MainFrame6015Impl::open()
 		IFlyHighRC::pInstance()->setLastDir(fileDlg.dir()->absolutePath());
 		delete pDir;
 		
-		file.setName(fileDlg.selectedFile());
+                file.setFileName(fileDlg.selectedFile());
 		
 		if(file.open(QIODevice::WriteOnly))
 		{
@@ -168,7 +168,7 @@ void MainFrame6015Impl::save()
 		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
 		
-		file.setName(fileDlg.selectedFile());
+                file.setFileName(fileDlg.selectedFile());
 	
 		if(file.open(QIODevice::WriteOnly))
 		{

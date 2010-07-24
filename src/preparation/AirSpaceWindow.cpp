@@ -139,7 +139,7 @@ void AirSpaceWindow::file_open()
 		pDir = fileDlg.dir();
 		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
-		file.setName(fileDlg.selectedFile());
+                file.setFileName(fileDlg.selectedFile());
 		
 		if(file.open(QIODevice::ReadOnly))
 		{

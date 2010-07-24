@@ -364,7 +364,7 @@ void FlightWindow::file_import()
 		pDir = fileDlg.dir();
 		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
-		file.setName(fileDlg.selectedFile());
+                file.setFileName(fileDlg.selectedFile());
 		
 		if(file.open(QIODevice::ReadOnly))
 		{
@@ -509,7 +509,7 @@ void FlightWindow::file_exportIGC()
 				IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 				delete pDir;
 				fileName = fileDlg.selectedFile();
-				file.setName(fileName + ".igc");
+                                file.setFileName(fileName + ".igc");
 				
 				if(file.open(QIODevice::WriteOnly))
 				{

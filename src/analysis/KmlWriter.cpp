@@ -76,7 +76,7 @@ bool KmlWriter::save(const QString & name)
 	QString str;
 	bool success;
 	
-	file.setName(name);
+        file.setFileName(name);
 	success = file.open(QIODevice::WriteOnly);
 	
 	if(success)

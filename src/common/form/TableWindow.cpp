@@ -150,7 +150,7 @@ void TableWindow::exportTable()
 		IFlyHighRC::pInstance()->setLastDir(pDir->absolutePath());
 		delete pDir;
 		fileName = fileDlg.selectedFile();
-		file.setName(fileName + ".html");
+                file.setFileName(fileName + ".html");
 		
 		if(file.open(QIODevice::WriteOnly))
 		{
