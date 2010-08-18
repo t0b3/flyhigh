@@ -66,6 +66,9 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	DeviceInfoType devInfo;
 	char str[FT_STRING_SIZE];
 	int syncRes;
+
+        // fetch data pointer for easy access
+        const char* devdata = arr.constData();
 	
 	if(ft_deviceInfoRead(&devInfo) == 0)
 	{
@@ -75,7 +78,7 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	}
 
 	// pilot name
-	ft_ftstring2string(str, (char*)&arr[PILOT_NAME_POS]);
+        ft_ftstring2string(str, &devdata[PILOT_NAME_POS]);
 	pilotName = str;
 	ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), dbPilot);
 	dbPilot.fullName(dbPilotName);
@@ -98,7 +101,7 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	lineEdit_PilotName->setText(pilotName);
 	
 	// glider
-	ft_ftstring2string(str, (char*)&arr[GLYDER_TYPE_POS]);
+	ft_ftstring2string(str, &devdata[GLYDER_TYPE_POS]);
 	glider = str;
 	dbGlider = m_gliderList.at(comboBoxModel->currentItem()).model();
 //	dbGlider = dbPilot.glider().model();
@@ -121,7 +124,7 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	}
 	
 	// callsign
-	ft_ftstring2string(str, (char*)&arr[GLYDER_ID_POS]);
+        ft_ftstring2string(str, &devdata[GLYDER_ID_POS]);
 	callsign = str;
 	
 	if(callsign != dbPilot.callSign().left(callsign.length()))
@@ -157,7 +160,10 @@ void DeviceFrameImpl::store(QByteArray &arr)
 	QString glider;
 	QString rcGlider;
 	int syncRes;
-	
+
+        // fetch data pointer for easy access
+        char* devdata = arr.data();
+
 	// pilot
 	pilotName = lineEdit_PilotName->text();
 	ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), dbPilot);
@@ -179,7 +185,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 		}
 	}
 	
-        ft_string2ftstring(pilotName.toAscii().constData(), (char*)&arr[PILOT_NAME_POS]);
+        ft_string2ftstring(pilotName.toAscii().constData(), &devdata[PILOT_NAME_POS]);
 	
 	// glider
 	m_gliderList.at(comboBoxModel->currentItem()).fullName(glider);
@@ -207,7 +213,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 		glider = m_gliderList.at(comboBoxModel->currentItem()).model();
 	}
 
-        ft_string2ftstring(glider.toAscii().constData(), (char*)&arr[GLYDER_TYPE_POS]);
+        ft_string2ftstring(glider.toAscii().constData(), &devdata[GLYDER_TYPE_POS]);
 
 	// callsign
 	callsign = lineEdit_GliderID->text();
@@ -229,7 +235,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
 	}
 	
 	// glider id
-        ft_string2ftstring(callsign.toAscii().constData(), (char*)&arr[GLYDER_ID_POS]);
+        ft_string2ftstring(callsign.toAscii().constData(), &devdata[GLYDER_ID_POS]);
 
 	// battery type
 	arr[BATT_TYPE_POS] = comboBox_BattType->currentItem();
