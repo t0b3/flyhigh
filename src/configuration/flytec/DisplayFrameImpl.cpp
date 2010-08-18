@@ -40,19 +40,19 @@ DisplayFrameImpl::DisplayFrameImpl(QWidget* parent, const char* name, Qt::WFlags
 	comboBox_Font->setEnabled(false);
 	
 	// Screen 1
-	pixmapLabel_Display->setPixmap(QPixmap(":/icons/ft_5020.png"));
+        pixmapLabel_Display->setPixmap(QPixmap(":/ft_5020.png"));
 	insertItems(comboBox_UserField_0_0);
 	insertItems(comboBox_UserField_0_1);
 	insertItems(comboBox_UserField_0_2);
 	
 	// Screen 2
-	pixmapLabel_Display_2->setPixmap(QPixmap(":/icons/ft_5020.png"));
+        pixmapLabel_Display_2->setPixmap(QPixmap(":/ft_5020.png"));
 	insertItems(comboBox_UserField_1_0);
 	insertItems(comboBox_UserField_1_1);
 	insertItems(comboBox_UserField_1_2);
 	
 	// Screen 3
-	pixmapLabel_Display_3->setPixmap(QPixmap(":/icons/ft_5020.png"));
+        pixmapLabel_Display_3->setPixmap(QPixmap(":/ft_5020.png"));
 	insertItems(comboBox_UserField_2_0);
 	insertItems(comboBox_UserField_2_1);
 	insertItems(comboBox_UserField_2_2);

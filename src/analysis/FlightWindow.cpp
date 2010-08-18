@@ -99,7 +99,7 @@ FlightWindow::FlightWindow(QWidget* parent, const char* name, Qt::WindowFlags wf
 	pMenu->insertItem("&Map View", this, SLOT(showOnMap()));
 	
         TableWindow::setWindowTitle(caption);
-        TableWindow::setWindowIcon(QIcon(":/icons/document.xpm"));
+        TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);

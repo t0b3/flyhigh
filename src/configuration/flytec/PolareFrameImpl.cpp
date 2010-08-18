@@ -38,8 +38,8 @@ PolareFrameImpl::PolareFrameImpl(QWidget* parent, const char* name, Qt::WFlags f
 	tabWidget->page(1)->setEnabled(false);
 	spinBox_Altitude1->setEnabled(false);
 
-	pixmapLabel_Polare1->setPixmap(QPixmap(":/icons/polare.png"));
-	pixmapLabel_Polare2->setPixmap(QPixmap(":/icons/polare.png"));
+        pixmapLabel_Polare1->setPixmap(QPixmap(":/polare.png"));
+        pixmapLabel_Polare2->setPixmap(QPixmap(":/polare.png"));
 }
 
 PolareFrameImpl::~PolareFrameImpl()

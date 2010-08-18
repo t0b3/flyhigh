@@ -40,7 +40,7 @@ ServicingWindow::ServicingWindow(QWidget* parent, const char* name, Qt::WindowFl
 	pMenu->insertItem("&Delete", this, SLOT(file_delete()));
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
         TableWindow::setWindowTitle("Servicings");
-        TableWindow::setWindowIcon(QIcon(":/icons/document.xpm"));
+        TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);

@@ -27,6 +27,7 @@
 int main( int argc, char ** argv ) 
 {
 	QApplication appl(argc, argv);
+        Q_INIT_RESOURCE(images);
 	MainWindow* pMainWin;
 	int res;
 
@@ -36,7 +37,7 @@ int main( int argc, char ** argv )
 	
 	pMainWin = new MainWindow();
 	appl.setMainWidget(pMainWin);
-        pMainWin->setWindowIcon(QIcon(":/icons/flyhigh.png"));
+        pMainWin->setWindowIcon(QIcon(":/flyhigh.png"));
 	
 	pMainWin->show();
 	appl.connect(&appl, SIGNAL(lastWindowClosed()), &appl, SLOT(quit()));

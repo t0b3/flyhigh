@@ -2,9 +2,11 @@ include(${QT_USE_FILE})
 
 include_directories( ${QT_INCLUDES} )
 
-set(images_SRCS ImgCollection.cpp)
+set(images_RC images.qrc)
 
-add_library(images ${images_SRCS})
+qt4_add_resources( images_RC_SRCS ${images_RC} )
+
+add_library(images ${images_RC_SRCS})
 
 ########### install files ###############
 
