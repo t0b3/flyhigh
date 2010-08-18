@@ -19,7 +19,8 @@ MDIWindow::MDIWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags)
 {
 	m_pUpdateTimer = new QTimer(this);
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
-	m_pUpdateTimer->start(0, true);
+        m_pUpdateTimer->setSingleShot(true);
+        m_pUpdateTimer->start(0);
 }
 
 bool MDIWindow::periodicalUpdate()
@@ -31,6 +32,7 @@ void MDIWindow::updateTimeout()
 {
 	if(periodicalUpdate())
 	{
-		m_pUpdateTimer->start(UPDATE_TIME, true);
+                m_pUpdateTimer->setSingleShot(true);
+                m_pUpdateTimer->start(UPDATE_TIME);
 	}
 }
