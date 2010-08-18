@@ -39,7 +39,7 @@ ServicingWindow::ServicingWindow(QWidget* parent, const char* name, Qt::WindowFl
 	pMenu->insertItem("&New...", this, SLOT(file_new()));
 	pMenu->insertItem("&Delete", this, SLOT(file_delete()));
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
-	TableWindow::setCaption("Servicings");
+        TableWindow::setWindowTitle("Servicings");
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table

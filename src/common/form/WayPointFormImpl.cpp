@@ -32,7 +32,7 @@ WayPointFormImpl::WayPointFormImpl(QWidget* parent, const QString &caption, WayP
 	Q_CHECK_PTR(pWayPoint);
 	m_pWayPoint = pWayPoint;
 
-	setCaption(caption);
+        setWindowTitle(caption);
 		
 	// name
 	lineEditName->setText(pWayPoint->name());

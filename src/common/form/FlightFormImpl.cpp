@@ -39,7 +39,7 @@ FlightFormImpl::FlightFormImpl(QWidget* parent, const QString &caption, Flight *
 : QDialog(parent)
 {
         setupUi(this);
-	setCaption(caption);
+        setWindowTitle(caption);
 	setFlight(pFlight);
 }
 

@@ -41,7 +41,7 @@ RouteFormImpl::RouteFormImpl(QWidget* parent, const QString &caption, Route *pRo
 	m_pRoute = pRoute;
 	m_readOnly = false;
 	
-	setCaption(caption);
+        setWindowTitle(caption);
 
 	// database waypoints
 	ISql::pInstance()->wayPointList(m_wpDbList);

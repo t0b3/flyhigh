@@ -26,7 +26,7 @@ GliderFormImpl::GliderFormImpl(QWidget* parent, const QString &caption, Glider *
 : QDialog(parent)
 {
         setupUi(this);
-        setCaption(caption);
+        setWindowTitle(caption);
 	Q_CHECK_PTR(pGlider);
 	m_pGlider = pGlider;
 }

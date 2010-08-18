@@ -66,7 +66,7 @@ RouteWindow::RouteWindow(QWidget* parent, const char* name, Qt::WindowFlags wfla
 	pMenu->insertItem("&Update", this, SLOT(file_update()));
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
 	
-	TableWindow::setCaption(caption);
+        TableWindow::setWindowTitle(caption);
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table

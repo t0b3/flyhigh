@@ -70,7 +70,7 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
 	
-	TableWindow::setCaption(caption);
+        TableWindow::setWindowTitle(caption);
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
@@ -92,7 +92,7 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	m_lastModified = 0;
 
 	m_airSpaceView.setGeometry(QRect(0, 0, 500, 500));
-	m_airSpaceView.setCaption("AirSpace View");
+        m_airSpaceView.setWindowTitle("AirSpace View");
 	connect(getTable(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 

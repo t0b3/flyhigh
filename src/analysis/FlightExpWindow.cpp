@@ -40,7 +40,7 @@ FlightExpWindow::FlightExpWindow(QWidget* parent, const char* name, Qt::WindowFl
 	pMenu = new Q3PopupMenu(this);
 	menuBar()->insertItem("&File", pMenu);
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
-	TableWindow::setCaption("Flight experience");
+        TableWindow::setWindowTitle("Flight experience");
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table

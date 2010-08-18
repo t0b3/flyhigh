@@ -67,7 +67,7 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	pMenu->insertItem("Delete all", this, SLOT(file_deleteAll()));
 	pMenu->insertItem("Export all...", this, SLOT(exportTable()));
 	
-	TableWindow::setCaption(caption);
+        TableWindow::setWindowTitle(caption);
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table

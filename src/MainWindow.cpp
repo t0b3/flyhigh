@@ -61,7 +61,7 @@ MainWindow::MainWindow()
 	uint maxDevNr;
 	
 	m_pActiveWin = NULL;
-	Q3MainWindow::setCaption("FlyHigh");
+        Q3MainWindow::setWindowTitle("FlyHigh");
 	
 	// Menu File
 	pMenu = new Q3PopupMenu(this);

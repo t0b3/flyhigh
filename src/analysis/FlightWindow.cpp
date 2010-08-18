@@ -98,7 +98,7 @@ FlightWindow::FlightWindow(QWidget* parent, const char* name, Qt::WindowFlags wf
 	pMenu->insertItem("&OLC", this, SLOT(plot_OLC()));
 	pMenu->insertItem("&Map View", this, SLOT(showOnMap()));
 	
-	TableWindow::setCaption(caption);
+        TableWindow::setWindowTitle(caption);
 	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
 	
 	// configure the table
