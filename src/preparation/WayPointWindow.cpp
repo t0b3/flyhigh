@@ -24,7 +24,6 @@
 #include <q3table.h>
 #include <qdatetime.h>
 #include <qmenubar.h>
-#include <q3popupmenu.h>
 #include "IDataBase.h"
 #include "ISql.h"
 #include "IGPSDevice.h"
@@ -39,34 +38,53 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	QString caption;
 	QStringList nameList;
 	Q3Table *pTable = TableWindow::getTable();
-	Q3PopupMenu *pMenu;
 
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	pMenu->insertItem("&Update", this, SLOT(file_update()));
-	
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+
+        QAction* pUpdateAct = new QAction(tr("&Update"), this);
+        connect(pUpdateAct,SIGNAL(triggered()), this, SLOT(file_update()));
+        pFileMenu->addAction(pUpdateAct);
+
 	switch(src)
 	{
 		case IDataBase::SqlDB:
+                {
 			m_pDb = ISql::pInstance();
 			caption = "WayPoints from DB";
-			pMenu->insertItem("&Add to GPS...", this, SLOT(file_AddToGps()));
-		break;
+
+                        QAction* pAddAct = new QAction(tr("&Add to GPS..."), this);
+                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToGPS()));
+                        pFileMenu->addAction(pAddAct);
+                }
+                break;
 		case IDataBase::GPSdevice:
+                {
 			m_pDb = IGPSDevice::pInstance();
 			caption = "WayPoints from GPS";
-			pMenu->insertItem("&Add to DB...", this, SLOT(file_AddToSqlDB()));
+
+                        QAction* pAddAct = new QAction(tr("&Add to DB..."), this);
+                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToSqlDB()));
+                        pFileMenu->addAction(pAddAct);
+                }
 		break;
 		default:
 			Q_ASSERT(false);
 		break;
 	}
 	
-	pMenu->insertItem("New Waypoint", this, SLOT(file_addNewWp()));
-	pMenu->insertItem("Delete", this, SLOT(file_delete()));
-	pMenu->insertItem("Delete all", this, SLOT(file_deleteAll()));
-	pMenu->insertItem("Export all...", this, SLOT(exportTable()));
-	
+        QAction* pNewAct = new QAction(tr("&New Waypoint..."), this);
+        connect(pNewAct,SIGNAL(triggered()), this, SLOT(file_addNewWp()));
+        pFileMenu->addAction(pNewAct);
+        QAction* pDelAct = new QAction(tr("&Delete"), this);
+        connect(pDelAct,SIGNAL(triggered()), this, SLOT(file_delete()));
+        pFileMenu->addAction(pDelAct);
+        QAction* pDelAllAct = new QAction(tr("De&lete all"), this);
+        connect(pDelAllAct,SIGNAL(triggered()), this, SLOT(file_deleteAll()));
+        pFileMenu->addAction(pDelAllAct);
+        QAction* pExpAllAct = new QAction(tr("&Export all..."), this);
+        connect(pExpAllAct,SIGNAL(triggered()), this, SLOT(exportTable()));
+        pFileMenu->addAction(pExpAllAct);
+
         TableWindow::setWindowTitle(caption);
         TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	
@@ -78,8 +96,8 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	nameList += "Name";
 	nameList += "Country";
 	nameList += "Spot";
-	nameList += "Longitude\n[�,min]";
-	nameList += "Latitude\n[�,min]";
+        nameList += "Longitude\n[Deg,min]";
+        nameList += "Latitude\n[Deg,min]";
 	nameList += "Altitude\n[m]";
 	nameList += "Description";
 	setupHeader(nameList);

@@ -25,7 +25,6 @@
 #include <q3header.h>
 #include <qinputdialog.h>
 #include <qmenubar.h>
-#include <q3popupmenu.h>
 #include <qstring.h>
 #include <q3table.h>
 #include <qwidget.h>
@@ -44,31 +43,44 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	QString caption;
 	QStringList nameList;
 	Q3Table *pTable = TableWindow::getTable();
-	Q3PopupMenu *pMenu;
 
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+
 	switch(src)
 	{
 		case IDataBase::SqlDB:
 		break;
 		case IDataBase::GPSdevice:
+                {
 			m_pDb = IGPSDevice::pInstance();
 			caption = "AirSpaces from GPS";
 
-			pMenu->insertItem("&Delete", this, SLOT(file_delete()));
-			pMenu->insertItem("&Update", this, SLOT(file_update()));
-		break;
+                        QAction* pDelAct = new QAction(tr("&Delete"), this);
+                        connect(pDelAct,SIGNAL(triggered()), this, SLOT(file_delete()));
+                        pFileMenu->addAction(pDelAct);
+                        QAction* pUpdateAct = new QAction(tr("&Update"), this);
+                        connect(pUpdateAct,SIGNAL(triggered()), this, SLOT(file_update()));
+                        pFileMenu->addAction(pUpdateAct);
+                }
+                break;
 		case IDataBase::File:
+                {
 			m_pDb = NULL;
 			caption = "AirSpaces from File";
-			pMenu->insertItem("&Import...", this, SLOT(file_open()));
-			pMenu->insertItem("&Add to GPS...", this, SLOT(file_AddToGPS()));
-		break;
+
+                        QAction* pImpAct = new QAction(tr("&Import..."), this);
+                        connect(pImpAct,SIGNAL(triggered()), this, SLOT(file_open()));
+                        pFileMenu->addAction(pImpAct);
+                        QAction* pAddAct = new QAction(tr("&Add to GPS..."), this);
+                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToGPS()));
+                        pFileMenu->addAction(pAddAct);
+                }
+                break;
 	}
 	
-	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
+        QAction* pExpAct = new QAction(tr("&Export all..."), this);
+        connect(pExpAct,SIGNAL(triggered()), this, SLOT(exportTable()));
+        pFileMenu->addAction(pExpAct);
 	
         TableWindow::setWindowTitle(caption);
         TableWindow::setWindowIcon(QIcon(":/document.xpm"));

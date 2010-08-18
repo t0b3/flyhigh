@@ -20,7 +20,6 @@
 
 #include <qcursor.h>
 #include <qmenubar.h>
-#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <q3table.h>
 #include <qwidget.h>
@@ -36,13 +35,19 @@ GliderWindow::GliderWindow(QWidget* parent, const char* name, Qt::WindowFlags wf
 {
 	QStringList nameList;
 	Q3Table *pTable = TableWindow::getTable();
-	Q3PopupMenu *pMenu;
 
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	pMenu->insertItem("&New...", this, SLOT(file_new()));
-	pMenu->insertItem("&Delete", this, SLOT(file_delete()));
-	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+
+        QAction* pNewAct = new QAction(tr("&New..."), this);
+        connect(pNewAct,SIGNAL(triggered()), this, SLOT(file_new()));
+        pFileMenu->addAction(pNewAct);
+        QAction* pDelAct = new QAction(tr("&Delete"), this);
+        connect(pDelAct,SIGNAL(triggered()), this, SLOT(file_delete()));
+        pFileMenu->addAction(pDelAct);
+        QAction* pExpAllAct = new QAction(tr("&Export all..."), this);
+        connect(pExpAllAct,SIGNAL(triggered()), this, SLOT(exportTable()));
+        pFileMenu->addAction(pExpAllAct);
+
         TableWindow::setWindowTitle("Gliders");
         TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	

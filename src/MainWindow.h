@@ -66,8 +66,8 @@ class MainWindow: public Q3MainWindow
 		
 	private:
 		QWorkspace* m_pWorkSpace;
-		Q3PopupMenu* m_pWindowsMenu;
-		Q3PopupMenu* m_pDevicesMenu;
+                QMenu* m_pWindowsMenu;
+                QMenu* m_pDevicesMenu;
 		Q3PopupMenu* m_pSpecialMenu;
 		MDIWindow* m_pActiveWin;
 		int m_specialMenuId;

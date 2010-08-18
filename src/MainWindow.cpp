@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <qworkspace.h>
-#include <q3popupmenu.h>
 #include <qmenubar.h>
 #include <qstatusbar.h>
 #include <qmessagebox.h>
@@ -52,7 +51,6 @@
 MainWindow::MainWindow()
 	:Q3MainWindow(0, "FlyHigh", Qt::WDestructiveClose)
 {
-	Q3PopupMenu *pMenu;
 	Q3VBox *pVBox;
 	QString devName;
 	int id;
@@ -64,43 +62,69 @@ MainWindow::MainWindow()
         Q3MainWindow::setWindowTitle("FlyHigh");
 	
 	// Menu File
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	pMenu->insertSeparator();
-	pMenu->insertItem("&Quit", qApp, SLOT(closeAllWindows()));
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+        QAction* pQuitAct = new QAction(tr("&Quit"), this);
+        connect(pQuitAct,SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
+        pFileMenu->addAction(pQuitAct);
+
 
 	// Analysis
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&Analysis", pMenu);
-	pMenu->insertItem("&Flights (DB)", this, SLOT(flights_fromSQL()));
-	pMenu->insertItem("&Flights (GPS)", this, SLOT(flights_fromGPS()));
-	pMenu->insertSeparator();
-	pMenu->insertItem("&Flight Exp", this, SLOT(flights_experience()));
-	pMenu->insertSeparator();
-	pMenu->insertItem("&Gliders", this, SLOT(analysis_gliders()));
-	pMenu->insertItem("&Servicing", this, SLOT(analysis_servicing()));
+        QMenu* pAnalysisMenu = menuBar()->addMenu(tr("&Analysis"));
+
+
+        QAction* pFlDBAct = new QAction(tr("&Flights (DB)"), this);
+        connect(pFlDBAct,SIGNAL(triggered()), this, SLOT(flights_fromSQL()));
+        pAnalysisMenu->addAction(pFlDBAct);
+        QAction* pFlDevAct = new QAction(tr("Flights (G&PS)"), this);
+        connect(pFlDevAct,SIGNAL(triggered()), this, SLOT(flights_fromGPS()));
+        pAnalysisMenu->addAction(pFlDevAct);
+        pAnalysisMenu->addSeparator();
+        QAction* pExpAct = new QAction(tr("Flight &Exp"), this);
+        connect(pExpAct,SIGNAL(triggered()), this, SLOT(flights_experience()));
+        pAnalysisMenu->addAction(pExpAct);
+        pAnalysisMenu->addSeparator();
+        QAction* pGlidAct = new QAction(tr("&Gliders"), this);
+        connect(pGlidAct,SIGNAL(triggered()), this, SLOT(analysis_gliders()));
+        pAnalysisMenu->addAction(pGlidAct);
+        QAction* pServAct = new QAction(tr("&Servicing"), this);
+        connect(pServAct,SIGNAL(triggered()), this, SLOT(analysis_servicing()));
+        pAnalysisMenu->addAction(pServAct);
+
 
 	// Preparation
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&Preparation", pMenu);
-	pMenu->insertItem("&WayPoints (DB)", this, SLOT(waypoints_fromSQL()));
-	pMenu->insertItem("&WayPoints (GPS)", this, SLOT(waypoints_fromGPS()));
-	pMenu->insertSeparator();
-	pMenu->insertItem("&Routes (DB)", this, SLOT(routes_fromSQL()));
-	pMenu->insertItem("&Routes (GPS)", this, SLOT(routes_fromGPS()));
-	pMenu->insertSeparator();
-//	pMenu->insertItem("&Airspaces (DB)", this, SLOT(airspaces_fromSQL()));
-	pMenu->insertItem("&Airspaces (GPS)", this, SLOT(airspaces_fromGPS()));
-	pMenu->insertItem("&Airspaces (File)", this, SLOT(airspaces_fromFile()));
+        QMenu* pPrepMenu = menuBar()->addMenu(tr("&Preparation"));
+
+        QAction* pWPDBAct = new QAction(tr("&WayPoints (DB)"), this);
+        connect(pWPDBAct,SIGNAL(triggered()), this, SLOT(waypoints_fromSQL()));
+        pPrepMenu->addAction(pWPDBAct);
+        QAction* pWPDevAct = new QAction(tr("WayPoints (G&PS)"), this);
+        connect(pWPDevAct,SIGNAL(triggered()), this, SLOT(waypoints_fromGPS()));
+        pPrepMenu->addAction(pWPDevAct);
+        pPrepMenu->addSeparator();
+        QAction* pRtDBAct = new QAction(tr("&Routes (DB)"), this);
+        connect(pRtDBAct,SIGNAL(triggered()), this, SLOT(routes_fromSQL()));
+        pPrepMenu->addAction(pRtDBAct);
+        QAction* pRtDevAct = new QAction(tr("Routes (&GPS)"), this);
+        connect(pRtDevAct,SIGNAL(triggered()), this, SLOT(routes_fromGPS()));
+        pPrepMenu->addAction(pRtDevAct);
+        pPrepMenu->addSeparator();
+        QAction* pAirDevAct = new QAction(tr("&Airspaces (GPS)"), this);
+        connect(pAirDevAct,SIGNAL(triggered()), this, SLOT(airspaces_fromGPS()));
+        pPrepMenu->addAction(pAirDevAct);
+        QAction* pAirFileAct = new QAction(tr("Airspaces (&File)"), this);
+        connect(pAirFileAct,SIGNAL(triggered()), this, SLOT(airspaces_fromFile()));
+        pPrepMenu->addAction(pAirFileAct);
 
 	// Menu Configuration
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&Configuration", pMenu);
-	pMenu->insertItem("Port...", this, SLOT(settings_port()));
+        QMenu* pConfMenu = menuBar()->addMenu(tr("&Configuration"));
+
+        QAction* pPortAct = new QAction(tr("Port..."), this);
+        connect(pPortAct,SIGNAL(triggered()), this, SLOT(settings_port()));
+        pConfMenu->addAction(pPortAct);
+
 	
-	// Menu Settings>Device
-	m_pDevicesMenu = new Q3PopupMenu(this);
-	m_pDevicesMenu->setCheckable(true);
+        // Submenu Settings>Device
+        m_pDevicesMenu = pConfMenu->addMenu(tr("&Device"));
 	maxDevNr = IFlyHighRC::pInstance()->deviceNameList().size();
 	curDev = IFlyHighRC::pInstance()->deviceName();
 	
@@ -115,22 +139,25 @@ MainWindow::MainWindow()
 		}
 	}
 
-	pMenu->insertItem("&Device", m_pDevicesMenu);
-	pMenu->insertItem("Configure Device...", this, SLOT(settings_configure_device()));
-	pMenu->insertItem("Pilot Info...", this, SLOT(settings_pilotInfo()));
+        QAction* pConfAct = new QAction(tr("Configure Device..."), this);
+        connect(pConfAct,SIGNAL(triggered()), SLOT(settings_configure_device()));
+        pConfMenu->addAction(pConfAct);
+
+        QAction* pPilotAct = new QAction(tr("Pilot Info..."), this);
+        connect(pPilotAct,SIGNAL(triggered()), SLOT(settings_pilotInfo()));
+        pConfMenu->addAction(pPilotAct);
 
 	// Menu Windows
-	m_pWindowsMenu = new Q3PopupMenu(this);
-	m_pWindowsMenu->setCheckable(true);
-	connect(m_pWindowsMenu, SIGNAL(aboutToShow()),
-			this, SLOT(aboutToShow()));
-	menuBar()->insertItem("&Windows", m_pWindowsMenu);
+        m_pWindowsMenu = menuBar()->addMenu(tr("&Windows"));
+        connect(m_pWindowsMenu, SIGNAL(aboutToShow()),this, SLOT(aboutToShow()));
 
 	// Menu Help
-	menuBar()->insertSeparator();
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&Help", pMenu);
-	pMenu->insertItem( "&About", this, SLOT(help_about()));
+        menuBar()->addSeparator();
+        QMenu* pHelpMenu = menuBar()->addMenu(tr("&Help"));
+
+        QAction* pAboutAct = new QAction(tr("&About"), this);
+        connect(pAboutAct,SIGNAL(triggered()), SLOT(help_about()));
+        pHelpMenu->addAction(pAboutAct);
 
 	// Frame
 	pVBox = new Q3VBox(this);
@@ -325,7 +352,7 @@ void MainWindow::aboutToShow()
 	}
 
 	// show window list
-	m_pWindowsMenu->insertSeparator();
+        m_pWindowsMenu->addSeparator();
 	winList = m_pWorkSpace->windowList();
 	nofWin = winList.count();
 	

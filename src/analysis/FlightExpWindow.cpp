@@ -20,7 +20,6 @@
 
 #include <qcursor.h>
 #include <qmenubar.h>
-#include <q3popupmenu.h>
 #include <qstringlist.h>
 #include <q3table.h>
 #include <qwidget.h>
@@ -35,11 +34,13 @@ FlightExpWindow::FlightExpWindow(QWidget* parent, const char* name, Qt::WindowFl
 {
 	QStringList nameList;
 	Q3Table *pTable = TableWindow::getTable();
-	Q3PopupMenu *pMenu;
 
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+
+        QAction* pExpAllAct = new QAction(tr("&Export all..."), this);
+        connect(pExpAllAct,SIGNAL(triggered()), this, SLOT(exportTable()));
+        pFileMenu->addAction(pExpAllAct);
+
         TableWindow::setWindowTitle("Flight experience");
         TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	

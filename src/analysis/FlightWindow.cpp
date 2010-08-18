@@ -27,7 +27,6 @@
 #include <q3table.h>
 #include <qdatetime.h>
 #include <qmenubar.h>
-#include <q3popupmenu.h>
 #include <qprinter.h>
 #include <qtimer.h>
 #include <qwidget.h>
@@ -56,48 +55,79 @@ FlightWindow::FlightWindow(QWidget* parent, const char* name, Qt::WindowFlags wf
 	QString caption;
 	QStringList nameList;
 	Q3Table *pTable = TableWindow::getTable();
-	Q3PopupMenu *pMenu;
-	
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&File", pMenu);
-	pMenu->insertItem("&Update", this, SLOT(file_update()));
+
+        QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
+
+        QAction* pUpdateAct = new QAction(tr("&Update"), this);
+        connect(pUpdateAct,SIGNAL(triggered()), this, SLOT(file_update()));
+        pFileMenu->addAction(pUpdateAct);
 
 	switch(src)
 	{
-		case IDataBase::SqlDB:
+            case IDataBase::SqlDB:
+            {
 			m_pDb = ISql::pInstance();
 			caption = "Flights from DB";
-			pMenu->insertItem("&New...", this, SLOT(file_new()));
-			pMenu->insertItem("&Delete", this, SLOT(file_delete()));
-			pMenu->insertItem("&Import...", this, SLOT(file_import()));
-		break;
-		case IDataBase::GPSdevice:
+
+                        QAction* pNewAct = new QAction(tr("&New..."), this);
+                        connect(pNewAct,SIGNAL(triggered()), this, SLOT(file_new()));
+                        pFileMenu->addAction(pNewAct);
+                        QAction* pDelAct = new QAction(tr("&Delete"), this);
+                        connect(pDelAct,SIGNAL(triggered()), this, SLOT(file_delete()));
+                        pFileMenu->addAction(pDelAct);
+                        QAction* pImpAct = new QAction(tr("&Import..."), this);
+                        connect(pImpAct,SIGNAL(triggered()), this, SLOT(file_import()));
+                        pFileMenu->addAction(pImpAct);
+            }
+            break;
+            case IDataBase::GPSdevice:
+            {
 			m_pDb = IGPSDevice::pInstance();
 			caption = "Flights from GPS";
-			pMenu->insertItem("&Add to DB...", this, SLOT(file_AddToSqlDB()));
-		break;
-		default:
+
+                        QAction* pAddAct = new QAction(tr("&Add to DB..."), this);
+                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToSqlDB()));
+                        pFileMenu->addAction(pAddAct);
+            }
+            break;
+            default:
 			Q_ASSERT(false);
-		break;
+            break;
 	}
 	
-	pMenu->insertItem("&Export IGC...", this, SLOT(file_exportIGC()));
-	pMenu->insertItem("&Export KML...", this, SLOT(file_exportKML()));
-	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
+        QAction* pExpIGCAct = new QAction(tr("&Export IGC..."), this);
+        connect(pExpIGCAct,SIGNAL(triggered()), this, SLOT(file_exportIGC()));
+        pFileMenu->addAction(pExpIGCAct);
+        QAction* pExpKMLAct = new QAction(tr("&Export KML..."), this);
+        connect(pExpKMLAct,SIGNAL(triggered()), this, SLOT(file_exportKML()));
+        pFileMenu->addAction(pExpKMLAct);
+        QAction* pExpAllAct = new QAction(tr("&Export all..."), this);
+        connect(pExpAllAct,SIGNAL(triggered()), this, SLOT(exportTable()));
+        pFileMenu->addAction(pExpAllAct);
 	
 /*	- ground speed / time
 - vario / time
 - altitude / time
 - 3D plot of flight*/
+        QMenu* pPlotMenu = menuBar()->addMenu(tr("&Plot"));
+
+        QAction* pSpdTimeAct = new QAction("&Speed vs Time", this);
+        connect(pSpdTimeAct,SIGNAL(triggered()), this, SLOT(plot_speedVsTime()));
+        pPlotMenu->addAction(pSpdTimeAct);
 	
-	pMenu = new Q3PopupMenu(this);
-	menuBar()->insertItem("&Plot", pMenu);
-	pMenu->insertItem("&Speed vs Time", this, SLOT(plot_speedVsTime()));
-	pMenu->insertItem("&Alt vs Time", this, SLOT(plot_altVsTime()));
-	pMenu->insertItem("&Vario vs Time", this, SLOT(plot_varioVsTime()));
-	pMenu->insertItem("&OLC", this, SLOT(plot_OLC()));
-	pMenu->insertItem("&Map View", this, SLOT(showOnMap()));
-	
+        QAction* pAltTimeAct = new QAction("&Alt vs Time", this);
+        connect(pAltTimeAct,SIGNAL(triggered()), this, SLOT(plot_altVsTime()));
+        pPlotMenu->addAction(pAltTimeAct);
+        QAction* pVarioTimeAct = new QAction("&Vario vs Time", this);
+        connect(pVarioTimeAct,SIGNAL(triggered()), this, SLOT(plot_varioVsTime()));
+        pPlotMenu->addAction(pVarioTimeAct);
+        QAction* pOLCAct = new QAction("&OLC", this);
+        connect(pOLCAct,SIGNAL(triggered()), this, SLOT(plot_OLC()));
+        pPlotMenu->addAction(pOLCAct);
+        QAction* pMapAct = new QAction("&Map View", this);
+        connect(pMapAct,SIGNAL(triggered()), this, SLOT(showOnMap()));
+        pPlotMenu->addAction(pMapAct);
+
         TableWindow::setWindowTitle(caption);
         TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 	
