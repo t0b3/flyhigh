@@ -68,7 +68,7 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlag
 	pMenu->insertItem("Export all...", this, SLOT(exportTable()));
 	
         TableWindow::setWindowTitle(caption);
-	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
+        TableWindow::setWindowIcon(QIcon(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);

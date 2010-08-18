@@ -36,7 +36,7 @@ int main( int argc, char ** argv )
 	
 	pMainWin = new MainWindow();
 	appl.setMainWidget(pMainWin);
-	pMainWin->setIcon(QPixmap(":/icons/flyhigh.png"));
+        pMainWin->setWindowIcon(QIcon(":/icons/flyhigh.png"));
 	
 	pMainWin->show();
 	appl.connect(&appl, SIGNAL(lastWindowClosed()), &appl, SLOT(quit()));

@@ -41,7 +41,7 @@ FlightExpWindow::FlightExpWindow(QWidget* parent, const char* name, Qt::WindowFl
 	menuBar()->insertItem("&File", pMenu);
 	pMenu->insertItem("&Export all...", this, SLOT(exportTable()));
         TableWindow::setWindowTitle("Flight experience");
-	TableWindow::setIcon(QPixmap(":/icons/document.xpm"));
+        TableWindow::setWindowIcon(QIcon(":/icons/document.xpm"));
 	
 	// configure the table
 	pTable->setReadOnly(true);
