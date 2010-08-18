@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.6)
 
+project(flyhigh)
+
 find_package(Qt4 REQUIRED)
 
 set(QT_USE_QT3SUPPORT TRUE)
