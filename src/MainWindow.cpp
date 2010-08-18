@@ -157,74 +157,107 @@ MainWindow::~MainWindow()
 
 void MainWindow::flights_fromGPS()
 {
-	MDIWindow* pWin = new FlightWindow(m_pWorkSpace, 0, Qt::WDestructiveClose, IDataBase::GPSdevice);
+        MDIWindow* pWin = new FlightWindow(m_pWorkSpace,
+                                           0,
+                                           Qt::WDestructiveClose|Qt::Window,
+                                           IDataBase::GPSdevice);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::flights_fromSQL()
 {
-	MDIWindow* pWin = new FlightWindow(m_pWorkSpace, "Flights", Qt::WDestructiveClose, IDataBase::SqlDB);
+        MDIWindow* pWin = new FlightWindow(m_pWorkSpace,
+                                           "Flights",
+                                           Qt::WDestructiveClose|Qt::Window,
+                                           IDataBase::SqlDB);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::flights_experience()
 {
-	MDIWindow* pWin = new FlightExpWindow(m_pWorkSpace, "Flight Experience", Qt::WDestructiveClose);
+        MDIWindow* pWin = new FlightExpWindow(m_pWorkSpace,
+                                              "Flight Experience",
+                                              Qt::WDestructiveClose|Qt::Window);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::analysis_gliders()
 {
-	MDIWindow* pWin = new GliderWindow(m_pWorkSpace, "Glider", Qt::WDestructiveClose);
+        MDIWindow* pWin = new GliderWindow(m_pWorkSpace,
+                                           "Glider",
+                                           Qt::WDestructiveClose|Qt::Window);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::analysis_servicing()
 {
-	MDIWindow* pWin = new ServicingWindow(m_pWorkSpace, "Servicing", Qt::WDestructiveClose);
+        MDIWindow* pWin = new ServicingWindow(m_pWorkSpace,
+                                              "Servicing",
+                                              Qt::WDestructiveClose|Qt::Window);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::waypoints_fromSQL()
 {
-	MDIWindow* pWin = new WayPointWindow(m_pWorkSpace, "WayPoints from DB", Qt::WDestructiveClose, IDataBase::SqlDB);
+        MDIWindow* pWin = new WayPointWindow(m_pWorkSpace,
+                                             "WayPoints from DB",
+                                             Qt::WDestructiveClose|Qt::Window,
+                                             IDataBase::SqlDB);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::waypoints_fromGPS()
 {
-	MDIWindow* pWin = new WayPointWindow(m_pWorkSpace, "WayPoints from GPS", Qt::WDestructiveClose, IDataBase::GPSdevice);
+        MDIWindow* pWin = new WayPointWindow(m_pWorkSpace,
+                                             "WayPoints from GPS",
+                                             Qt::WDestructiveClose|Qt::Window,
+                                             IDataBase::GPSdevice);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::routes_fromSQL()
 {
-	MDIWindow* pWin = new RouteWindow(m_pWorkSpace, "Routes from DB", Qt::WDestructiveClose, IDataBase::SqlDB);
+        MDIWindow* pWin = new RouteWindow(m_pWorkSpace,
+                                          "Routes from DB",
+                                          Qt::WDestructiveClose|Qt::Window,
+                                          IDataBase::SqlDB);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::routes_fromGPS()
 {
-	MDIWindow* pWin = new RouteWindow(m_pWorkSpace, "Routes from GPS", Qt::WDestructiveClose, IDataBase::GPSdevice);
+        MDIWindow* pWin = new RouteWindow(m_pWorkSpace,
+                                          "Routes from GPS",
+                                          Qt::WDestructiveClose|Qt::Window,
+                                          IDataBase::GPSdevice);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 /*
 void MainWindow::airspaces_fromSQL()
@@ -237,18 +270,26 @@ void MainWindow::airspaces_fromSQL()
 */
 void MainWindow::airspaces_fromGPS()
 {
-	MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace, "Airspaces from GPS", Qt::WDestructiveClose, IDataBase::GPSdevice);
+        MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace,
+                                             "Airspaces from GPS",
+                                             Qt::WDestructiveClose|Qt::Window,
+                                             IDataBase::GPSdevice);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::airspaces_fromFile()
 {
-	MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace, "Airspaces from OpenAirTextFile", Qt::WDestructiveClose, IDataBase::File);
+        MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace,
+                                             "Airspaces from OpenAirTextFile",
+                                             Qt::WDestructiveClose|Qt::Window,
+                                             IDataBase::File);
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::help_about()
