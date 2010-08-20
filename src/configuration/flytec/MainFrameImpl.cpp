@@ -68,8 +68,8 @@ MainFrameImpl::MainFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
 	m_fileName = "";
 	
 	// make a clean table
-	pWidget = toolBox->item(0);
-	toolBox->removeItem(pWidget);
+        pWidget = toolBox->widget(0);
+        toolBox->removeItem(toolBox->indexOf(pWidget));
 	pWidget = widgetStack->widget(0);
 	widgetStack->removeWidget(pWidget);
 	

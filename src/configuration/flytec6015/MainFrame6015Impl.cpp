@@ -62,8 +62,8 @@ MainFrame6015Impl::MainFrame6015Impl(QWidget* parent, const char* name, Qt::WFla
 	m_fileName = "";
 	
 	// make a clean table
-	pWidget = toolBox->item(0);
-	toolBox->removeItem(pWidget);
+        pWidget = toolBox->widget(0);
+        toolBox->removeItem(toolBox->indexOf(pWidget));
 	pWidget = widgetStack->widget(0);
 	widgetStack->removeWidget(pWidget);
 	
