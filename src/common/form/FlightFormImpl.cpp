@@ -52,14 +52,12 @@ void FlightFormImpl::updateWayPoints()
 	ISql::pInstance()->wayPointList(m_wpList);
 	comboBoxStart->clear();
 	comboBoxLand->clear();
-        int size = m_wpList.size();
 	
 	for(it=m_wpList.begin(); it!=m_wpList.end(); it++)
 	{
 		(*it).fullName(name);
-                // use list size to keep order
-                comboBoxStart->insertItem(size,name);
-                comboBoxLand->insertItem(size,name);
+                comboBoxStart->addItem(name);
+                comboBoxLand->addItem(name);
 	}
 }
 
@@ -71,13 +69,11 @@ void FlightFormImpl::updateGlider()
 	m_gliderList.clear();
 	ISql::pInstance()->gliderList(m_gliderList);
 	comboBoxModel->clear();
-        int size = m_gliderList.size();
-
+	
 	for(it=m_gliderList.begin(); it!=m_gliderList.end(); it++)
 	{
 		(*it).fullName(gliderModel);
-                // use list size to keep order
-                comboBoxModel->insertItem(size, gliderModel);
+                comboBoxModel->addItem(gliderModel);
 	}
 }
 

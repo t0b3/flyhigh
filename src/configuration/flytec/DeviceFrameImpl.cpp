@@ -251,13 +251,11 @@ void DeviceFrameImpl::updateGlider()
 	comboBoxModel->clear();
 	m_gliderList.clear();
 	ISql::pInstance()->gliderList(m_gliderList);
-        int size = m_gliderList.size();
 	
 	for(it=m_gliderList.begin(); it!=m_gliderList.end(); it++)
 	{
 		(*it).fullName(gliderName);
-                // use list size to keep order
-                comboBoxModel->insertItem(size, gliderName);
+                comboBoxModel->addItem(gliderName);
 	}
 
 	ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), dbPilot);
