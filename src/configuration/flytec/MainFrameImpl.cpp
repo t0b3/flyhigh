@@ -152,7 +152,7 @@ void MainFrameImpl::addPage( QWidget * pFrame, int * pPos)
 //	pWidget = new QWidget(toolBox,  pFrame->caption());
         pWidget = new QWidget(toolBox);
 	pWidget->setBackgroundMode(Qt::PaletteBackground);
-	toolBox->addItem(pWidget,  pFrame->caption());
+        toolBox->addItem(pWidget,  pFrame->windowTitle());
 }
 
 void MainFrameImpl::open()

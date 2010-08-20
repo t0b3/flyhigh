@@ -87,7 +87,7 @@ void TableWindow::tableAsHTML(QDomDocument &doc)
 	head = doc.createElement("head");
 	root.appendChild(head);
 	elem = doc.createElement("title");
-	txt = doc.createTextNode(caption());
+        txt = doc.createTextNode(windowTitle());
 	elem.appendChild(txt);
 	head.appendChild(elem);
 	body = doc.createElement("body");

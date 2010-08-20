@@ -358,7 +358,7 @@ void MainWindow::aboutToShow()
 	
 	for(winNr=0; winNr<nofWin; winNr++)
 	{
-		menuItemId = m_pWindowsMenu->insertItem(winList.at(winNr)->caption(),
+                menuItemId = m_pWindowsMenu->insertItem(winList.at(winNr)->windowTitle(),
 					 this, SLOT(windows_activated(int)));
 		m_pWindowsMenu->setItemParameter(menuItemId, winNr);
 		m_pWindowsMenu->setItemChecked(menuItemId, m_pWorkSpace->activeWindow() == winList.at(winNr));
