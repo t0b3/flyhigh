@@ -110,36 +110,38 @@ void DisplayFrameImpl::store(QByteArray &arr)
 
 void DisplayFrameImpl::insertItems( QComboBox * pItem )
 {
+        // use index to keep order
+        int index = 0;
 	pItem->clear();
-	pItem->insertItem( tr( "Wind spd" ) );
-	pItem->insertItem( tr( "Time" ) );
-	pItem->insertItem( tr( "Fl.Time" ) );
-	pItem->insertItem( tr( "Gnd spd" ) );
-	pItem->insertItem( tr( "Speed diff" ) );
-	pItem->insertItem( tr( "Dist WP" ) );
-	pItem->insertItem( tr( "Bearing" ) );
-	pItem->insertItem( tr( "Track" ) );
-	pItem->insertItem( tr( "Temp" ) );
-	pItem->insertItem( tr( "Alt 2" ) );
-	pItem->insertItem( tr( "Alt 3" ) );
-	pItem->insertItem( tr( "QNH hPa" ) );
-	pItem->insertItem( tr( "L/D Gnd" ) );
-	pItem->insertItem( tr( "L/D air" ) );
-	pItem->insertItem( tr( "L/D Req" ) );
-	pItem->insertItem( tr( "Dist to ^" ) );
-	pItem->insertItem( QString::null );
-	pItem->insertItem( tr( "Alt @ BG" ) );
-	pItem->insertItem( tr( "FL (ft)" ) );
-	pItem->insertItem( tr( "Air spd" ) );
-	pItem->insertItem( tr( "Alt @ goal" ) );
-	pItem->insertItem( tr( "Dist goal" ) );
-	pItem->insertItem( tr( "Vario" ) );
-	pItem->insertItem( tr( "Alt 1" ) );
-	pItem->insertItem( tr( "SMS p/t" ) );
-	pItem->insertItem( tr( "Dist toff" ) );
-	pItem->insertItem( tr( "Dist cyl" ) );
-	pItem->insertItem( tr( "L/D rel goal" ) );
-	pItem->insertItem( tr( "Race start" ) );
+        pItem->insertItem( ++index, tr( "Wind spd" ) );
+        pItem->insertItem( ++index, tr( "Time" ) );
+        pItem->insertItem( ++index, tr( "Fl.Time" ) );
+        pItem->insertItem( ++index, tr( "Gnd spd" ) );
+        pItem->insertItem( ++index, tr( "Speed diff" ) );
+        pItem->insertItem( ++index, tr( "Dist WP" ) );
+        pItem->insertItem( ++index, tr( "Bearing" ) );
+        pItem->insertItem( ++index, tr( "Track" ) );
+        pItem->insertItem( ++index, tr( "Temp" ) );
+        pItem->insertItem( ++index, tr( "Alt 2" ) );
+        pItem->insertItem( ++index, tr( "Alt 3" ) );
+        pItem->insertItem( ++index, tr( "QNH hPa" ) );
+        pItem->insertItem( ++index, tr( "L/D Gnd" ) );
+        pItem->insertItem( ++index, tr( "L/D air" ) );
+        pItem->insertItem( ++index, tr( "L/D Req" ) );
+        pItem->insertItem( ++index, tr( "Dist to ^" ) );
+        pItem->insertItem( ++index, QString::null );
+        pItem->insertItem( ++index, tr( "Alt @ BG" ) );
+        pItem->insertItem( ++index, tr( "FL (ft)" ) );
+        pItem->insertItem( ++index, tr( "Air spd" ) );
+        pItem->insertItem( ++index, tr( "Alt @ goal" ) );
+        pItem->insertItem( ++index, tr( "Dist goal" ) );
+        pItem->insertItem( ++index, tr( "Vario" ) );
+        pItem->insertItem( ++index, tr( "Alt 1" ) );
+        pItem->insertItem( ++index, tr( "SMS p/t" ) );
+        pItem->insertItem( ++index, tr( "Dist toff" ) );
+        pItem->insertItem( ++index, tr( "Dist cyl" ) );
+        pItem->insertItem( ++index, tr( "L/D rel goal" ) );
+        pItem->insertItem( ++index, tr( "Race start" ) );
 }
 
 

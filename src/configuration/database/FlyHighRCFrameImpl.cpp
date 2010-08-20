@@ -83,11 +83,13 @@ void FlyHighRCFrameImpl::updateGlider()
 	m_gliderList.clear();
 	ISql::pInstance()->gliderList(m_gliderList);
 	comboBoxModel->clear();
+        int size = m_gliderList.size();
 	
 	for(it=m_gliderList.begin(); it!=m_gliderList.end(); it++)
 	{
 		(*it).fullName(gliderModel);
-		comboBoxModel->insertItem(gliderModel);
+                // use list size to keep order
+                comboBoxModel->insertItem(size, gliderModel);
 	}
 }
 
