@@ -42,9 +42,9 @@
 #include "ProgressDlg.h"
 #include "UnitFrameImpl.h"
 #include "Frame.h"
-#include "MainFrameImpl.h"
 #include "IGPSDevice.h"
 #include "SmsFrameImpl.h"
+#include "MainFrameImpl.h"
 
 MainFrameImpl::MainFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
 :Q3MainWindow(parent)

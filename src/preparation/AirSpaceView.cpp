@@ -94,7 +94,7 @@ void AirSpaceView::mouseMoveEvent(QMouseEvent *pEvent)
 {
 	QPoint prevOff;
 
-	if(m_mouseDown && (pEvent->state() & Qt::LeftButton))
+        if(m_mouseDown && (pEvent->buttons() & Qt::LeftButton))
 	{
 		prevOff = m_offset;
 		calcOffset(pEvent->pos());
@@ -189,7 +189,7 @@ void AirSpaceView::drawAirspace()
 		// offset, scale and color
 		paint.translate(m_offset.x() * paint.window().width() / viewRect.width(), m_offset.y() * paint.window().height() / viewRect.height());
 		paint.scale(m_scale, m_scale);
-		paint.setPen(colorGroup().foreground());
+                paint.setPen(palette().windowText().color());
 
 
 

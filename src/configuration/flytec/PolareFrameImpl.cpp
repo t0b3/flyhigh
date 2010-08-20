@@ -35,7 +35,7 @@ PolareFrameImpl::PolareFrameImpl(QWidget* parent, const char* name, Qt::WFlags f
 {
         setupUi(this);
 	// these are not supportet by 5020
-	tabWidget->page(1)->setEnabled(false);
+        tabWidget->widget(1)->setEnabled(false);
 	spinBox_Altitude1->setEnabled(false);
 
         pixmapLabel_Polare1->setPixmap(QPixmap(":/polare.png"));

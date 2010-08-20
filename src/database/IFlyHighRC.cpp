@@ -236,11 +236,11 @@ void IFlyHighRC::parseSerialLine(QBuffer &buff)
 		}
                 else if(DeviceSpeedVar.indexOf(var) == 0)
 		{
-			setDeviceSpeed(m_deviceSpeedList.findIndex(val));
+                        setDeviceSpeed(m_deviceSpeedList.indexOf(val));
 		}
                 else if(DeviceNameVar.indexOf(var) == 0)
 		{
-			setDeviceName(m_deviceNameList.findIndex(val));
+                        setDeviceName(m_deviceNameList.indexOf(val));
 		}
 		else
 		{
