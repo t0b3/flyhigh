@@ -44,7 +44,7 @@ void GPSFrameImpl::update(QByteArray &arr)
 	char i8value;
 
 	// Grid System
-	comboBox_GridSys->setCurrentItem(arr[GRID_SYS_POS]);
+        comboBox_GridSys->setCurrentIndex(arr[GRID_SYS_POS]);
 	
 	// UTC Offset
 	i8value = arr[UTC_OFFSET_POS];
@@ -60,7 +60,7 @@ void GPSFrameImpl::update(QByteArray &arr)
 void GPSFrameImpl::store(QByteArray &arr)
 {
 	// Grid System
-	arr[GRID_SYS_POS] = comboBox_GridSys->currentItem();
+        arr[GRID_SYS_POS] = comboBox_GridSys->currentIndex();
 	
 	// UTC offset
 	arr[UTC_OFFSET_POS] = spinBox_UTCoffset->value();

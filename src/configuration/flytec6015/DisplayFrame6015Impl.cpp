@@ -47,10 +47,10 @@ void DisplayFrame6015Impl::update(QByteArray &arr)
 
 	// Alti, Line 4, Alt2, Alt3
 	uiValue = pDev->memoryRead(MemFa, DIV_FLAGS, UInt16).toUInt();
-	comboBox_AltDisp->setCurrentItem((uiValue & MASK_ALT_DISP) >> 4);
-	comboBox_Line4->setCurrentItem((uiValue & MASK_LINE4_DISP) >> 5);
-	comboBox_Alt2Mode->setCurrentItem((uiValue & MASK_ALT2_MODE) >> 6);
-	comboBox_Alt3Mode->setCurrentItem((uiValue & MASK_ALT3_MODE) >> 9);
+        comboBox_AltDisp->setCurrentIndex((uiValue & MASK_ALT_DISP) >> 4);
+        comboBox_Line4->setCurrentIndex((uiValue & MASK_LINE4_DISP) >> 5);
+        comboBox_Alt2Mode->setCurrentIndex((uiValue & MASK_ALT2_MODE) >> 6);
+        comboBox_Alt3Mode->setCurrentIndex((uiValue & MASK_ALT3_MODE) >> 9);
 }
 
 void DisplayFrame6015Impl::store(QByteArray &arr)

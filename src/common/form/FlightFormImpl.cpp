@@ -127,13 +127,13 @@ void FlightFormImpl::accept()
 	m_pFlight->setDuration(timeEditDuration->time());
 	
 	// glider
-	m_pFlight->setGlider(m_gliderList.at(comboBoxModel->currentItem()));
+        m_pFlight->setGlider(m_gliderList.at(comboBoxModel->currentIndex()));
 
 	// start
-	m_pFlight->setStartPt(m_wpList.at(comboBoxStart->currentItem()));
+        m_pFlight->setStartPt(m_wpList.at(comboBoxStart->currentIndex()));
 	
 	// land
-	m_pFlight->setLandPt(m_wpList.at(comboBoxLand->currentItem()));
+        m_pFlight->setLandPt(m_wpList.at(comboBoxLand->currentIndex()));
 	
 	// distance
 	m_pFlight->setDistance((uint)(lineEditDistance->text().toDouble()*1000.0));
@@ -159,7 +159,7 @@ void FlightFormImpl::selectStart()
 		
 		if(found)
 		{
-			comboBoxStart->setCurrentItem(index);
+                        comboBoxStart->setCurrentIndex(index);
 			break;
 		}
 	}
@@ -179,7 +179,7 @@ void FlightFormImpl::selectLand()
 		
 		if(found)
 		{
-			comboBoxLand->setCurrentItem(index);
+                        comboBoxLand->setCurrentIndex(index);
 			break;
 		}
 	}
@@ -199,7 +199,7 @@ void FlightFormImpl::selectGlider()
 		
 		if(found)
 		{
-			comboBoxModel->setCurrentItem(index);
+                        comboBoxModel->setCurrentIndex(index);
 			break;
 		}
 	}

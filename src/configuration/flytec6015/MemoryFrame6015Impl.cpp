@@ -46,7 +46,7 @@ void MemoryFrame6015Impl::update(QByteArray &arr)
 
 	// flight end detection
 	uiValue = pDev->memoryRead(MemFa, DIV_FLAGS, UInt16).toUInt();
-	comboBox_FlightEnd->setCurrentItem((uiValue & MASK_FLIGHT_END) >> POS_FLIGHT_END);
+        comboBox_FlightEnd->setCurrentIndex((uiValue & MASK_FLIGHT_END) >> POS_FLIGHT_END);
 }
 
 void MemoryFrame6015Impl::store(QByteArray &arr)

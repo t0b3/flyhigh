@@ -68,7 +68,7 @@ void FlyHighRCFrameImpl::selectGlider(Glider &glider)
 		
 		if(found)
 		{
-			comboBoxModel->setCurrentItem(index);
+                        comboBoxModel->setCurrentIndex(index);
 			break;
 		}
 	}
@@ -100,7 +100,7 @@ void FlyHighRCFrameImpl::ok()
 
 	if(m_gliderList.size() > 0)
 	{
-		m_curPilot.setGlider(m_gliderList.at(comboBoxModel->currentItem()));
+                m_curPilot.setGlider(m_gliderList.at(comboBoxModel->currentIndex()));
 	}
 
 	if(m_curPilot.id() < 0)

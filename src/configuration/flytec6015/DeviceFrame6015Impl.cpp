@@ -91,7 +91,7 @@ void DeviceFrame6015Impl::update(QByteArray &arr)
 
 	// glider
 	glider = pDev->memoryRead(MemFa, AC_TYPE, String).toString();
-	dbGlider = m_gliderList.at(comboBoxModel->currentItem()).model();
+        dbGlider = m_gliderList.at(comboBoxModel->currentIndex()).model();
 	
 	if(glider != dbGlider)
 	{
@@ -372,11 +372,11 @@ void DeviceFrame6015Impl::selectGlider(const QString &name)
 	
 	for(index=0; index<maxIndex; index++)
 	{
-		found = (comboBoxModel->text(index) == name);
+                found = (comboBoxModel->itemText(index) == name);
 		
 		if(found)
 		{
-			comboBoxModel->setCurrentItem(index);
+                        comboBoxModel->setCurrentIndex(index);
 			break;
 		}
 	}

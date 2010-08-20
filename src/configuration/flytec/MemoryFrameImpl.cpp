@@ -43,7 +43,7 @@ void MemoryFrameImpl::update(QByteArray &arr)
 	spinBox_Intervall->setValue(arr[REC_INTERVAL_POS]);
 
 	// Stop Mode
-	comboBox_Mode->setCurrentItem(arr[REC_STOP_MODE_POS]);
+        comboBox_Mode->setCurrentIndex(arr[REC_STOP_MODE_POS]);
 }
 
 void MemoryFrameImpl::store(QByteArray &arr)
@@ -52,7 +52,7 @@ void MemoryFrameImpl::store(QByteArray &arr)
 	arr[REC_INTERVAL_POS] = spinBox_Intervall->value();
 
 	// Stop Mode
-	arr[REC_STOP_MODE_POS] = comboBox_Mode->currentItem();
+        arr[REC_STOP_MODE_POS] = comboBox_Mode->currentIndex();
 }
 
 #include "moc_MemoryFrameImpl.cxx"

@@ -42,25 +42,25 @@ void UnitFrame6015Impl::update(QByteArray &arr)
 	uiValue = pDev->memoryRead(MemFa, UNIT_FLAGS, UInt16).toUInt();
 
 	// Distance 1
-	comboBox_Distance1->setCurrentItem((uiValue & MASK_UNIT_DIST1) >> POS_UNIT_DIST1);
+        comboBox_Distance1->setCurrentIndex((uiValue & MASK_UNIT_DIST1) >> POS_UNIT_DIST1);
 
 	// Distance 2
-	comboBox_Distance2->setCurrentItem((uiValue & MASK_UNIT_DIST2) >> POS_UNIT_DIST2);
+        comboBox_Distance2->setCurrentIndex((uiValue & MASK_UNIT_DIST2) >> POS_UNIT_DIST2);
 
 	// Speed 1
-	comboBox_Velocity1->setCurrentItem((uiValue & MASK_UNIT_SPEED1) >> POS_UNIT_SPEED1);
+        comboBox_Velocity1->setCurrentIndex((uiValue & MASK_UNIT_SPEED1) >> POS_UNIT_SPEED1);
 
 	// Speed 2
-	comboBox_Velocity2->setCurrentItem((uiValue & MASK_UNIT_SPEED2) >> POS_UNIT_SPEED2);
+        comboBox_Velocity2->setCurrentIndex((uiValue & MASK_UNIT_SPEED2) >> POS_UNIT_SPEED2);
 
 	// Temperature
-	comboBox_Temp->setCurrentItem((uiValue & MASK_UNIT_DEG) >> POS_UNIT_DEG);
+        comboBox_Temp->setCurrentIndex((uiValue & MASK_UNIT_DEG) >> POS_UNIT_DEG);
 
 	// Pressure
-	comboBox_Press->setCurrentItem((uiValue & MASK_UNIT_PRESS) >> POS_UNIT_PRESS);
+        comboBox_Press->setCurrentIndex((uiValue & MASK_UNIT_PRESS) >> POS_UNIT_PRESS);
 
 	// Time Format
-	comboBox_TimeFormat->setCurrentItem((uiValue & MASK_UNIT_TIME) >> POS_UNIT_TIME);
+        comboBox_TimeFormat->setCurrentIndex((uiValue & MASK_UNIT_TIME) >> POS_UNIT_TIME);
 }
 
 void UnitFrame6015Impl::store(QByteArray &arr)

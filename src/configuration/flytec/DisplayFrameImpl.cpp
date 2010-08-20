@@ -70,17 +70,17 @@ void DisplayFrameImpl::update(QByteArray &arr)
 	i16value += arr[LCD_CONTRAST_POS+1];
 	slider_Contrast->setValue(i16value);
 
-	comboBox_UserField_0_0->setCurrentItem(arr[USERFIELD_0_POS]);
-	comboBox_UserField_0_1->setCurrentItem(arr[USERFIELD_0_POS+1]);
-	comboBox_UserField_0_2->setCurrentItem(arr[USERFIELD_0_POS+2]);
+        comboBox_UserField_0_0->setCurrentIndex(arr[USERFIELD_0_POS]);
+        comboBox_UserField_0_1->setCurrentIndex(arr[USERFIELD_0_POS+1]);
+        comboBox_UserField_0_2->setCurrentIndex(arr[USERFIELD_0_POS+2]);
 
-	comboBox_UserField_1_0->setCurrentItem(arr[USERFIELD_1_POS]);
-	comboBox_UserField_1_1->setCurrentItem(arr[USERFIELD_1_POS+1]);
-	comboBox_UserField_1_2->setCurrentItem(arr[USERFIELD_1_POS+2]);
+        comboBox_UserField_1_0->setCurrentIndex(arr[USERFIELD_1_POS]);
+        comboBox_UserField_1_1->setCurrentIndex(arr[USERFIELD_1_POS+1]);
+        comboBox_UserField_1_2->setCurrentIndex(arr[USERFIELD_1_POS+2]);
 	
-	comboBox_UserField_2_0->setCurrentItem(arr[USERFIELD_2_POS]);
-	comboBox_UserField_2_1->setCurrentItem(arr[USERFIELD_2_POS+1]);
-	comboBox_UserField_2_2->setCurrentItem(arr[USERFIELD_2_POS+2]);
+        comboBox_UserField_2_0->setCurrentIndex(arr[USERFIELD_2_POS]);
+        comboBox_UserField_2_1->setCurrentIndex(arr[USERFIELD_2_POS+1]);
+        comboBox_UserField_2_2->setCurrentIndex(arr[USERFIELD_2_POS+2]);
 }
 
 void DisplayFrameImpl::store(QByteArray &arr)
@@ -93,19 +93,19 @@ void DisplayFrameImpl::store(QByteArray &arr)
 	arr[LCD_CONTRAST_POS+1] = (u_char)(i16value & 0xFF);
 	
 	// User Field 0
-	arr[USERFIELD_0_POS] = comboBox_UserField_0_0->currentItem();
-	arr[USERFIELD_0_POS+1] = comboBox_UserField_0_1->currentItem();
-	arr[USERFIELD_0_POS+2] = comboBox_UserField_0_2->currentItem();
+        arr[USERFIELD_0_POS] = comboBox_UserField_0_0->currentIndex();
+        arr[USERFIELD_0_POS+1] = comboBox_UserField_0_1->currentIndex();
+        arr[USERFIELD_0_POS+2] = comboBox_UserField_0_2->currentIndex();
 	
 	// User Field 1
-	arr[USERFIELD_1_POS] = comboBox_UserField_1_0->currentItem();
-	arr[USERFIELD_1_POS+1] = comboBox_UserField_1_1->currentItem();
-	arr[USERFIELD_1_POS+2] = comboBox_UserField_1_2->currentItem();
+        arr[USERFIELD_1_POS] = comboBox_UserField_1_0->currentIndex();
+        arr[USERFIELD_1_POS+1] = comboBox_UserField_1_1->currentIndex();
+        arr[USERFIELD_1_POS+2] = comboBox_UserField_1_2->currentIndex();
 
 	// User Field 2
-	arr[USERFIELD_2_POS] = comboBox_UserField_2_0->currentItem();
-	arr[USERFIELD_2_POS+1] = comboBox_UserField_2_1->currentItem();
-	arr[USERFIELD_2_POS+2] = comboBox_UserField_2_2->currentItem();
+        arr[USERFIELD_2_POS] = comboBox_UserField_2_0->currentIndex();
+        arr[USERFIELD_2_POS+1] = comboBox_UserField_2_1->currentIndex();
+        arr[USERFIELD_2_POS+2] = comboBox_UserField_2_2->currentIndex();
 }
 
 void DisplayFrameImpl::insertItems( QComboBox * pItem )

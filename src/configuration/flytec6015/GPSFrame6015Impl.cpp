@@ -45,7 +45,7 @@ void GPSFrame6015Impl::update(QByteArray &arr)
 
 	// grid system
 	uiValue = pDev->memoryRead(MemFa, UNIT_FLAGS, UInt16).toUInt();
-	comboBox_GridSys->setCurrentItem((uiValue & MASK_UNIT_GRID) >> 9);
+        comboBox_GridSys->setCurrentIndex((uiValue & MASK_UNIT_GRID) >> 9);
 
 	// utc offset
 	iValue = pDev->memoryRead(MemFa, UTC_OFFSET, Int8).toInt();

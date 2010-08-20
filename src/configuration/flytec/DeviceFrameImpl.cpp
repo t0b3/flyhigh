@@ -103,7 +103,7 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	// glider
 	ft_ftstring2string(str, &devdata[GLYDER_TYPE_POS]);
 	glider = str;
-	dbGlider = m_gliderList.at(comboBoxModel->currentItem()).model();
+        dbGlider = m_gliderList.at(comboBoxModel->currentIndex()).model();
 //	dbGlider = dbPilot.glider().model();
 	
 	if(glider != dbGlider)
@@ -146,7 +146,7 @@ void DeviceFrameImpl::update(QByteArray &arr)
 	lineEdit_GliderID->setText(callsign);
 
 	// battery type
-	comboBox_BattType->setCurrentItem(arr[BATT_TYPE_POS]);
+        comboBox_BattType->setCurrentIndex(arr[BATT_TYPE_POS]);
 }
 
 void DeviceFrameImpl::store(QByteArray &arr)
@@ -188,7 +188,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
         ft_string2ftstring(pilotName.toAscii().constData(), &devdata[PILOT_NAME_POS]);
 	
 	// glider
-	m_gliderList.at(comboBoxModel->currentItem()).fullName(glider);
+        m_gliderList.at(comboBoxModel->currentIndex()).fullName(glider);
 	dbPilot.glider().fullName(dbGlider);
 	
 	if(glider != dbGlider)
@@ -204,13 +204,13 @@ void DeviceFrameImpl::store(QByteArray &arr)
 				glider = dbPilot.glider().model();
 			break;
 			default:
-				glider = m_gliderList.at(comboBoxModel->currentItem()).model();
+                                glider = m_gliderList.at(comboBoxModel->currentIndex()).model();
 			break;
 		}
 	}
 	else
 	{
-		glider = m_gliderList.at(comboBoxModel->currentItem()).model();
+                glider = m_gliderList.at(comboBoxModel->currentIndex()).model();
 	}
 
         ft_string2ftstring(glider.toAscii().constData(), &devdata[GLYDER_TYPE_POS]);
@@ -238,7 +238,7 @@ void DeviceFrameImpl::store(QByteArray &arr)
         ft_string2ftstring(callsign.toAscii().constData(), &devdata[GLYDER_ID_POS]);
 
 	// battery type
-	arr[BATT_TYPE_POS] = comboBox_BattType->currentItem();
+        arr[BATT_TYPE_POS] = comboBox_BattType->currentIndex();
 }
 
 void DeviceFrameImpl::updateGlider()
@@ -274,11 +274,11 @@ void DeviceFrameImpl::selectGlider(const QString &name)
 	
 	for(index=0; index<maxIndex; index++)
 	{
-		found = (comboBoxModel->text(index) == name);
+                found = (comboBoxModel->itemText(index) == name);
 		
 		if(found)
 		{
-			comboBoxModel->setCurrentItem(index);
+                        comboBoxModel->setCurrentIndex(index);
 			break;
 		}
 	}
