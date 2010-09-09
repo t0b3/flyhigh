@@ -47,7 +47,7 @@
 #include "MainFrameImpl.h"
 
 MainFrameImpl::MainFrameImpl(QWidget* parent, const char* name, Qt::WFlags fl)
-:Q3MainWindow(parent)
+:QMainWindow(parent)
 {
   setupUi(this);
 	QWidget *pWidget;

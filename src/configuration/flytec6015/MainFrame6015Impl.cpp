@@ -44,7 +44,7 @@
 #include "IGPSDevice.h"
 
 MainFrame6015Impl::MainFrame6015Impl(QWidget* parent, const char* name, Qt::WFlags fl)
-:Q3MainWindow(parent)
+:QMainWindow(parent)
 {
   setupUi(this);
 	QWidget *pWidget;

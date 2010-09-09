@@ -4,7 +4,7 @@
   <comment></comment>
   <exportmacro></exportmacro>
   <class>MainFrame6015</class>
-  <widget class="Q3MainWindow" name="MainFrame6015">
+  <widget class="QMainWindow" name="MainFrame6015">
     <property name="geometry">
       <rect>
         <x>0</x>

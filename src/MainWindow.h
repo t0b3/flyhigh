@@ -21,7 +21,7 @@
 #ifndef _MainWindow_h_
 #define _MainWindow_h_
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
 #include <QCloseEvent>
@@ -32,7 +32,7 @@ class MDIWindow;
 
 class TrackWindow;
 
-class MainWindow: public Q3MainWindow
+class MainWindow: public QMainWindow
 {
 	Q_OBJECT
 	public:
@@ -72,7 +72,7 @@ class MainWindow: public Q3MainWindow
 		MDIWindow* m_pActiveWin;
 		int m_specialMenuId;
 
-		void showWindow(Q3MainWindow *pWin);
+                void showWindow(QMainWindow *pWin);
 		void setCurrentDevice(int id);
 };
 

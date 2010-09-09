@@ -15,8 +15,9 @@
 #define UPDATE_TIME 1000 // 1 second
 
 MDIWindow::MDIWindow(QWidget* parent, const char* name, Qt::WindowFlags wflags)
-	:Q3MainWindow(parent, name, wflags)
+        :QMainWindow(parent, wflags)
 {
+        setWindowTitle(name);
 	m_pUpdateTimer = new QTimer(this);
 	connect(m_pUpdateTimer, SIGNAL(timeout()), this, SLOT(updateTimeout()));
         m_pUpdateTimer->setSingleShot(true);

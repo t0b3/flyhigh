@@ -7,7 +7,7 @@
 #ifndef _MDIWindow_h_
 #define _MDIWindow_h_
 
-#include <q3mainwindow.h>
+#include <qmainwindow.h>
 //Added by qt3to4:
 #include <Q3PopupMenu>
 
@@ -17,7 +17,7 @@ class QWidget;
 class QString;
 class QTimer;
 
-class MDIWindow: public Q3MainWindow
+class MDIWindow: public QMainWindow
 {
 	Q_OBJECT
 	public:

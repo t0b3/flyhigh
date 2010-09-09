@@ -29,7 +29,7 @@
 class Q3ProgressBar;
 class Frame6015;
 
-class MainFrame6015Impl: public Q3MainWindow, public Ui::MainFrame6015
+class MainFrame6015Impl: public QMainWindow, public Ui::MainFrame6015
 {
 	Q_OBJECT
 

@@ -49,7 +49,7 @@
 #include "WayPointWindow.h"
 
 MainWindow::MainWindow()
-	:Q3MainWindow(0, "FlyHigh", Qt::WDestructiveClose)
+        :QMainWindow(0, Qt::WDestructiveClose)
 {
 	Q3VBox *pVBox;
 	QString devName;
@@ -59,7 +59,7 @@ MainWindow::MainWindow()
 	uint maxDevNr;
 	
 	m_pActiveWin = NULL;
-        Q3MainWindow::setWindowTitle("FlyHigh");
+        QMainWindow::setWindowTitle("FlyHigh");
 	
 	// Menu File
         QMenu* pFileMenu = menuBar()->addMenu(tr("&File"));
@@ -436,10 +436,10 @@ void MainWindow::closeEvent(QCloseEvent *e)
 		}
 	}
 	
-	Q3MainWindow::closeEvent(e);
+        QMainWindow::closeEvent(e);
 }
 
-void MainWindow::showWindow(Q3MainWindow *pWin)
+void MainWindow::showWindow(QMainWindow *pWin)
 {
 	// show the very first window in maximized mode
 	if(m_pWorkSpace->windowList().isEmpty())
