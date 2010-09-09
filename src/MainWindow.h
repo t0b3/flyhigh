@@ -27,7 +27,7 @@
 #include <QCloseEvent>
 
 class Q3PopupMenu;
-class QWorkspace;
+class QMdiArea;
 class MDIWindow;
 
 class TrackWindow;
@@ -65,7 +65,7 @@ class MainWindow: public QMainWindow
 		void aboutToShow();
 		
 	private:
-		QWorkspace* m_pWorkSpace;
+                QMdiArea* m_pMdiArea;
                 QMenu* m_pWindowsMenu;
                 QMenu* m_pDevicesMenu;
 		Q3PopupMenu* m_pSpecialMenu;

@@ -24,10 +24,10 @@
 #include <qmessagebox.h>
 #include <qapplication.h>
 #include <qobject.h>
-#include <q3vbox.h>
+#include <qmdiarea.h>
+#include <qmdisubwindow.h>
 //Added by qt3to4:
 #include <QCloseEvent>
-#include <Q3Frame>
 
 #include "AirSpaceWindow.h"
 #include "GliderWindow.h"
@@ -51,7 +51,6 @@
 MainWindow::MainWindow()
         :QMainWindow(0, Qt::WDestructiveClose)
 {
-	Q3VBox *pVBox;
 	QString devName;
 	int id;
 	uint devNr;
@@ -159,15 +158,11 @@ MainWindow::MainWindow()
         connect(pAboutAct,SIGNAL(triggered()), SLOT(help_about()));
         pHelpMenu->addAction(pAboutAct);
 
-	// Frame
-	pVBox = new Q3VBox(this);
-	pVBox->setFrameStyle(Q3Frame::StyledPanel | Q3Frame::Sunken);
-	setCentralWidget(pVBox);
-	
 	// Workspace
-	m_pWorkSpace = new QWorkspace(pVBox);
-	m_pWorkSpace->setScrollBarsEnabled(true);
-	m_pWorkSpace->setPaletteBackgroundColor(Qt::lightGray);
+        m_pMdiArea = new QMdiArea(this);
+        setCentralWidget(m_pMdiArea);
+        //m_pMdiArea->setScrollBarsEnabled(true);
+        m_pMdiArea->setPaletteBackgroundColor(Qt::lightGray);
 	
 	statusBar()->message("Ready", 2000);
 
@@ -184,7 +179,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::flights_fromGPS()
 {
-        MDIWindow* pWin = new FlightWindow(m_pWorkSpace,
+        MDIWindow* pWin = new FlightWindow(m_pMdiArea,
                                            0,
                                            Qt::WDestructiveClose|Qt::Window,
                                            IDataBase::GPSdevice);
@@ -196,7 +191,7 @@ void MainWindow::flights_fromGPS()
 
 void MainWindow::flights_fromSQL()
 {
-        MDIWindow* pWin = new FlightWindow(m_pWorkSpace,
+        MDIWindow* pWin = new FlightWindow(m_pMdiArea,
                                            "Flights",
                                            Qt::WDestructiveClose|Qt::Window,
                                            IDataBase::SqlDB);
@@ -208,7 +203,7 @@ void MainWindow::flights_fromSQL()
 
 void MainWindow::flights_experience()
 {
-        MDIWindow* pWin = new FlightExpWindow(m_pWorkSpace,
+        MDIWindow* pWin = new FlightExpWindow(m_pMdiArea,
                                               "Flight Experience",
                                               Qt::WDestructiveClose|Qt::Window);
 
@@ -219,7 +214,7 @@ void MainWindow::flights_experience()
 
 void MainWindow::analysis_gliders()
 {
-        MDIWindow* pWin = new GliderWindow(m_pWorkSpace,
+        MDIWindow* pWin = new GliderWindow(m_pMdiArea,
                                            "Glider",
                                            Qt::WDestructiveClose|Qt::Window);
 
@@ -230,7 +225,7 @@ void MainWindow::analysis_gliders()
 
 void MainWindow::analysis_servicing()
 {
-        MDIWindow* pWin = new ServicingWindow(m_pWorkSpace,
+        MDIWindow* pWin = new ServicingWindow(m_pMdiArea,
                                               "Servicing",
                                               Qt::WDestructiveClose|Qt::Window);
 
@@ -241,7 +236,7 @@ void MainWindow::analysis_servicing()
 
 void MainWindow::waypoints_fromSQL()
 {
-        MDIWindow* pWin = new WayPointWindow(m_pWorkSpace,
+        MDIWindow* pWin = new WayPointWindow(m_pMdiArea,
                                              "WayPoints from DB",
                                              Qt::WDestructiveClose|Qt::Window,
                                              IDataBase::SqlDB);
@@ -253,7 +248,7 @@ void MainWindow::waypoints_fromSQL()
 
 void MainWindow::waypoints_fromGPS()
 {
-        MDIWindow* pWin = new WayPointWindow(m_pWorkSpace,
+        MDIWindow* pWin = new WayPointWindow(m_pMdiArea,
                                              "WayPoints from GPS",
                                              Qt::WDestructiveClose|Qt::Window,
                                              IDataBase::GPSdevice);
@@ -265,7 +260,7 @@ void MainWindow::waypoints_fromGPS()
 
 void MainWindow::routes_fromSQL()
 {
-        MDIWindow* pWin = new RouteWindow(m_pWorkSpace,
+        MDIWindow* pWin = new RouteWindow(m_pMdiArea,
                                           "Routes from DB",
                                           Qt::WDestructiveClose|Qt::Window,
                                           IDataBase::SqlDB);
@@ -277,7 +272,7 @@ void MainWindow::routes_fromSQL()
 
 void MainWindow::routes_fromGPS()
 {
-        MDIWindow* pWin = new RouteWindow(m_pWorkSpace,
+        MDIWindow* pWin = new RouteWindow(m_pMdiArea,
                                           "Routes from GPS",
                                           Qt::WDestructiveClose|Qt::Window,
                                           IDataBase::GPSdevice);
@@ -297,7 +292,7 @@ void MainWindow::airspaces_fromSQL()
 */
 void MainWindow::airspaces_fromGPS()
 {
-        MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace,
+        MDIWindow* pWin = new AirSpaceWindow(m_pMdiArea,
                                              "Airspaces from GPS",
                                              Qt::WDestructiveClose|Qt::Window,
                                              IDataBase::GPSdevice);
@@ -309,7 +304,7 @@ void MainWindow::airspaces_fromGPS()
 
 void MainWindow::airspaces_fromFile()
 {
-        MDIWindow* pWin = new AirSpaceWindow(m_pWorkSpace,
+        MDIWindow* pWin = new AirSpaceWindow(m_pMdiArea,
                                              "Airspaces from OpenAirTextFile",
                                              Qt::WDestructiveClose|Qt::Window,
                                              IDataBase::File);
@@ -329,7 +324,7 @@ void MainWindow::help_about()
 
 void MainWindow::aboutToShow()
 {
-	QWidgetList winList;
+        QList<QMdiSubWindow *> winList;
 	unsigned int nofWin;
 	unsigned int winNr;
 	int cascadeId;
@@ -339,12 +334,12 @@ void MainWindow::aboutToShow()
 
 	// add menu items
 	m_pWindowsMenu->clear();
-	cascadeId = m_pWindowsMenu->insertItem("&Cascade", m_pWorkSpace, SLOT(cascade()));
-	tileId = m_pWindowsMenu->insertItem("&Tile", m_pWorkSpace, SLOT(tile()));
-	horTileId = m_pWindowsMenu->insertItem("Tile &Horizontally", this, SLOT(windows_tile_horizontally()));
+        cascadeId = m_pWindowsMenu->insertItem("&Cascade", m_pMdiArea, SLOT(cascadeSubWindows()));
+        tileId = m_pWindowsMenu->insertItem("&Tile", m_pMdiArea, SLOT(tileSubWindows()));
+        horTileId = m_pWindowsMenu->insertItem("Tile &Horizontally", this, SLOT(windows_tile_horizontally()));
 
 	// set enabled
-	if(m_pWorkSpace->windowList().isEmpty())
+        if(m_pMdiArea->subWindowList().isEmpty())
 	{
 		m_pWindowsMenu->setItemEnabled(cascadeId, false);
 		m_pWindowsMenu->setItemEnabled(tileId, false);
@@ -353,7 +348,7 @@ void MainWindow::aboutToShow()
 
 	// show window list
         m_pWindowsMenu->addSeparator();
-	winList = m_pWorkSpace->windowList();
+        winList = m_pMdiArea->subWindowList();
 	nofWin = winList.count();
 	
 	for(winNr=0; winNr<nofWin; winNr++)
@@ -361,13 +356,13 @@ void MainWindow::aboutToShow()
                 menuItemId = m_pWindowsMenu->insertItem(winList.at(winNr)->windowTitle(),
 					 this, SLOT(windows_activated(int)));
 		m_pWindowsMenu->setItemParameter(menuItemId, winNr);
-		m_pWindowsMenu->setItemChecked(menuItemId, m_pWorkSpace->activeWindow() == winList.at(winNr));
+                m_pWindowsMenu->setItemChecked(menuItemId, m_pMdiArea->activeSubWindow() == winList.at(winNr));
 	}
 }
 
 void MainWindow::windows_activated(int id)
 {
-	QWidget* pWin = m_pWorkSpace->windowList().at(id);
+        QWidget* pWin = m_pMdiArea->subWindowList().at(id);
 
 	if(pWin != NULL)
 	{
@@ -378,7 +373,7 @@ void MainWindow::windows_activated(int id)
 
 void MainWindow::windows_tile_horizontally()
 {
-	QWidgetList winList = m_pWorkSpace->windowList();
+        QList<QMdiSubWindow *> winList = m_pMdiArea->subWindowList();
 	QWidget *pWin;
 	unsigned int winNr;
 	unsigned int nofWin;
@@ -387,14 +382,16 @@ void MainWindow::windows_tile_horizontally()
 	int actHeight;
 	int y = 0;
 
-	if(winList.count() == 0)
+        // if 0 or 1 windows do normal tiling
+        if(winList.count() < 2)
 	{
-		return;
+                m_pMdiArea->tileSubWindows();
+                return;
 	}
   
-	// primitive horizontal tiling  
-	heightForEach = m_pWorkSpace->height() / winList.count();
-	nofWin = winList.count();
+        // primitive horizontal tiling
+        nofWin = winList.count();
+        heightForEach = m_pMdiArea->height() / nofWin;
 
 	for(winNr= 0; winNr<nofWin; winNr++)
 	{
@@ -408,16 +405,15 @@ void MainWindow::windows_tile_horizontally()
 		}
 
 		// set new height
-		preferredHeight = pWin->minimumHeight() + pWin->parentWidget()->baseSize().height();
-		actHeight = qMax(heightForEach, preferredHeight);
-		pWin->parentWidget()->setGeometry( 0, y, m_pWorkSpace->width(), actHeight);
-		y += actHeight;
+                pWin->resize(m_pMdiArea->width(), heightForEach);
+                pWin->move(0,y);
+                y += heightForEach;
 	}
 }
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
-	QWidgetList winList = m_pWorkSpace->windowList();
+        QList<QMdiSubWindow *> winList = m_pMdiArea->subWindowList();
 	QWidget *pWin;
 	unsigned int nofWin = winList.count();
 	unsigned int winNr;
@@ -442,14 +438,14 @@ void MainWindow::closeEvent(QCloseEvent *e)
 void MainWindow::showWindow(QMainWindow *pWin)
 {
 	// show the very first window in maximized mode
-	if(m_pWorkSpace->windowList().isEmpty())
+        if(m_pMdiArea->subWindowList().isEmpty())
 	{
-		pWin->showMaximized();
+            m_pMdiArea->addSubWindow(pWin);
 	}
 	else
 	{
-		pWin->show();
-	}
+            m_pMdiArea->addSubWindow(pWin);
+        }
 }
 
 void MainWindow::settings_device(int id)
