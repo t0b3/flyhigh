@@ -186,7 +186,6 @@ void MainWindow::flights_fromGPS()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::flights_fromSQL()
@@ -198,7 +197,6 @@ void MainWindow::flights_fromSQL()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::flights_experience()
@@ -209,7 +207,6 @@ void MainWindow::flights_experience()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::analysis_gliders()
@@ -220,7 +217,6 @@ void MainWindow::analysis_gliders()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::analysis_servicing()
@@ -231,7 +227,6 @@ void MainWindow::analysis_servicing()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::waypoints_fromSQL()
@@ -243,7 +238,6 @@ void MainWindow::waypoints_fromSQL()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::waypoints_fromGPS()
@@ -255,7 +249,6 @@ void MainWindow::waypoints_fromGPS()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::routes_fromSQL()
@@ -267,7 +260,6 @@ void MainWindow::routes_fromSQL()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::routes_fromGPS()
@@ -279,7 +271,6 @@ void MainWindow::routes_fromGPS()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 /*
 void MainWindow::airspaces_fromSQL()
@@ -299,7 +290,6 @@ void MainWindow::airspaces_fromGPS()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::airspaces_fromFile()
@@ -311,7 +301,6 @@ void MainWindow::airspaces_fromFile()
 
 	connect(pWin, SIGNAL(message(const QString&, int)), statusBar(), SLOT(message(const QString&, int)));
 	showWindow(pWin);
-        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
 }
 
 void MainWindow::help_about()
@@ -420,16 +409,16 @@ void MainWindow::closeEvent(QCloseEvent *e)
 	
 	if(nofWin > 0)
 	{
-		for(winNr=0; winNr<nofWin; winNr++)
-		{
-	    pWin = winList.at(winNr);
+            for(winNr=0; winNr<nofWin; winNr++)
+            {
+                pWin = winList.at(winNr);
 			
-	    if(!pWin->close())
-			{
-				e->ignore();
-				return;
-	    }
-		}
+                if(!pWin->close())
+                {
+                    e->ignore();
+                    return;
+                }
+            }
 	}
 	
         QMainWindow::closeEvent(e);
@@ -437,14 +426,12 @@ void MainWindow::closeEvent(QCloseEvent *e)
 
 void MainWindow::showWindow(QMainWindow *pWin)
 {
-	// show the very first window in maximized mode
-        if(m_pMdiArea->subWindowList().isEmpty())
-	{
-            m_pMdiArea->addSubWindow(pWin);
-	}
-	else
-	{
-            m_pMdiArea->addSubWindow(pWin);
+        m_pMdiArea->addSubWindow(pWin);
+        pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
+        // show the very first window in maximized mode
+        if(m_pMdiArea->subWindowList().length()==1)
+        {
+            m_pMdiArea->activeSubWindow()->showMaximized();
         }
 }
 
