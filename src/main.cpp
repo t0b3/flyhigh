@@ -32,7 +32,7 @@ int main( int argc, char ** argv )
 	int res;
 
 	IFlyHighRC::pInstance()->loadRC();
-	IGPSDevice::pInstance()->open();
+        IGPSDevice::pInstance()->open();
 	ISql::pInstance()->open();
 	
 	pMainWin = new MainWindow();

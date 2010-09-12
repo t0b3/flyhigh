@@ -23,10 +23,8 @@
 
 #include <qmainwindow.h>
 //Added by qt3to4:
-#include <Q3PopupMenu>
 #include <QCloseEvent>
 
-class Q3PopupMenu;
 class QMdiArea;
 class MDIWindow;
 
@@ -68,12 +66,11 @@ class MainWindow: public QMainWindow
                 QMdiArea* m_pMdiArea;
                 QMenu* m_pWindowsMenu;
                 QMenu* m_pDevicesMenu;
-		Q3PopupMenu* m_pSpecialMenu;
+                //Q3PopupMenu* m_pSpecialMenu;
 		MDIWindow* m_pActiveWin;
-		int m_specialMenuId;
+                //int m_specialMenuId;
 
                 void showWindow(QMainWindow *pWin);
-		void setCurrentDevice(int id);
 };
 
 #endif

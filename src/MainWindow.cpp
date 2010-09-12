@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <qworkspace.h>
 #include <qmenubar.h>
 #include <qstatusbar.h>
 #include <qmessagebox.h>
@@ -117,32 +116,39 @@ MainWindow::MainWindow()
 	// Menu Configuration
         QMenu* pConfMenu = menuBar()->addMenu(tr("&Configuration"));
 
-        QAction* pPortAct = new QAction(tr("Port..."), this);
+        // Submenu Port
+        QAction* pPortAct = new QAction(tr("&Port..."), this);
         connect(pPortAct,SIGNAL(triggered()), this, SLOT(settings_port()));
         pConfMenu->addAction(pPortAct);
-
 	
         // Submenu Settings>Device
         m_pDevicesMenu = pConfMenu->addMenu(tr("&Device"));
+        // create a radiobutton group
+        QActionGroup* pDevActGrp = new QActionGroup(this);
 	maxDevNr = IFlyHighRC::pInstance()->deviceNameList().size();
 	curDev = IFlyHighRC::pInstance()->deviceName();
-	
+        // add all currently supported devices
 	for(devNr=0; devNr<maxDevNr; devNr++)
 	{
 		devName = IFlyHighRC::pInstance()->deviceNameList().at(devNr);
-		id = m_pDevicesMenu->insertItem(devName, this, SLOT(settings_device(int)));
-		
+                QAction* pDevAct = new QAction(devName,this);
+                pDevAct->setCheckable(true);
+                connect(pDevAct,SIGNAL(activated(int)),this,SLOT(settings_device(int)));
+                // enable current device
 		if(devNr == curDev)
 		{
-			setCurrentDevice(id);
+                    pDevAct->setChecked(true);
 		}
-	}
+                pDevActGrp->addAction(pDevAct);
+        }
+        // add buttons to menu
+        m_pDevicesMenu->addActions(pDevActGrp->actions());
 
-        QAction* pConfAct = new QAction(tr("Configure Device..."), this);
+        QAction* pConfAct = new QAction(tr("&Configure Device..."), this);
         connect(pConfAct,SIGNAL(triggered()), SLOT(settings_configure_device()));
         pConfMenu->addAction(pConfAct);
 
-        QAction* pPilotAct = new QAction(tr("Pilot Info..."), this);
+        QAction* pPilotAct = new QAction(tr("Pilot &Info..."), this);
         connect(pPilotAct,SIGNAL(triggered()), SLOT(settings_pilotInfo()));
         pConfMenu->addAction(pPilotAct);
 
@@ -456,26 +462,6 @@ void MainWindow::settings_device(int id)
 	IGPSDevice::pInstance()->close();
 	IFlyHighRC::pInstance()->setDeviceName(itemNr);
 	IGPSDevice::pInstance()->open();
-	setCurrentDevice(id);
-}
-
-void MainWindow::setCurrentDevice(int id)
-{
-	uint itemNr;
-	uint nofItems;
-	int itemId;
-	bool selected;
-
-	nofItems = m_pDevicesMenu->count();
-	
-	// check the selected item
-	for(itemNr=0; itemNr<nofItems; itemNr++)
-	{
-		itemId = m_pDevicesMenu->idAt(itemNr);
-		
-		selected = (itemId == id);
-		m_pDevicesMenu->setItemChecked(itemId, selected);
-	}
 }
 
 void MainWindow::settings_port()
