@@ -167,10 +167,11 @@ MainWindow::MainWindow()
 	// Workspace
         m_pMdiArea = new QMdiArea(this);
         setCentralWidget(m_pMdiArea);
-        //m_pMdiArea->setScrollBarsEnabled(true);
-        m_pMdiArea->setPaletteBackgroundColor(Qt::lightGray);
+        QPalette palette;
+        palette.setColor(m_pMdiArea->backgroundRole(),Qt::lightGray);
+        m_pMdiArea->setPalette(palette);
 	
-	statusBar()->message("Ready", 2000);
+        statusBar()->showMessage("Ready", 2000);
 
 	// if pilot info is not set
 	if(IFlyHighRC::pInstance()->pilotId() < 0)
@@ -447,7 +448,7 @@ void MainWindow::settings_device(int id)
 	uint nofItems;
 	int itemId;
 	
-	nofItems = m_pDevicesMenu->count();
+        nofItems =m_pDevicesMenu->actions().count();
 	
 	for(itemNr=0; itemNr<nofItems; itemNr++)
 	{
