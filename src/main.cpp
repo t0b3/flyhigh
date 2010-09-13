@@ -36,7 +36,6 @@ int main( int argc, char ** argv )
 	ISql::pInstance()->open();
 	
 	pMainWin = new MainWindow();
-	appl.setMainWidget(pMainWin);
         pMainWin->setWindowIcon(QIcon(":/flyhigh.png"));
 	
 	pMainWin->show();
