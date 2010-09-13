@@ -125,9 +125,7 @@ void MainFrame6015Impl::addPage( QWidget * pFrame6015, int * pPos)
 	
 	widgetStack->addWidget(pFrame6015, *pPos);
 	(*pPos)++;
-	//pWidget = new QWidget(toolBox,  pFrame6015->caption());
         pWidget = new QWidget(toolBox);
-	pWidget->setBackgroundMode(Qt::PaletteBackground);
         toolBox->addItem(pWidget,  pFrame6015->windowTitle());
 }
 
