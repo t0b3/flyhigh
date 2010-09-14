@@ -436,7 +436,7 @@ void MainWindow::showWindow(QMainWindow *pWin)
         m_pMdiArea->addSubWindow(pWin);
         pWin->setWindowState(Qt::WindowNoState|Qt::WindowActive);
         // show the very first window in maximized mode
-        if(m_pMdiArea->subWindowList().length()==1)
+        if(m_pMdiArea->subWindowList().count()==1)
         {
             m_pMdiArea->activeSubWindow()->showMaximized();
         }

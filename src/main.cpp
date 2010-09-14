@@ -19,6 +19,7 @@
  ***************************************************************************/
  
 #include <qapplication.h>
+#include <qicon.h>
 #include "MainWindow.h"
 #include "IFlyHighRC.h"
 #include "IGPSDevice.h"
