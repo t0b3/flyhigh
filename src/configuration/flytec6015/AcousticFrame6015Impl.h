@@ -30,10 +30,12 @@ class AcousticFrame6015Impl: public QWidget, public Ui::AcousticFrame6015, publi
 
 	public:
 		AcousticFrame6015Impl(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
+
 		~AcousticFrame6015Impl();
 
-		void update(QByteArray &arr);
-		void store(QByteArray &arr);
+		void update();
+
+		void store();
 };
 
 #endif

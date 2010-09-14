@@ -30,13 +30,14 @@ class DisplayFrame6015Impl: public QWidget, public Ui::DisplayFrame6015, public 
 
 	public:
 		DisplayFrame6015Impl(QWidget* parent = 0, const char* name = 0, Qt::WFlags fl = 0);
+
 		~DisplayFrame6015Impl();
 
-		void update(QByteArray &arr);
-		void store(QByteArray &arr);
+		void update();
+
+		void store();
 
 	private:
-		void insertItems(QComboBox * pItem);
 };
 
 #endif

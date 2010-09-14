@@ -34,9 +34,9 @@ class DeviceFrame6015Impl: public QWidget, public Ui::DeviceFrame6015, public Fr
 
 		~DeviceFrame6015Impl();
 		
-		void update(QByteArray &arr);
+		void update();
 
-		void store(QByteArray &arr);
+		void store();
 
 	protected slots:
 		void newGlider();

@@ -33,7 +33,7 @@ UnitFrame6015Impl::~UnitFrame6015Impl()
 {
 }
 
-void UnitFrame6015Impl::update(QByteArray &arr)
+void UnitFrame6015Impl::update()
 {
 	Flytec6015 *pDev;
 	uint uiValue;
@@ -63,34 +63,23 @@ void UnitFrame6015Impl::update(QByteArray &arr)
         comboBox_TimeFormat->setCurrentIndex((uiValue & MASK_UNIT_TIME) >> POS_UNIT_TIME);
 }
 
-void UnitFrame6015Impl::store(QByteArray &arr)
+void UnitFrame6015Impl::store()
 {
-/*
-	u_char ch = 0;
-	int index;
-	
-	// Distance
-	index = comboBox_Distance->currentItem();
-	ch |= index;
+	Flytec6015 *pDev;
+	uint uiValue;
 
-	// Velocity 1
-	index = comboBox_Velocity1->currentItem();
-	index <<= 1;
-	ch |= index;
-	
-	// Velocity 2
-	index = comboBox_Velocity2->currentItem();
-	index <<= 2;
-	ch |= index;
-	
-	// Temperature
-	index = comboBox_Temp->currentItem();
-	index <<= 4;
-	ch |= index;
-	
-	// store
-	arr[UNITS_POS] = ch;
-*/
+	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
+
+	uiValue = pDev->memoryRead(MemFa, UNIT_FLAGS, UInt16).toUInt();
+	uiValue &= ~(MASK_UNIT_DIST1 | MASK_UNIT_DIST2 | MASK_UNIT_SPEED1 | MASK_UNIT_SPEED2 | MASK_UNIT_DEG | MASK_UNIT_PRESS | MASK_UNIT_TIME);
+        uiValue |= (comboBox_Distance1->currentIndex() << POS_UNIT_DIST1);
+        uiValue |= (comboBox_Distance2->currentIndex() << POS_UNIT_DIST2);
+        uiValue |= (comboBox_Velocity1->currentIndex() << POS_UNIT_SPEED1);
+        uiValue |= (comboBox_Velocity2->currentIndex() << POS_UNIT_SPEED2);
+        uiValue |= (comboBox_Temp->currentIndex() << POS_UNIT_DEG);
+        uiValue |= (comboBox_Press->currentIndex() << POS_UNIT_PRESS);
+        uiValue |= (comboBox_TimeFormat->currentIndex() << POS_UNIT_TIME);
+	pDev->memoryWrite(MemFa, UNIT_FLAGS, UInt16, uiValue);
 }
 
 #include "moc_UnitFrame6015Impl.cxx"

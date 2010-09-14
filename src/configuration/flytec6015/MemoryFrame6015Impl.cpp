@@ -33,7 +33,7 @@ MemoryFrame6015Impl::~MemoryFrame6015Impl()
 {
 }
 
-void MemoryFrame6015Impl::update(QByteArray &arr)
+void MemoryFrame6015Impl::update()
 {
 	Flytec6015 *pDev;
 	uint uiValue;
@@ -49,15 +49,22 @@ void MemoryFrame6015Impl::update(QByteArray &arr)
         comboBox_FlightEnd->setCurrentIndex((uiValue & MASK_FLIGHT_END) >> POS_FLIGHT_END);
 }
 
-void MemoryFrame6015Impl::store(QByteArray &arr)
+void MemoryFrame6015Impl::store()
 {
-/*
-	// Recording Interval
-	arr[REC_INTERVAL_POS] = spinBox_Intervall->value();
+	Flytec6015 *pDev;
+	uint uiValue;
 
-	// Stop Mode
-	arr[REC_STOP_MODE_POS] = comboBox_Mode->currentItem();
-*/
+	pDev = static_cast<Flytec6015*>(IGPSDevice::pInstance());
+
+	// recording interval
+	uiValue = spinBox_Intervall->value();
+	pDev->memoryWrite(MemFa, REC_INTERVALL, UInt8, uiValue);
+
+	// flight end detection
+	uiValue = pDev->memoryRead(MemFa, DIV_FLAGS, UInt16).toUInt();
+	uiValue &= ~MASK_FLIGHT_END;
+        uiValue |= (comboBox_FlightEnd->currentIndex() << POS_FLIGHT_END);
+	pDev->memoryWrite(MemFa, DIV_FLAGS, UInt16, uiValue);
 }
 
 #include "moc_MemoryFrame6015Impl.cxx"

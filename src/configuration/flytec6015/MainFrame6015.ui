@@ -86,9 +86,6 @@
         <property name="title">
           <string>File</string>
         </property>
-        <addaction name="File_Open"/>
-        <addaction name="File_Save"/>
-        <addaction name="separator"/>
         <addaction name="File_Read"/>
         <addaction name="File_Write"/>
         <addaction name="separator"/>
