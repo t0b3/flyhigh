@@ -47,6 +47,10 @@ int main( int argc, char ** argv )
 	// exit
 	IGPSDevice::pInstance()->close();
 	IFlyHighRC::pInstance()->saveRC();
+
+	delete IGPSDevice::pInstance();
+	delete IFlyHighRC::pInstance();
+	delete ISql::pInstance();
 	
 	return res;
 }
