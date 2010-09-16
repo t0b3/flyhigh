@@ -35,7 +35,7 @@ class AcousticFrameImpl: public QWidget, public Ui::AcousticFrame, public Frame
 		void update(QByteArray &arr);
 		void store(QByteArray &arr);
 
-	protected:
+	protected slots:
 		void sinkAcousticToggled(bool b);
 };
 
