@@ -39,7 +39,7 @@ class MainFrameImpl: public QMainWindow, public Ui::MainFrame
 	public slots:
 		virtual void addPage(QWidget * pFrame, int * pPos);
 
-	protected:
+	protected slots:
 		void open();
 		void save();
 		void read();
