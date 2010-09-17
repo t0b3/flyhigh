@@ -1,12 +1,12 @@
-#include "qcolor.h"
+#include <QColor>
 #include "MapTile.h"
 
 MapTile::MapTile(const QString &name, uint sizeX, uint sizeY)
 {
 	if(!m_image.load(name, 0))
 	{
-		m_image.create(sizeX, sizeY, 32);
-                m_image.fill(QColor(Qt::lightGray).rgb());
+		m_image = QImage(sizeX, sizeY, QImage::Format_RGB32);
+		m_image.fill(QColor(Qt::lightGray).rgb());
 	}
 
 	m_scaledImage = m_image;
