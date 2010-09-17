@@ -26,8 +26,8 @@
 #include <QCloseEvent>
 
 class QMdiArea;
+class QSignalMapper;
 class MDIWindow;
-
 class TrackWindow;
 
 class MainWindow: public QMainWindow
@@ -61,16 +61,22 @@ class MainWindow: public QMainWindow
 		void settings_pilotInfo();
 		void help_about();
 		void aboutToShow();
+		void setActiveSubWindow(QWidget *window);
 		
 	private:
-                QMdiArea* m_pMdiArea;
-                QMenu* m_pWindowsMenu;
-                QMenu* m_pDevicesMenu;
-                //Q3PopupMenu* m_pSpecialMenu;
+		QMdiArea* m_pMdiArea;
+		QSignalMapper* m_pWinMapper;
+		QMenu* m_pWindowsMenu;
+		QMenu* m_pDevicesMenu;
 		MDIWindow* m_pActiveWin;
-                //int m_specialMenuId;
+		QAction* m_pCascade;
+		QAction* m_pTile;
+		QAction* m_pTileHor;
+		QAction* m_pWinSeparator;
 
-                void showWindow(QMainWindow *pWin);
+		void showWindow(QMainWindow *pWin);
+
+		MDIWindow* activeMdiChild();
 };
 
 #endif

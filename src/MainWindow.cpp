@@ -25,7 +25,7 @@
 #include <qobject.h>
 #include <qmdiarea.h>
 #include <qmdisubwindow.h>
-//Added by qt3to4:
+#include <QSignalMapper>
 #include <QCloseEvent>
 
 #include "AirSpaceWindow.h"
@@ -55,6 +55,16 @@ MainWindow::MainWindow()
 	uint devNr;
 	uint curDev;
 	uint maxDevNr;
+
+	// Workspace
+	m_pMdiArea = new QMdiArea(this);
+	setCentralWidget(m_pMdiArea);
+	QPalette palette;
+	palette.setColor(m_pMdiArea->backgroundRole(),Qt::lightGray);
+	m_pMdiArea->setPalette(palette);
+
+	m_pWinMapper = new QSignalMapper(this);
+	connect(m_pWinMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
 	
 	m_pActiveWin = NULL;
         QMainWindow::setWindowTitle("FlyHigh");
@@ -127,6 +137,7 @@ MainWindow::MainWindow()
         QActionGroup* pDevActGrp = new QActionGroup(this);
 	maxDevNr = IFlyHighRC::pInstance()->deviceNameList().size();
 	curDev = IFlyHighRC::pInstance()->deviceName();
+
         // add all currently supported devices
 	for(devNr=0; devNr<maxDevNr; devNr++)
 	{
@@ -141,6 +152,7 @@ MainWindow::MainWindow()
 		}
                 pDevActGrp->addAction(pDevAct);
         }
+
         // add buttons to menu
         m_pDevicesMenu->addActions(pDevActGrp->actions());
 
@@ -154,24 +166,30 @@ MainWindow::MainWindow()
 
 	// Menu Windows
         m_pWindowsMenu = menuBar()->addMenu(tr("&Windows"));
-        connect(m_pWindowsMenu, SIGNAL(aboutToShow()),this, SLOT(aboutToShow()));
+
+	m_pCascade = new QAction(tr("&Cascade"), this);
+	connect(m_pCascade, SIGNAL(triggered()), m_pMdiArea, SLOT(cascadeSubWindows()));
+	
+	m_pTile = new QAction(tr("&Tile"), this);
+	connect(m_pTile, SIGNAL(triggered()), m_pMdiArea, SLOT(tileSubWindows()));
+	
+	m_pTileHor = new QAction(tr("Tile &Horizontally"), this);
+	connect(m_pTileHor, SIGNAL(triggered()), SLOT(windows_tile_horizontally()));
+
+	m_pWinSeparator = new QAction(this);
+	m_pWinSeparator->setSeparator(true);
+
+	connect(m_pWindowsMenu, SIGNAL(aboutToShow()),this, SLOT(aboutToShow()));
 
 	// Menu Help
-        menuBar()->addSeparator();
-        QMenu* pHelpMenu = menuBar()->addMenu(tr("&Help"));
+	menuBar()->addSeparator();
+	QMenu* pHelpMenu = menuBar()->addMenu(tr("&Help"));
 
-        QAction* pAboutAct = new QAction(tr("&About"), this);
-        connect(pAboutAct,SIGNAL(triggered()), SLOT(help_about()));
-        pHelpMenu->addAction(pAboutAct);
+	QAction* pAboutAct = new QAction(tr("&About"), this);
+	connect(pAboutAct,SIGNAL(triggered()), SLOT(help_about()));
+	pHelpMenu->addAction(pAboutAct);
 
-	// Workspace
-        m_pMdiArea = new QMdiArea(this);
-        setCentralWidget(m_pMdiArea);
-        QPalette palette;
-        palette.setColor(m_pMdiArea->backgroundRole(),Qt::lightGray);
-        m_pMdiArea->setPalette(palette);
-	
-        statusBar()->showMessage("Ready", 2000);
+	statusBar()->showMessage("Ready", 2000);
 
 	// if pilot info is not set
 	if(IFlyHighRC::pInstance()->pilotId() < 0)
@@ -321,27 +339,46 @@ void MainWindow::help_about()
 
 void MainWindow::aboutToShow()
 {
-        QList<QMdiSubWindow *> winList;
+	QList<QMdiSubWindow *> winList;
 	unsigned int nofWin;
 	unsigned int winNr;
-	int cascadeId;
-	int tileId;
-	int horTileId;
 	int menuItemId;
+	bool hasMdiChild;
 
-	// add menu items
 	m_pWindowsMenu->clear();
-        cascadeId = m_pWindowsMenu->insertItem("&Cascade", m_pMdiArea, SLOT(cascadeSubWindows()));
-        tileId = m_pWindowsMenu->insertItem("&Tile", m_pMdiArea, SLOT(tileSubWindows()));
-        horTileId = m_pWindowsMenu->insertItem("Tile &Horizontally", this, SLOT(windows_tile_horizontally()));
+	m_pWindowsMenu->addAction(m_pCascade);
+	m_pWindowsMenu->addAction(m_pTile);
+	m_pWindowsMenu->addAction(m_pTileHor);
+	m_pWindowsMenu->addAction(m_pWinSeparator);
 
 	// set enabled
-        if(m_pMdiArea->subWindowList().isEmpty())
+	hasMdiChild = !m_pMdiArea->subWindowList().isEmpty();
+	m_pCascade->setEnabled(hasMdiChild);
+	m_pTile->setEnabled(hasMdiChild);
+	m_pTileHor->setEnabled(hasMdiChild);
+
+	QList<QMdiSubWindow *> windows = m_pMdiArea->subWindowList();
+	m_pWinSeparator->setVisible(!windows.isEmpty());
+
+	for (int i = 0; i < windows.size(); ++i)
 	{
-		m_pWindowsMenu->setItemEnabled(cascadeId, false);
-		m_pWindowsMenu->setItemEnabled(tileId, false);
-		m_pWindowsMenu->setItemEnabled(horTileId, false);
+			MDIWindow *child = qobject_cast<MDIWindow *>(windows.at(i)->widget());
+
+			QString text;
+			if (i < 9) {
+					text = tr("&%1 %2").arg(i + 1)
+															.arg(child->windowTitle());
+			} else {
+					text = tr("%1 %2").arg(i + 1)
+														.arg(child->windowTitle());
+			}
+			QAction *action  = m_pWindowsMenu->addAction(text);
+			action->setCheckable(true);
+			action ->setChecked(child == activeMdiChild());
+			connect(action, SIGNAL(triggered()), m_pWinMapper, SLOT(map()));
+			m_pWinMapper->setMapping(action, windows.at(i));
 	}
+/**
 
 	// show window list
         m_pWindowsMenu->addSeparator();
@@ -355,6 +392,7 @@ void MainWindow::aboutToShow()
 		m_pWindowsMenu->setItemParameter(menuItemId, winNr);
                 m_pWindowsMenu->setItemChecked(menuItemId, m_pMdiArea->activeSubWindow() == winList.at(winNr));
 	}
+*/
 }
 
 void MainWindow::windows_activated(int id)
@@ -449,7 +487,7 @@ void MainWindow::settings_device(int id)
 	uint nofItems;
 	int itemId;
 	
-        nofItems =m_pDevicesMenu->actions().count();
+	nofItems =m_pDevicesMenu->actions().count();
 	
 	for(itemNr=0; itemNr<nofItems; itemNr++)
 	{
@@ -507,5 +545,20 @@ void MainWindow::settings_pilotInfo()
 	
 	rcFrame.show();
 }
+
+MDIWindow* MainWindow::activeMdiChild()
+{
+    if (QMdiSubWindow *activeSubWindow = m_pMdiArea->activeSubWindow())
+        return qobject_cast<MDIWindow *>(activeSubWindow->widget());
+    return 0;
+}
+
+void MainWindow::setActiveSubWindow(QWidget *window)
+{
+    if (!window)
+        return;
+    m_pMdiArea->setActiveSubWindow(qobject_cast<QMdiSubWindow *>(window));
+}
+
 
 //#include "moc_MainWindow.cxx"
