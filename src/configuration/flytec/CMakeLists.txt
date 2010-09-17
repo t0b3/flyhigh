@@ -30,7 +30,6 @@ set(cfgflytec_HDRS AcousticFrameImpl.h
                    DeviceFrameImpl.h
                    DisplayFrameImpl.h
                    FlyCalcFrameImpl.h
-                   Frame.h
                    GPSFrameImpl.h
                    MainFrameImpl.h
                    MemoryFrameImpl.h
@@ -38,8 +37,7 @@ set(cfgflytec_HDRS AcousticFrameImpl.h
                    UnitFrameImpl.h
                    VarioFrameImpl.h
                    SmsFrameImpl.h
-                   VelocityFrameImpl.h
-                   IFlytecConfig.h )
+                   VelocityFrameImpl.h)
 
 set(cfgflytec_UIS
 	AcousticFrame.ui

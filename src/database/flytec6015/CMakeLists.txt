@@ -9,12 +9,7 @@ set(dbflytec6015_SRCS Device6015.cpp
                       Flytec6015.cpp
                       Protocol6015.cpp)
 
-set(dbflytec6015_HDRS Defs6015.h
-                      Protocol6015.h )
-
-QT4_WRAP_CPP(dbflytec6015_SRCS ${dbflytec6015_HDRS})
-
-add_library(dbflytec6015 ${dbflytec6015_SRCS} ${dbflytec6015_HDRS})
+add_library(dbflytec6015 ${dbflytec6015_SRCS})
 
 ########### install files ###############
 

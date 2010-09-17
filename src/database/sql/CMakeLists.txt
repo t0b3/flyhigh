@@ -15,18 +15,7 @@ set(dbsql_SRCS DataBaseSub.cpp
                Upgrade.cpp
                Pilots.cpp)
 
-set(dbsql_HDRS Flights.h
-               Gliders.h
-               WayPoints.h
-               DataBaseSub.h
-               Routes.h
-               Servicings.h
-               Upgrade.h
-               Pilots.h )
-
-QT4_WRAP_CPP(dbsql_SRCS ${dbsql_HDRS})
-
-add_library(dbsql ${dbsql_SRCS} ${dbsql_HDRS})
+add_library(dbsql ${dbsql_SRCS})
 
 ########### install files ###############
 

@@ -17,15 +17,11 @@ set(analysis_SRCS FlightExpWindow.cpp
                   OLCOptimizer.cpp
                   OLCWebForm.cpp
                   ServicingWindow.cpp )
-                  
+
 set(analysis_HDRS FlightExpWindow.h
-                  FlightPointList.h
                   FlightWindow.h
                   GliderWindow.h
-                  IGCFileParser.h
-                  KmlWriter.h
                   OLCOptimizer.h
-                  OLCWebForm.h
                   ServicingWindow.h )
 
 QT4_WRAP_CPP(analysis_SRCS ${analysis_HDRS})

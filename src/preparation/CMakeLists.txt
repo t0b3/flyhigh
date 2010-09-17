@@ -15,8 +15,7 @@ set(preparation_SRCS AirSpaceView.cpp
 
 set(preparation_HDRS WayPointWindow.h
                      RouteWindow.h
-                     AirSpaceWindow.h
-                     OpenAirFileParser.h )
+                     AirSpaceWindow.h)
 
 QT4_WRAP_CPP(preparation_SRCS ${preparation_HDRS})
 

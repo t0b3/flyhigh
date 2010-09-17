@@ -23,16 +23,11 @@ set(form_SRCS FlightFormImpl.cpp
 
 set(form_HDRS FlightFormImpl.h
               GliderFormImpl.h
-              IWayPointForm.h
               MDIWindow.h
-              IGliderForm.h
               TableWindow.h
-              IFlightForm.h
               WayPointFormImpl.h
               RouteFormImpl.h
-              IRouteForm.h
               ServicingFormImpl.h
-              IServicingForm.h
               ProgressDlg.h)
 
 set(form_UIS

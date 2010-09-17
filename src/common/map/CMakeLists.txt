@@ -12,11 +12,7 @@ set(map_SRCS Map.cpp
              SwissMap100.cpp
 )
 
-set(map_HDRS Map.h
-             MapTile.h
-             MapView.h
-             SwissGrid.h
-             SwissMap100.h )
+set(map_HDRS Map.h)
 
 QT4_WRAP_CPP(map_SRCS ${map_HDRS})
 

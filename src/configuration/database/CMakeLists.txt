@@ -9,8 +9,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/common/container
 set(cfgdatabase_SRCS FlyHighRCFrameImpl.cpp
                      IFlyHighRCFrame.cpp )
 
-set(cfgdatabase_HDRS FlyHighRCFrameImpl.h
-                     IFlyHighRCFrame.h )
+set(cfgdatabase_HDRS FlyHighRCFrameImpl.h)
 
 file (GLOB cfgdatabase_UI *.ui)
 

@@ -18,11 +18,8 @@ set(database_SRCS IDataBase.cpp
                   ISql.cpp
                   IFlyHighRC.cpp )
 
-set(database_HDRS IDataBase.h
-                  IGPSDevice.h
-                  ISql.h
-                  IFlyHighRC.h)
-                  
+set(database_HDRS IDataBase.h)
+
 QT4_WRAP_CPP(database_SRCS ${database_HDRS})
 
 add_library(database ${database_SRCS})

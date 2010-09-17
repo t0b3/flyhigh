@@ -1,4 +1,3 @@
-
 include_directories(${CMAKE_SOURCE_DIR}/src/database
                     ${QT_INCLUDES}
                     ${CMAKE_CURRENT_BINARY_DIR} )
@@ -6,11 +5,9 @@ include_directories(${CMAKE_SOURCE_DIR}/src/database
 set(cfginterface_SRCS PortFrameImpl.cpp
                       IPortFrame.cpp )
 
-set(cfginterface_HDRS PortFrameImpl.h
-                      IPortFrame.h )
+set(cfginterface_HDRS PortFrameImpl.h)
 
-set(cfginterface_UIS
-	PortFrame.ui)
+set(cfginterface_UIS PortFrame.ui)
 
 QT4_WRAP_CPP(cfginterface_SRCS ${cfginterface_HDRS})
 

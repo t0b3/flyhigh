@@ -11,17 +11,8 @@ set(container_SRCS AirSpace.cpp
                    Route.cpp
                    Servicing.cpp
                    WayPoint.cpp )
-                   
-set(container_HDRS Route.h
-                   ContainerDef.h
-                   Servicing.h
-                   AirSpace.h
-                   AirSpaceItem.h
-                   Pilot.h)
 
-QT4_WRAP_CPP(container_SRCS ${container_HDRS})
-
-add_library(container ${container_SRCS} ${container_HDRS})
+add_library(container ${container_SRCS})
 
 ########### install files ###############
 

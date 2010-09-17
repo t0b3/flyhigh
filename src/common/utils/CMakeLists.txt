@@ -6,14 +6,7 @@ set(utils_SRCS Error.cpp
                GnuPlot.cpp
                Tokenizer.cpp )
 
-               
-set(utils_HDRS Error.h
-               GnuPlot.h
-               Tokenizer.h )
-
-QT4_WRAP_CPP(utils_SRCS ${utils_HDRS})
-
-add_library(utils ${utils_SRCS} ${utils_HDRS})
+add_library(utils ${utils_SRCS})
 
 ########### install files ###############
 

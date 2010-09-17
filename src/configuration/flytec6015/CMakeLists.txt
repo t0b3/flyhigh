@@ -25,9 +25,7 @@ set(cfgflytec6015_HDRS AcousticFrame6015Impl.h
                        CorrFrame6015Impl.h
                        DeviceFrame6015Impl.h
                        DisplayFrame6015Impl.h
-                       Frame6015.h
                        GPSFrame6015Impl.h
-                       IFlytec6015Config.h
                        MainFrame6015Impl.h
                        MemoryFrame6015Impl.h
                        UnitFrame6015Impl.h
