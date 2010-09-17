@@ -53,7 +53,7 @@ WayPointWindow::WayPointWindow(QWidget* parent, const char* name, Qt::WindowFlag
 			caption = "WayPoints from DB";
 
                         QAction* pAddAct = new QAction(tr("&Add to GPS..."), this);
-                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToGPS()));
+                        connect(pAddAct,SIGNAL(triggered()), this, SLOT(file_AddToGps()));
                         pFileMenu->addAction(pAddAct);
                 }
                 break;
