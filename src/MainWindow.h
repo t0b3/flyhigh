@@ -56,7 +56,7 @@ class MainWindow: public QMainWindow
 		void windows_tile_horizontally();
 		void windows_activated(int id);
 		void settings_port();
-		void settings_device(int id);
+		void settings_device();
 		void settings_configure_device();
 		void settings_pilotInfo();
 		void help_about();
