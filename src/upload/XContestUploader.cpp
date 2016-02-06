@@ -27,11 +27,11 @@
 #include <QCryptographicHash>
 #include <QHttpMultiPart>
 #include <QHttpPart>
-#include "QJsonDocument.h"
-#include "QJsonArray.h"
-#include "QJsonParseError.h"
-#include "QJsonObject.h"
-#include "QJsonValue.h"
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonParseError>
+#include <QJsonObject>
+#include <QJsonValue>
 #include "Account.h"
 #include "Flight.h"
 #include "XContestAdditionalInfoDlg.h"

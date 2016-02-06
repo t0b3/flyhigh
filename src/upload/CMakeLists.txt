@@ -1,5 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/src/common/form
-                     ${CMAKE_SOURCE_DIR}/src/common/qjson4)
+include_directories( ${CMAKE_SOURCE_DIR}/src/common/form)
 
 set(upload_SRCS Account.cpp
                 AccountWindow.cpp
