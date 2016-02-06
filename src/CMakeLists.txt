@@ -67,7 +67,6 @@ target_link_libraries(flyhigh
   res
   qextmedia
   upload
-  qjson4
   Qt5Core Qt5Gui Qt5Network Qt5PrintSupport Qt5Sql Qt5SerialPort Qt5WebKit
   Qt5WebKitWidgets Qt5Widgets Qt5Xml)
 
