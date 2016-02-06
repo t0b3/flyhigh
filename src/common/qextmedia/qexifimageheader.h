@@ -57,6 +57,7 @@ Q_DECLARE_METATYPE(QExifURational)
 Q_DECLARE_METATYPE(QExifSRational)
 
 class QExifValuePrivate;
+class QIODevice;
 
 class QExifValue
 {
