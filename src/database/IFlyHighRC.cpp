@@ -80,14 +80,14 @@ IFlyHighRC::IFlyHighRC()
   m_deviceSpeedList += "38400";*/
   m_deviceSpeedList += "57600";
 
-  m_versionInfo = "FlyHigh Version 0.9.9";
+  m_versionInfo = "FlyHigh Version 1.0.0";
   m_copyInfo =
-      "Copyright (c): 2004-2016 by Alex Graf <grafal@sf.net>, \n"
-      "Jurg Allemann <ja_kern@sf.net> and Markus Franke.\n\n"
-      "Thank you Thomas Kuhlmann for OLC optimizer, Luke Mahe\n"
-      "for MarkerClusterer and George MacKerron for Spiderfy.\n"
-      "Thank you Siegmar Schultz to point out some bugs.\n\n"
-      "FlyHigh is distributed under the terms of the General Public\n"
+      "Copyright (c): 2004-2016 by Alex Graf <grafal@sf.net>, "
+      "Jurg Allemann <ja_kern@sf.net>.\n\n"
+      "Thank you Markus Franke for popup edits, Thomas Kuhlmann for OLC"
+      "optimizer, Luke Mahe for MarkerClusterer and George MacKerron for"
+      "Spiderfy. Thank you Siegmar Schultz to point out some bugs.\n\n"
+      "FlyHigh is distributed under the terms of the General Public"
       "License (GPL Version 2). Visit www.gnu.org for more information.\n";
 
   m_dbTypeList += "sqlite";
