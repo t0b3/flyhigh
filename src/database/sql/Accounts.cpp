@@ -100,9 +100,9 @@ bool Accounts::accountList(Account::AccountListType &accountList)
 
   success = query.prepare("SELECT Id, Username, Password, Type, PilotId, Comment FROM Accounts "
                           "WHERE PilotId = :pilotId "
-                          "ORDER BY Username, Type ASC" );
+                          "ORDER BY Username, Type ASC");
 
-  query.bindValue("pilotId", m_pilotId);
+  query.bindValue(":pilotId", m_pilotId);
   success &= query.exec();
 
   if(success)
