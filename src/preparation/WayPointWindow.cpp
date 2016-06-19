@@ -177,21 +177,22 @@ WayPointWindow::WayPointWindow(QWidget* parent, const QString &name, Qt::WindowF
 
   pTable->setColumnHidden(Id, true);
 	pTable->setColumnWidth(Name, 150);
-	pTable->setColumnWidth(Country, 70);
+	pTable->setColumnWidth(Country, 100);
 	pTable->setColumnWidth(Spot, 120);
 	pTable->setColumnWidth(Longitude, 90);
 	pTable->setColumnWidth(Latitude, 90);
 	pTable->setColumnWidth(Altitude, 70);
 	pTable->setColumnWidth(Description, 500);
-	pTable->sortByColumn(Country, Qt::AscendingOrder);
 	pTable->setSortingEnabled(true);
 
   if(src == IDataBase::File)
   {
+    pTable->sortByColumn(Name, Qt::AscendingOrder);
     file_open();
   }
   else
   {
+    pTable->sortByColumn(Country, Qt::AscendingOrder);
     file_update();
   }
 }
@@ -340,8 +341,9 @@ void WayPointWindow::file_open()
 {
 	QString fileName;
 	WptFileParser parser;
-	uint wptNr;
-	uint maxWptNr;
+	QTableWidget *pTable;
+	uint wpNr;
+	uint maxWpNr;
 	bool success;
 
 	fileName = QFileDialog::getOpenFileName(this,
@@ -359,15 +361,18 @@ void WayPointWindow::file_open()
 
 		if(success)
 		{
-			maxWptNr = m_wpList.size();
-			TableWindow::setNumRows(maxWptNr);
+			pTable = TableWindow::getTable();
+			pTable->setSortingEnabled(false); // prevent sorting on modification
 
-			for(wptNr=0; wptNr<maxWptNr; wptNr++)
+			maxWpNr = m_wpList.size();
+			TableWindow::setNumRows(maxWpNr);
+
+			for(wpNr=0; wpNr<maxWpNr; wpNr++)
 			{
-				setWpToRow(wptNr, m_wpList.at(wptNr));
+				setWpToRow(wpNr, m_wpList[wpNr]);
 			}
 
-			TableWindow::selectRow(0);
+			pTable->setSortingEnabled(true);
 			selectionChanged();
 		}
 

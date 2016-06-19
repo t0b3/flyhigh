@@ -193,6 +193,11 @@ bool WptFileParser::parseLineWpt(const QString &line, WayPoint &wpt)
 
   // W  AAR041 A 47.2455555556�N 7.7627777778�E 27-MAR-62 00:00:00 414.000000 Aarwangen Bruecke
   // B01188   32T   0478502   5168215   1880  B01188 RUERAS-MILEZ
+
+/*
+  W  B00 A 46.6320000000ºN 8.5910000000ºE 27-MAR-62 00:00:00 1440.000000 B00144 ANDERMATT LANDING
+  w Waypoint,4,-1.0,0,0,1,5,7,0.0,0.0
+*/
   success = tokenizer.getFirstToken(line, "  ", token);
 
   if(success && token == "W")
@@ -205,52 +210,38 @@ bool WptFileParser::parseLineWpt(const QString &line, WayPoint &wpt)
   {
     wpt.setName(token);
     tokenizer.getNextToken(line, ' ', token); // skip A
-    success = tokenizer.getNextToken(line, 0xba, token);
+    success = tokenizer.getNextToken(line, ' ', token);
   }
 
   // lat
   if(success)
   {
-    lat = token.toDouble();
+    lat = token.left(token.size() - 2).toDouble();
+
+    if(token.right(1) == "S")
+      lat = -lat;
+
+    wpt.setLat(lat);
     success = tokenizer.getNextToken(line, ' ', token);
-
-    if(success)
-    {
-      if(token == "S")
-      {
-        lat = -lat;
-      }
-
-      wpt.setLat(lat);
-      success = tokenizer.getNextToken(line, 0xba, token);
-    }
   }
 
   // lon
   if(success)
   {
-    lon = token.toDouble();
+    lon = token.left(token.size() - 2).toDouble();
+
+    if(token.right(1) == "W")
+      lon = -lon;
+
+    wpt.setLon(lon);
+    tokenizer.getNextToken(line, ' ', token); // skip Date
+    tokenizer.getNextToken(line, ' ', token); // skip Time
     success = tokenizer.getNextToken(line, ' ', token);
-
-    if(success)
-    {
-      if(token == "W")
-      {
-        lon = -lon;
-      }
-
-      wpt.setLon(lon);
-      tokenizer.getNextToken(line, ' ', token); // skip Date
-      tokenizer.getNextToken(line, ' ', token); // skip Time
-      success = tokenizer.getNextToken(line, ' ', token);
-    }
   }
 
   // altitude
   if(success)
-  {
     wpt.setAlt((int)token.toDouble());
-  }
 
   // description
   if(success)
