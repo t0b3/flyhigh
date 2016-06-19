@@ -9,12 +9,21 @@ innodb_data_file_path=ibdata1:10M:autoextend
 
 # /etc/init.d/mysql restart
 
+// database setup
+$ mysql -u root -p
+mysql> CREATE USER 'flyhigh'@'localhost' IDENTIFIED BY 'flyhigh';
+mysql> GRANT ALL PRIVILEGES ON * . * TO 'flyhigh'@'localhost';
+mysql> FLUSH PRIVILEGES;
+mysql> CREATE DATABASE flyhigh_v2;
+mysql> GRANT ALL PRIVILEGES ON flyhigh_v2.* TO 'flyhigh'@'localhost';
+mysql> quit
+
 /* OTHERS */
 // backup the database
-$ mysqldump flyhigh_v2 -h localhost -u root -p > flyhigh.backup
+$ mysqldump flyhigh_v2 -h localhost -u root -p > flyhigh.sql
 
 // restore the database
-$ mysql -u root -p < flyhigh.backup
+$ mysql -u root -p < flyhigh.sql
 Enter password:
 
 // remove the database
