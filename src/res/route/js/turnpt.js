@@ -22,284 +22,328 @@
  ***************************************************************************/
 
 TurnPt.Type = {
-	Undefined: 0,
-	WayPoint: 1,
-	Cross: 2
+  Undefined: 0,
+  WayPoint: 1,
+  Cross: 2
 };
 
 function TurnPt(route, latlng, type)
 {
-	var turnPt = this;
+  var turnPt = this;
+  var marker;
 
-	this.route = route;
-	this.type = TurnPt.Type.Undefined;
-	this.altitude = -1;
-	this.nextTurnPt = null;
-	this.prevLeg = null;
-	this.nextLeg = null;
-	this.editable = true;
-	this.stpos = null;
-	this.marker = new google.maps.Marker({
-		map: route.getMap(),
-		draggable: true,
-		raiseOnDrag: false,
-		zIndex: 10
-	});
-	this.infoBox = null;
-	this.setType(type);
-	this.setPosition(latlng);
-	this.delta = null;
+  this.route = route;
+  this.type = TurnPt.Type.Undefined;
+  this.altitude = -1;
+  this.nextTurnPt = null;
+  this.prevLeg = null;
+  this.nextLeg = null;
+  this.editable = true;
+//  this.stpos = null;
 
-	google.maps.event.addListener(this.marker, 'dragstart', function(event) {tp_dragstart(turnPt);});
-	google.maps.event.addListener(this.marker, 'drag', function(event) {tp_drag(turnPt);});
-	google.maps.event.addListener(this.marker, 'position_changed', function(event){tp_position_changed(turnPt);});
-	google.maps.event.addListener(this.marker, 'dblclick', function(event){tp_dblclick(turnPt);});
-	google.maps.event.addListener(this.marker, 'mouseover', function(event){tp_mouseover(turnPt);});
-	google.maps.event.addListener(this.marker, 'mouseout', function(event){tp_mouseout(turnPt);});
+/*
+  this.marker = new google.maps.Marker({
+    map: route.getMap(),
+    draggable: true,
+    raiseOnDrag: false,
+    zIndex: 10
+  });
+*/
+
+  this.infoBox = null;
+  this.setType(type);
+  this.delta = null;
+
+  marker = L.marker(latlng, {draggable:'true'});
+  marker.on('dragstart', function(event) {tp_dragstart(turnPt);});
+  marker.on('drag', function(event) {tp_drag(turnPt);});
+  marker.on('move', function(event){tp_position_changed(turnPt);});
+  marker.on('dblclick', function(event){tp_dblclick(turnPt);});
+  marker.on('mouseover', function(event){tp_mouseover(turnPt);});
+  marker.on('mouseout', function(event){tp_mouseout(turnPt);});
+  marker.addTo(route.getMap());
+
+/*
+  google.maps.event.addListener(this.marker, 'dragstart', function(event) {tp_dragstart(turnPt);});
+  google.maps.event.addListener(this.marker, 'drag', function(event) {tp_drag(turnPt);});
+  google.maps.event.addListener(this.marker, 'position_changed', function(event){tp_position_changed(turnPt);});
+  google.maps.event.addListener(this.marker, 'dblclick', function(event){tp_dblclick(turnPt);});
+  google.maps.event.addListener(this.marker, 'mouseover', function(event){tp_mouseover(turnPt);});
+  google.maps.event.addListener(this.marker, 'mouseout', function(event){tp_mouseout(turnPt);});
+*/
+
+  this.marker = marker;
+//  this.setPosition(latlng);
 }
 
 TurnPt.prototype.getRoute = function()
 {
-	return this.route;
+  return this.route;
 };
 
 TurnPt.prototype.setType = function(type)
 {
-	if(this.type != type)
-	{
-		this.type = type;
-		this.updateIcon();
-	}
+  if(this.type !== type)
+  {
+    this.type = type;
+    this.updateIcon();
+  }
 };
 
 TurnPt.prototype.getType = function()
 {
-	return this.type;
+  return this.type;
 };
 
 TurnPt.prototype.setDelta = function(latlng)
 {
-	this.delta = latlng;
+  this.delta = latlng;
 };
 
 TurnPt.prototype.getDelta = function()
 {
-	return this.delta;
+  return this.delta;
 };
 
 TurnPt.prototype.remove = function()
 {
-	this.marker.setMap(null);
+  this.marker.remove();
 };
 
 TurnPt.prototype.setNextTurnPt = function(nextTurnPt)
 {
-	this.nextTurnPt = nextTurnPt;
+  this.nextTurnPt = nextTurnPt;
 };
 
 TurnPt.prototype.getNextTurnPt = function()
 {
-	return this.nextTurnPt;
+  return this.nextTurnPt;
 };
 
 TurnPt.prototype.setNextLeg = function(leg)
 {
-	this.nextLeg = leg;
-	this.updateIcon();
+  this.nextLeg = leg;
+  this.updateIcon();
 };
 
 TurnPt.prototype.getNextLeg = function()
 {
-	return this.nextLeg;
+  return this.nextLeg;
 };
 
 TurnPt.prototype.setPrevLeg = function(leg)
 {
-	this.prevLeg = leg;
-	this.updateIcon();
+  this.prevLeg = leg;
+  this.updateIcon();
 };
 
 TurnPt.prototype.getPrevLeg = function()
 {
-	return this.prevLeg;
+  return this.prevLeg;
 };
 
 TurnPt.prototype.setPosition = function(latlng)
 {
-	this.marker.setPosition(latlng);
+alert("TurnPt setPosition " + this.marker.getLatLng());
+
+  this.marker.setLatLng(latlng);
+
+alert("TurnPt setPosition done " + latlng);
 };
 
 TurnPt.prototype.getPosition = function()
 {
-	return this.marker.getPosition();
+  return this.marker.getLatLng();
 };
 
 TurnPt.prototype.setAltitude = function(alt)
 {
-	this.altitude = alt;
+  this.altitude = alt;
 };
 
 TurnPt.prototype.getAltitude = function()
 {
-	return this.altitude;
+  return this.altitude;
 };
 
 TurnPt.prototype.setEditable = function(en)
 {
-	this.editable = en;
+  this.editable = en;
 };
 
 TurnPt.prototype.getEditable = function()
 {
-	return this.editable;
+  return this.editable;
 };
 
 TurnPt.prototype.getInfoBox = function()
 {
-	return this.infoBox;
+  return this.infoBox;
 };
 
 /*
-	This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-	markers which are not draggable. In a later version, this should be fixed through
-	setting markers draggable=this.editable.
+  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
+  markers which are not draggable. In a later version, this should be fixed through
+  setting markers draggable=this.editable.
 */
+/*
 TurnPt.prototype.storePos = function()
 {
-	this.stpos = new google.maps.LatLng(this.getPosition().lat(), this.getPosition().lng());
+  this.stpos = new google.maps.LatLng(this.getPosition().lat(), this.getPosition().lng());
 };
 
 TurnPt.prototype.restorePos = function()
 {
-	if(this.stpos !== null)
-	{
-		this.setPosition(this.stpos);
-	}
+  if(this.stpos !== null)
+  {
+    this.setPosition(this.stpos);
+  }
 };
-
+*/
 TurnPt.prototype.updateIcon = function()
 {
-	switch(this.getType())
-	{
-		case TurnPt.Type.WayPoint:
-			if(this.getPrevLeg() === null)
-			{
-				// start
-				this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
-			}
-			else if(this.getNextLeg() === null)
-			{
-				// end
-				this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
-			}
-			else
-			{
-				// normal
-				this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
-			}
+  switch(this.getType())
+  {
+    case TurnPt.Type.WayPoint:
+      if(this.getPrevLeg() === null)
+      {
+        // start
+///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
+      }
+      else if(this.getNextLeg() === null)
+      {
+        // end
+///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
+      }
+      else
+      {
+        // normal
+///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
+      }
 
-			this.infoBox = null;
-		break;
-		case TurnPt.Type.Cross:
-			var image = new google.maps.MarkerImage('../route/images/quad.png',
-						new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
-						new google.maps.Point(0, 0), // The origin for this image is 0,0.
-						new google.maps.Point(4, 4));// The anchor for this image is the base of the flagpole at 7,7.
-			var shape = {
-				coord: [0, 0, 7, 0, 7, 7, 0 , 7],
-				type: 'poly'
-			};
+      this.infoBox = null;
+    break;
+    case TurnPt.Type.Cross:
+/**
+var cross = L.icon({
+    iconUrl: '../route/images/quad.png',
+//    shadowUrl: 'leaf-shadow.png',
+    iconSize:     [15, 15], // size of the icon
+//    shadowSize:   [50, 64], // size of the shadow
+    iconAnchor:   [4, 4], // point of the icon which will correspond to marker's location
+//    shadowAnchor: [4, 62],  // the same for the shadow
+//    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+*/
 
-			this.marker.setIcon(image);
-			this.infoBox = new InfoBox(this.getRoute().getMap());
-		break;
-	}
+/*
+      var image = new google.maps.MarkerImage('../route/images/quad.png',
+            new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
+            new google.maps.Point(0, 0), // The origin for this image is 0,0.
+            new google.maps.Point(4, 4));// The anchor for this image is the base of the flagpole at 7,7.
+      var shape = {
+        coord: [0, 0, 7, 0, 7, 7, 0 , 7],
+        type: 'poly'
+      };
+*/
+
+/**
+      this.marker.setIcon(cross);
+      this.infoBox = new InfoBox(this.getRoute().getMap());
+*/
+    break;
+  }
 };
 
 function tp_position_changed(turnPt)
 {
-	if(turnPt.getEditable() && (turnPt.getType() == TurnPt.Type.WayPoint))
-	{
-		if(turnPt.getPrevLeg() !== null)
-		{
-			turnPt.getPrevLeg().setEndPosition(turnPt.getPosition());
-		}
+  if(turnPt.getEditable() && (turnPt.getType() === TurnPt.Type.WayPoint))
+  {
+    if(turnPt.getPrevLeg() !== null)
+    {
+      turnPt.getPrevLeg().setEndPosition(turnPt.getPosition());
+    }
 
-		if(turnPt.getNextLeg() !== null)
-		{
-			turnPt.getNextLeg().setBeginPosition(turnPt.getPosition());
-		}
+    if(turnPt.getNextLeg() !== null)
+    {
+      turnPt.getNextLeg().setBeginPosition(turnPt.getPosition());
+    }
 
-		turnPt.getRoute().update();
-	}
+    turnPt.getRoute().update();
+  }
 }
 
 function tp_dragstart(turnPt)
 {
-	if(turnPt.getEditable())
-	{
-		if((turnPt.getType() == TurnPt.Type.Cross) &&
-				(turnPt.getPrevLeg() !== null))
-		{
-			turnPt.getInfoBox().hide();
-			turnPt.getRoute().spliceLeg(turnPt);
-		}
+  if(turnPt.getEditable())
+  {
+    if((turnPt.getType() === TurnPt.Type.Cross) &&
+        (turnPt.getPrevLeg() !== null))
+    {
+      turnPt.getInfoBox().hide();
+      turnPt.getRoute().spliceLeg(turnPt);
+    }
 
-		turnPt.getRoute().turnPtDrag();
-	}
-	else
-	{
-		turnPt.storePos();
-	}
+    turnPt.getRoute().turnPtDrag();
+  }
+/*
+  else
+  {
+    turnPt.storePos();
+  }
+*/
 }
 
 function tp_drag(turnPt)
 {
-	if(!turnPt.getEditable())
-	{
-		turnPt.restorePos();
-	}
+/*
+  if(!turnPt.getEditable())
+  {
+    turnPt.restorePos();
+  }
+*/
 }
 
 function tp_dblclick(turnPt)
 {
-	if(turnPt.getEditable() && (turnPt.getType() == TurnPt.Type.WayPoint))
-	{
-		turnPt.getRoute().removeMarker(turnPt);
-	}
+  if(turnPt.getEditable() && (turnPt.getType() == TurnPt.Type.WayPoint))
+  {
+    turnPt.getRoute().removeMarker(turnPt);
+  }
 }
 
 function tp_mouseover(turnPt)
 {
-	var leg;
-	var dist;
-	var duration;
-	var latlng;
-	var msg;
-	var beginPos;
-	var endPos;
+  var leg;
+  var dist;
+  var duration;
+  var latlng;
+  var msg;
+  var beginPos;
+  var endPos;
 
-	if(turnPt.getInfoBox() !== null)
-	{
-		leg = turnPt.getPrevLeg();
-		beginPos = leg.getBeginTurnPt().getPosition();
-		endPos = leg.getEndTurnPt().getPosition();
-		dist = google.maps.geometry.spherical.computeDistanceBetween(beginPos, endPos);
-		dist /= 1000.0;
-		duration = dist / turnPt.getRoute().getSpeed();
-		duration = Math.round(duration * 10) / 10;
-		msg = "Distance: " + dist.toFixed(2) + " km ";
-		msg += "Duration: " + duration.toFixed(1) + " h";
+  if(turnPt.getInfoBox() !== null)
+  {
+    leg = turnPt.getPrevLeg();
+    beginPos = leg.getBeginTurnPt().getPosition();
+    endPos = leg.getEndTurnPt().getPosition();
+    dist = endPos.distanceTo(beginPos);
+//    dist = google.maps.geometry.spherical.computeDistanceBetween(beginPos, endPos);
+    dist /= 1000.0;
+    duration = dist / turnPt.getRoute().getSpeed();
+    duration = Math.round(duration * 10) / 10;
+    msg = "Distance: " + dist.toFixed(2) + " km ";
+    msg += "Duration: " + duration.toFixed(1) + " h";
 
-		latlng = turnPt.getPosition();
-		turnPt.getInfoBox().show(latlng, 180, 50, msg);
-	}
+    latlng = turnPt.getPosition();
+    turnPt.getInfoBox().show(latlng, 180, 50, msg);
+  }
 }
 
 function tp_mouseout(turnPt)
 {
-	if(turnPt.getInfoBox() !== null)
-	{
-		turnPt.getInfoBox().hide();
-	}
+  if(turnPt.getInfoBox() !== null)
+  {
+    turnPt.getInfoBox().hide();
+  }
 }

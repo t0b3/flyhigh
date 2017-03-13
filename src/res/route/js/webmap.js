@@ -23,85 +23,85 @@
 
 function wm_include(file)
 {
-	var script = document.createElement('script');
-	script.src = file;
-	script.type = 'text/javascript';
-	script.defer = true;
+  var script = document.createElement('script');
+  script.src = file;
+  script.type = 'text/javascript';
+  script.defer = true;
 
-	document.getElementsByTagName('head').item(0).appendChild(script);
+  document.getElementsByTagName('head').item(0).appendChild(script);
 }
 
 function wm_setMapPos(top, left)
 {
-	var div;
+  var div;
 
-	div = document.getElementById("map");
-	div.style.top = top + "px";
-	div.style.left = left + "px";
-	google.maps.event.trigger(map, 'resize');
+  div = document.getElementById("map");
+  div.style.top = top + "px";
+  div.style.left = left + "px";
+///  google.maps.event.trigger(map, 'resize');
 }
 
 function wm_setMapSize(width, height)
 {
-	var div;
+  var div;
 
-	div = document.getElementById("map");
-	div.style.width = width + "px";
-	div.style.height = height + "px";
-	google.maps.event.trigger(map, 'resize');
+  div = document.getElementById("map");
+  div.style.width = width + "px";
+  div.style.height = height + "px";
+///  google.maps.event.trigger(map, 'resize');
 }
 
 function wm_setDivValue(divId, value, editable)
 {
-	var div;
+  var div;
 
-	if(editable)
-	{
-		div = document.getElementById(divId);
-		div.value = value;
-	}
-	else
-	{
-		div = document.getElementById('s' + divId);
-		div.innerHTML = value;
-	}
+  if(editable)
+  {
+    div = document.getElementById(divId);
+    div.value = value;
+  }
+  else
+  {
+    div = document.getElementById('s' + divId);
+    div.innerHTML = value;
+  }
 }
 
 function wm_getDivValue(divId, editable)
 {
-	var locInput;
-	var value;
+  var locInput;
+  var value;
 
-	if(editable)
-	{
-		locInput = document.getElementById(divId);
-		value = locInput.value;
-	}
-	else
-	{
-		locInput = document.getElementById('s' + divId);
-		value = locInput.innerHTML;
-	}
+  if(editable)
+  {
+    locInput = document.getElementById(divId);
+    value = locInput.value;
+  }
+  else
+  {
+    locInput = document.getElementById('s' + divId);
+    value = locInput.innerHTML;
+  }
 
-	return value;
+  return value;
 }
 
 function wm_emitNetRequest(id, req, callback)
 {
-	WebMap.netRequest(id, req, callback);
+  WebMap.netRequest(id, req, callback);
 }
 
 function wm_emitAppReady()
 {
-	WebMap.appReady();
+  WebMap.appReady();
 }
 
 function wm_emitLineChanged(line)
 {
-	WebMap.setLine(line);
+  WebMap.setLine(line);
 }
 
 function wm_emitOk(ok)
 {
-	WebMap.setOk(ok);
+  WebMap.setOk(ok);
 }

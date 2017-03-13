@@ -24,106 +24,154 @@
 // class AirSpace
 function AirSpace(map, path, opts)
 {
-	var vertexNr;
-	var vertex;
+  var vertexNr;
+  var vertex;
 
-	this.id = opts.id;
-	this.name = opts.name;
-	this.low = opts.low;
-	this.high = opts.high;
-	this.airclass = opts.airclass;
-	this.polygon = new google.maps.Polygon({
-		map: map,
-		paths: path,
-		strokeColor: "#000000",
-		strokeOpacity: 0.8,
-		strokeWeight: 1,
-		fillColor: "#ff0000",
-		fillOpacity: 0.05,
-		zIndex: 10,
-		clickable: false
-	});
+  this.id = opts.id;
+  this.name = opts.name;
+  this.low = opts.low;
+  this.high = opts.high;
+  this.airclass = opts.airclass;
+
+  this.polygon = L.polygon(path, {
+    color: '#000000',
+    stroke: '#000000',
+    weight: 1,
+    fillColor: '#ff0000',
+    fillOpacity: 0.1
+  }).addTo(map);
+
+/**
+  this.polygon = new google.maps.Polygon({
+    map: map,
+    paths: path,
+    strokeColor: "#000000",
+    strokeOpacity: 0.8,
+    strokeWeight: 1,
+    fillColor: "#ff0000",
+    fillOpacity: 0.05,
+    zIndex: 10,
+    clickable: false
+  });
+*/
 }
 
 AirSpace.prototype.getMap = function()
 {
-	return this.map;
+  return this.map;
 };
 
 AirSpace.prototype.setMap = function(map)
 {
-	this.map = map;
-	this.polygon.setMap(map);
+  this.map = map;
+//  this.polygon.setMap(map);
 };
 
 AirSpace.prototype.getId = function()
 {
-	return this.id;
+  return this.id;
 };
 
 AirSpace.prototype.getName = function()
 {
-	return this.name;
+  return this.name;
 };
 
 AirSpace.prototype.getLow = function()
 {
-	return this.low;
+  return this.low;
 };
 
 AirSpace.prototype.getHigh = function()
 {
-	return this.high;
+  return this.high;
 };
 
 AirSpace.prototype.getClass = function()
 {
-	return this.airclass;
+  return this.airclass;
 };
 
 AirSpace.prototype.isInside = function(latlng)
 {
-	var i;
-	var j = 0;
-	var oddNodes = false;
-	var x = latlng.lng();
-	var y = latlng.lat();
-	var path;
+  var i;
+  var j = 0;
+  var oddNodes = false;
+  var x = latlng.lng;
+  var y = latlng.lat;
+  var latlngs = this.polygon.getLatLngs()[0];
 
-	path = this.polygon.getPath();
+  for(i=0; i<latlngs.length; i++)
+  {
+    j++;
 
-	for(i=0; i<path.length; i++)
-	{
-		j++;
+    if(j === latlngs.length)
+    {
+      j = 0;
+    }
 
-		if(j == path.length)
-		{
-			j = 0;
-		}
+    if(((latlngs[i].lat < y) && (latlngs[j].lat >= y)) ||
+      ((latlngs[j].lat < y) && (latlngs[i].lat >= y)))
+    {
+      if(latlngs[i].lng + (y - latlngs[i].lat) /
+        (latlngs[j].lat - latlngs[i].lat) *
+        (latlngs[j].lng - latlngs[i].lng) < x)
+      {
+        oddNodes = !oddNodes;
+      }
+    }
+  }
 
-		if(((path.getAt(i).lat() < y) && (path.getAt(j).lat() >= y)) ||
-			((path.getAt(j).lat() < y) && (path.getAt(i).lat() >= y)))
-		{
-			if(path.getAt(i).lng() + (y - path.getAt(i).lat()) /
-				(path.getAt(j).lat() - path.getAt(i).lat()) *
-				(path.getAt(j).lng() - path.getAt(i).lng()) < x)
-			{
-				oddNodes = !oddNodes;
-			}
-		}
-	}
-
-	return oddNodes;
+  return oddNodes;
 };
+
+/*
+AirSpace.prototype.isInside = function(latlng)
+{
+  var i;
+  var j = 0;
+  var oddNodes = false;
+  var x = latlng.lng();
+  var y = latlng.lat();
+  var path;
+
+  path = this.polygon.getPath();
+
+  for(i=0; i<path.length; i++)
+  {
+    j++;
+
+    if(j == path.length)
+    {
+      j = 0;
+    }
+
+    if(((path.getAt(i).lat() < y) && (path.getAt(j).lat() >= y)) ||
+      ((path.getAt(j).lat() < y) && (path.getAt(i).lat() >= y)))
+    {
+      if(path.getAt(i).lng() + (y - path.getAt(i).lat()) /
+        (path.getAt(j).lat() - path.getAt(i).lat()) *
+        (path.getAt(j).lng() - path.getAt(i).lng()) < x)
+      {
+        oddNodes = !oddNodes;
+      }
+    }
+  }
+
+  return oddNodes;
+};
+*/
 
 AirSpace.prototype.setSelect = function(select)
 {
-	if(select)
-	{
-		this.polygon.setOptions({fillColor: "#ffff00", fillOpacity: 0.3});
-	}
-	else
-	{
-		this.polygon.setOptions({fillColor: "#ff0000", fillOpacity: 0.05});
-	}
+  if(select)
+  {
+    this.polygon.setStyle({fillColor: '#0000FF', fillOpacity: 0.3});
+//    this.polygon.setOptions({fillColor: "#ffff00", fillOpacity: 0.3});
+  }
+  else
+  {
+    this.polygon.setStyle({fillColor: "#ff0000", fillOpacity: 0.1});
+//    this.polygon.setOptions({fillColor: "#ff0000", fillOpacity: 0.05});
+  }
 };

@@ -23,64 +23,64 @@
 
 function InfoBox(map)
 {
-	this.map = map;
-	this.infoDiv = null;
+  this.map = map;
+  this.infoDiv = null;
 }
 
 InfoBox.prototype.show = function(latlng, width, height, msg)
 {
-	var mapDiv;
-	var infoDiv;
-	var mapWidth;
-	var mapHeight;
-	var bounds;
-	var boundsSpan;
-	var longSpan;
-	var latSpan;
-	var ptX;
-	var ptY;
+  var mapDiv;
+  var infoDiv;
+  var mapWidth;
+  var mapHeight;
+  var bounds;
+  var boundsSpan;
+  var longSpan;
+  var latSpan;
+  var ptX;
+  var ptY;
 
-	mapDiv = this.map.getDiv();
-	mapWidth = mapDiv.offsetWidth;
-	mapHeight = mapDiv.offsetHeight;
-	bounds = map.getBounds();
-	boundsSpan = bounds.toSpan();
-	ptX = (latlng.lng() - bounds.getSouthWest().lng()) * mapWidth / boundsSpan.lng();
-	ptX += mapDiv.offsetLeft;
-	ptY = (bounds.getNorthEast().lat() - latlng.lat()) * mapHeight / boundsSpan.lat();
-	ptY += mapDiv.offsetTop;
-	ptY += 20;
+  mapDiv = this.map.getDiv();
+  mapWidth = mapDiv.offsetWidth;
+  mapHeight = mapDiv.offsetHeight;
+  bounds = map.getBounds();
+  boundsSpan = bounds.toSpan();
+  ptX = (latlng.lng() - bounds.getSouthWest().lng()) * mapWidth / boundsSpan.lng();
+  ptX += mapDiv.offsetLeft;
+  ptY = (bounds.getNorthEast().lat - latlng.lat) * mapHeight / boundsSpan.lat;
+  ptY += mapDiv.offsetTop;
+  ptY += 20;
 
-	if(this.infoDiv === null)
-	{
-		this.createInfoDiv();
-	}
+  if(this.infoDiv === null)
+  {
+    this.createInfoDiv();
+  }
 
-	infoDiv = this.infoDiv;
-	infoDiv.style.left = ptX.toFixed(0) + "px";
-	infoDiv.style.top = ptY.toFixed(0) + "px";
-	infoDiv.style.width = width + "px";
-	infoDiv.style.height = height + "px";
-	infoDiv.innerHTML = msg;
-	infoDiv.style.display = "block";
+  infoDiv = this.infoDiv;
+  infoDiv.style.left = ptX.toFixed(0) + "px";
+  infoDiv.style.top = ptY.toFixed(0) + "px";
+  infoDiv.style.width = width + "px";
+  infoDiv.style.height = height + "px";
+  infoDiv.innerHTML = msg;
+  infoDiv.style.display = "block";
 };
 
 InfoBox.prototype.hide = function()
 {
-	if(this.infoDiv !== null)
-	{
-		this.infoDiv.style.display = "none";
-	}
+  if(this.infoDiv !== null)
+  {
+    this.infoDiv.style.display = "none";
+  }
 };
 
 InfoBox.prototype.createInfoDiv = function()
 {
-	var infoDiv;
+  var infoDiv;
 
-	infoDiv = document.createElement('div');
-	infoDiv.style.position = "absolute";
-	infoDiv.style.backgroundColor = "#eeeeee";
-	infoDiv.style.border = "1px solid";
-	document.body.appendChild(infoDiv);
-	this.infoDiv = infoDiv;
+  infoDiv = document.createElement('div');
+  infoDiv.style.position = "absolute";
+  infoDiv.style.backgroundColor = "#eeeeee";
+  infoDiv.style.border = "1px solid";
+  document.body.appendChild(infoDiv);
+  this.infoDiv = infoDiv;
 };

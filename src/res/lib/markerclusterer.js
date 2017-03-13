@@ -456,7 +456,7 @@ MarkerClusterer.prototype.removeMarker_ = function(marker) {
     index = this.markers_.indexOf(marker);
   } else {
     for (var i = 0, m; m = this.markers_[i]; i++) {
-      if (m == marker) {
+      if (m === marker) {
         index = i;
         break;
       }
@@ -468,7 +468,8 @@ MarkerClusterer.prototype.removeMarker_ = function(marker) {
     return false;
   }
 
-  marker.setMap(null);
+  marker.remove();
+//  marker.setMap(null);
 
   this.markers_.splice(index, 1);
 

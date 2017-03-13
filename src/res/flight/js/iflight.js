@@ -21,7 +21,9 @@
  *   service in combination with closed source.                            *
  ***************************************************************************/
 
-wm_include('js/flight.js');
+//wm_include('js/flight.js');
+
+/*
 wm_include('../airspace/js/airspace.js');
 wm_include('../route/js/fai.js');
 wm_include('../route/js/infobox.js');
@@ -32,11 +34,15 @@ wm_include('../route/js/route.js');
 wm_include('../route/js/turnpt.js');
 wm_include('../lib/oms.min.js');
 wm_include('../lib/photo.js');
+*/
+
+/*
 wm_include('../lib/plot/context.js');
 wm_include('../lib/plot/cursor.js');
 wm_include('../lib/plot/legend.js');
 wm_include('../lib/plot/plot.js');
 wm_include('../lib/plot/value.js');
+*/
 
 var airspaces = [];
 var route = null;
@@ -44,458 +50,583 @@ var map = null;
 var flight = null;
 var plot = null;
 var measure;
-var oldSelect = -1;
-var airspaceNr;
+var selectedAirspace = -1;
 
 function fl_init()
 {
-	var mapLoaded = false;
-	var mapOptions =
-	{
-		zoom: 9,
-		center: new google.maps.LatLng(47.0, 8.5),
-		mapTypeId: google.maps.MapTypeId.TERRAIN,
-		disableDefaultUI: false,
-		mapTypeControl: true,
-		panControl: false,
-		zoomControl: false,
-		streetViewControl: false
-	};
+  var airspaceNr;
+  map = L.map('map');
 
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+          maxZoom: 15,
+          attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  }).addTo(map);
 
-	google.maps.event.addListener(map, 'idle', function()
-	{
-		if(!mapLoaded)
-		{
-			mapLoaded = true;
-			flight = new Flight(map);
+/*
+  var marker = L.marker([47.0, 8.5], {draggable:'true'});
+  //	marker.on('move', function(event){ alert("move") });
+  marker.addTo(map);
+*/
 
-			route = new Route(map);
-			route.setChangeCallback(routeChanged);
+  map.on('load', function()
+  {
+    flight = new Flight(map);
 
-			plot = new Plot(document.getElementById('plot'));
-			plot.setValueLabels(["TIME", "ALT", "GND", "AGL", "SOG", "VARIO"]);
-			plot.setUpdateCursorPosCb(updateCursorPos);
-			plot.setUpdateCursorClickCb(updateCursorClick);
+//alert("flight loaded");
 
-			measure = new Measure(map);
-			measure.setChangeCallback(measureChanged);
+    route = new Route(map);
+    route.setChangeCallback(routeChanged);
 
-			ph_initPhotoList(map);
+//alert("route");
 
-			wm_emitAppReady();
-		}
-	});
+    plot = new Plot(document.getElementById('plot'));
+    plot.setValueLabels(["TIME", "ALT", "GND", "AGL", "SOG", "VARIO"]);
+    plot.setUpdateCursorPosCb(updateCursorPos);
+    plot.setUpdateCursorClickCb(updateCursorClick);
 
-	google.maps.event.addListener(map, 'click', function(event)
-	{
-		var inside = false;
+//alert("plot");
 
-		if(!measure.getEnable())
-		{
-			// select next airspace
-			airspaceNr = oldSelect;
+/*
+        measure = new Measure(map);
+        measure.setChangeCallback(measureChanged);
 
-			for(var i=0; i<airspaces.length; i++)
-			{
-				airspaceNr = (airspaceNr + 1) % airspaces.length;
-				inside = airspaces[airspaceNr].isInside(event.latLng);
+alert("measure");
 
-				if(inside)
-				{
-					if(airspaceNr != oldSelect)
-					{
-						break; // jump out of loop
-					}
-				}
-			}
+        ph_initPhotoList(map);
 
-			if(inside)
-			{
-				as_selectAirSpaceNr(airspaceNr);
-			}
-			else
-			{
-				as_selectAirSpaceNr(-1);
-			}
-		}
-	});
+alert("photo");
+*/
+
+      wm_emitAppReady();
+  });
+
+
+//    map.on('click', function(event){as_selectAirSpaceNr(-1);});
+
+  map.on('click', function(event)
+  {
+    var inside = false;
+
+///      if(!measure.getEnable())
+    {
+      // select next airspace
+      airspaceNr = selectedAirspace;
+
+      for(var i=0; i<airspaces.length; i++)
+      {
+        airspaceNr = (airspaceNr + 1) % airspaces.length;
+        inside = airspaces[airspaceNr].isInside(event.latlng);
+
+        if(inside)
+        {
+          if(airspaceNr !== selectedAirspace)
+          {
+            break; // jump out of loop
+          }
+        }
+      }
+
+      if(inside)
+      {
+        as_selectAirSpaceNr(airspaceNr);
+      }
+      else
+      {
+        as_selectAirSpaceNr(-1);
+      }
+    }
+  });
+
+  map.setView([47.0, 8.5], 9);
+
+/*
+    var mapLoaded = false;
+    var mapOptions =
+    {
+        zoom: 9,
+        center: new google.maps.LatLng(47.0, 8.5),
+        mapTypeId: google.maps.MapTypeId.TERRAIN,
+        disableDefaultUI: false,
+        mapTypeControl: true,
+        panControl: false,
+        zoomControl: false,
+        streetViewControl: false
+    };
+
+    map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+    google.maps.event.addListener(map, 'idle', function()
+    {
+        if(!mapLoaded)
+        {
+            mapLoaded = true;
+            flight = new Flight(map);
+
+            route = new Route(map);
+            route.setChangeCallback(routeChanged);
+
+            plot = new Plot(document.getElementById('plot'));
+            plot.setValueLabels(["TIME", "ALT", "GND", "AGL", "SOG", "VARIO"]);
+            plot.setUpdateCursorPosCb(updateCursorPos);
+            plot.setUpdateCursorClickCb(updateCursorClick);
+
+            measure = new Measure(map);
+            measure.setChangeCallback(measureChanged);
+
+            ph_initPhotoList(map);
+
+            wm_emitAppReady();
+        }
+    });
+
+    google.maps.event.addListener(map, 'click', function(event)
+    {
+        var inside = false;
+
+        if(!measure.getEnable())
+        {
+            // select next airspace
+            airspaceNr = selectedAirspace;
+
+            for(var i=0; i<airspaces.length; i++)
+            {
+                airspaceNr = (airspaceNr + 1) % airspaces.length;
+                inside = airspaces[airspaceNr].isInside(event.latLng);
+
+                if(inside)
+                {
+                    if(airspaceNr != selectedAirspace)
+                    {
+                        break; // jump out of loop
+                    }
+                }
+            }
+
+            if(inside)
+            {
+                as_selectAirSpaceNr(airspaceNr);
+            }
+            else
+            {
+                as_selectAirSpaceNr(-1);
+            }
+        }
+    });
+*/
 }
 
 function as_pushAirSpace(coords, opts)
 {
-	var latlngs = [];
-	var airspace;
-	var nr;
+  var latlngs = [];
+  var latlng;
+  var airspace;
+  var nr;
 
-	for(nr=0; nr<coords.length; nr++)
-	{
-		latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
-	}
+  for(nr=0; nr<coords.length; nr++)
+  {
+    latlng = L.latLng(coords[nr][0], coords[nr][1]);
+    latlngs.push(latlng);
+//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
+  }
 
-	airspace = new AirSpace(map, latlngs, opts);
-	airspaces.push(airspace);
+  airspace = new AirSpace(map, latlngs, opts, as_selectAirSpaceNr);
+  airspaces.push(airspace);
 }
 
 function as_selectAirSpaceNr(num)
 {
-	var airspace;
+  var airspace;
 
-	if(num < airspaces.length)
-	{
-		if(oldSelect >= 0)
-		{
-			airspaces[oldSelect].setSelect(false);
-		}
+  if(num < airspaces.length)
+  {
+    if(selectedAirspace >= 0)
+    {
+      airspaces[selectedAirspace].setSelect(false);
+    }
 
-		oldSelect = num;
+    selectedAirspace = num;
 
-		if(num >= 0)
-		{
-			airspace = airspaces[num];
-			airspace.setSelect(true);
-			wm_setDivValue("airspace", airspace.getName(), false);
+    if(num >= 0)
+    {
+      airspace = airspaces[num];
+      airspace.setSelect(true);
+      wm_setDivValue("airspace", airspace.getName(), false);
 
-			if(airspace.getLow() === 0)
-			{
-				wm_setDivValue("low", "GND", false);
-			}
-			else
-			{
-				wm_setDivValue("low", airspace.getLow() + " m", false);
-			}
+      if(airspace.getLow() === 0)
+      {
+        wm_setDivValue("low", "GND", false);
+      }
+      else
+      {
+        wm_setDivValue("low", airspace.getLow() + " m", false);
+      }
 
-			wm_setDivValue("high", airspace.getHigh() + " m", false);
-			wm_setDivValue("class", airspace.getClass(), false);
-		}
-		else
-		{
-			wm_setDivValue("airspace", "", false);
-			wm_setDivValue("low", "", false);
-			wm_setDivValue("high", "", false);
-			wm_setDivValue("class", "", false);
-		}
-	}
+      wm_setDivValue("high", airspace.getHigh() + " m", false);
+      wm_setDivValue("class", airspace.getClass(), false);
+    }
+    else
+    {
+      wm_setDivValue("airspace", "", false);
+      wm_setDivValue("low", "", false);
+      wm_setDivValue("high", "", false);
+      wm_setDivValue("class", "", false);
+    }
+  }
 }
 
 function rt_setTurnPts(turnPts)
 {
-	var turnPt;
-	var tpNr;
-	var bounds;
-	var latlng;
+  var turnPt;
+  var tpNr;
+  var bounds = L.latLngBounds(turnPts);
+  var latlng;
 
-	bounds = new google.maps.LatLngBounds();
+//  bounds = new google.maps.LatLngBounds();
 
-	for(tpNr=0; tpNr<turnPts.length; tpNr++)
-	{
-		latlng = new google.maps.LatLng(turnPts[tpNr][0], turnPts[tpNr][1]);
-		bounds.extend(latlng);
-		turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
-		route.addTurnPt(turnPt);
-	}
+  for(tpNr=0; tpNr<turnPts.length; tpNr++)
+  {
+    latlng = L.latLng(turnPts[tpNr][0], turnPts[tpNr][1]);
+//    bounds.extend(latlng);
+    turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
+    route.addTurnPt(turnPt);
+  }
 
-	map.fitBounds(bounds);
+  map.fitBounds(bounds);
 }
 
 function rt_setName(name)
 {
-	var locInput;
+  var locInput;
 
-	locInput = document.getElementById("sstart");
-	locInput.innerHTML = name;
+  locInput = document.getElementById("sstart");
+  locInput.innerHTML = name;
 }
 
 function fl_setPlotSize(width, height)
 {
-	var left;
-	var top;
+  var left;
+  var top;
 
-	if(plot !== null)
-	{
-		left = (window.innerWidth - width - 5);
-		top = (window.innerHeight - height);
-		plot.setGeometry(left, top, width, height);
-	}
+  if(plot !== null)
+  {
+    left = (window.innerWidth - width - 5);
+    top = (window.innerHeight - height);
+    plot.setGeometry(left, top, width, height);
+  }
 }
 
 function fl_setFlightTime(timeList, start, duration)
 {
-	flight.setTimeList(timeList);
-	route.setDuration(duration / 3600);
-	updateDurationAndSpeed();
+  flight.setTimeList(timeList);
+  route.setDuration(duration / 3600);
+  updateDurationAndSpeed();
 }
 
 function fl_setFlightAlt(altList, minAlt, maxAlt)
 {
-	flight.setAltList(altList, minAlt, maxAlt);
+  flight.setAltList(altList, minAlt, maxAlt);
 }
 
 function fl_setFlightElevation(elevations)
 {
-	flight.setElevationList(elevations);
+  flight.setElevationList(elevations);
 }
 
 function fl_setFlightLatLon(latlngs)
 {
-	var latlng;
-	var posNr;
-	var bounds;
-	var path = [];
+  var bounds = L.latLngBounds(latlngs);
+  var latlng;
+  var posNr;
+  var path = [];
 
-	bounds = new google.maps.LatLngBounds();
+  for(posNr=0; posNr<latlngs.length; posNr++)
+  {
+    latlng = L.latLng(latlngs[posNr][0], latlngs[posNr][1]);
+    path.push(latlng);
+  }
 
-	for(posNr=0; posNr<latlngs.length; posNr++)
-	{
-		latlng = new google.maps.LatLng(latlngs[posNr][0], latlngs[posNr][1]);
-		path.push(latlng);
-		bounds.extend(latlng);
-	}
+  flight.setTrackPts(path);
+  map.fitBounds(bounds);
 
-	flight.setTrackPts(path);
-	map.fitBounds(bounds);
+/*
+    var latlng;
+    var posNr;
+    var bounds;
+    var path = [];
+
+    bounds = new google.maps.LatLngBounds();
+
+    for(posNr=0; posNr<latlngs.length; posNr++)
+    {
+        latlng = new google.maps.LatLng(latlngs[posNr][0], latlngs[posNr][1]);
+        path.push(latlng);
+        bounds.extend(latlng);
+    }
+
+    flight.setTrackPts(path);
+    map.fitBounds(bounds);
+*/
 }
 
 function fl_setSog(sogList)
 {
-	flight.setSogList(sogList);
+  flight.setSogList(sogList);
 }
 
 function fl_setVario(varioList)
 {
-	flight.setVarioList(varioList);
+  flight.setVarioList(varioList);
 }
 
 function fl_pushPhoto(opts)
 {
-	var photo;
+/*
+    var photo;
 
-	photo = new Photo(map, opts);
-	ph_addToPhotoList(photo);
+    photo = new Photo(map, opts);
+    ph_addToPhotoList(photo);
+*/
 }
 
 function fl_showPlot()
 {
-	var index;
-	var maxIndex;
-	var data = [];
+  var index;
+  var maxIndex;
+  var data = [];
 
-	maxIndex = flight.getTimeList().length;
+  maxIndex = flight.getTimeList().length;
 
-	for(index=0; index<maxIndex; index++)
-	{
-		data.push({valueX: flight.getTimeAt(index), valueY: flight.getAltAt(index),
-							valueY2: flight.getElevationAt(index)});
-	}
+  for(index=0; index<maxIndex; index++)
+  {
+    data.push({valueX: flight.getTimeAt(index),
+               valueY: flight.getAltAt(index),
+               valueY2: flight.getElevationAt(index)});
+  }
 
-	plot.adjustMinMaxX(data);
-	plot.setMinMaxY(0, flight.getMaxAlt());
-	plot.plot(data);
-	flight.moveGliderTo(0);
+  plot.adjustMinMaxX(data);
+  plot.setMinMaxY(0, flight.getMaxAlt());
+  plot.plot(data);
+  flight.moveGliderTo(0);
 }
 
 function fl_setOk(ok)
 {
-	wm_emitOk(ok);
+    wm_emitOk(ok);
 }
 
 function fl_speedUp()
 {
-	var speed;
+  var speed;
 
-	speed = route.getSpeed();
+  speed = route.getSpeed();
 
-	if(speed < 50.0)
-	{
-		route.setSpeed(speed + 0.5);
-		updateDurationAndSpeed();
-	}
+  if(speed < 50.0)
+  {
+    route.setSpeed(speed + 0.5);
+    updateDurationAndSpeed();
+  }
 }
 
 function fl_speedDown()
 {
-	var speed;
+  var speed;
 
-	if(route.getEditable())
-	{
-		speed = route.getSpeed();
+  if(route.getEditable())
+  {
+    speed = route.getSpeed();
 
-		if(speed > 1.0)
-		{
-			route.setSpeed(speed - 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(speed > 1.0)
+    {
+      route.setSpeed(speed - 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function fl_durationUp()
 {
-	var duration;
+  var duration;
 
-	if(route.getEditable())
-	{
-		duration = route.getDuration();
+  if(route.getEditable())
+  {
+    duration = route.getDuration();
 
-		if(duration < 24)
-		{
-			route.setDuration(duration + 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(duration < 24)
+    {
+      route.setDuration(duration + 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function fl_durationDown()
 {
-	var duration;
+  var duration;
 
-	if(route.getEditable())
-	{
-		duration = route.getDuration();
+  if(route.getEditable())
+  {
+    duration = route.getDuration();
 
-		if(duration > 1)
-		{
-			route.setDuration(duration - 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(duration > 1)
+    {
+      route.setDuration(duration - 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function fl_measure(div)
 {
-	var show;
+  var show;
 
-	show = (div.className == "button_up");
-	measure.show(show);
+  show = (div.className == "button_up");
+  measure.show(show);
 
-	if(show)
-	{
-		div.className = "button_down";
-		wm_setDivValue("measure", "0.0 km", false);
-	}
-	else
-	{
-		div.className = "button_up";
-		wm_setDivValue("measure", "Off", false);
-	}
+  if(show)
+  {
+    div.className = "button_down";
+    wm_setDivValue("measure", "0.0 km", false);
+  }
+  else
+  {
+    div.className = "button_up";
+    wm_setDivValue("measure", "Off", false);
+  }
 }
 
 function routeChanged()
 {
-	wm_setDivValue("type", Route.ScoreTypeText[route.getType()], false);
-	wm_setDivValue("distance", route.getDist().toFixed(2) + " km", false);
-	wm_setDivValue("score", route.getScore().toFixed(2) + " points", false);
-	wm_setDivValue("track", route.getTrackDist().toFixed(0) + " km", false);
-	updateDurationAndSpeed();
+  wm_setDivValue("type", Route.ScoreTypeText[route.getType()], false);
+  wm_setDivValue("distance", route.getDist().toFixed(2) + " km", false);
+  wm_setDivValue("score", route.getScore().toFixed(2) + " points", false);
+  wm_setDivValue("track", route.getTrackDist().toFixed(0) + " km", false);
+  updateDurationAndSpeed();
 }
 
 function updateDurationAndSpeed()
 {
-	wm_setDivValue("speed", route.getSpeed().toFixed(1) + " km/h", true);
-	wm_setDivValue("duration", route.getDuration().toFixed(1) + " h", true);
+  wm_setDivValue("speed", route.getSpeed().toFixed(1) + " km/h", true);
+  wm_setDivValue("duration", route.getDuration().toFixed(1) + " h", true);
 }
 
 function updateCursorPos(pos)
 {
-	var index;
-	var date;
-	var time;
-	var alt;
-	var altValue;
-	var elevation;
-	var elevationValue;
-	var agl;
-	var sog;
-	var vario;
-	var timeList;
-	var duration;
+  var index;
+  var date;
+  var time;
+  var alt;
+  var altValue;
+  var elevation;
+  var elevationValue;
+  var agl;
+  var sog;
+  var vario;
+  var timeList;
+  var duration;
 
-	// legend-values
-	timeList = flight.getTimeList();
-	duration = (timeList[timeList.length - 1] - timeList[0]);
-	time = timeList[0] + Math.round(pos * duration / plot.getPlotAreaWidth());
-	index = getIndex(timeList, time);
-	date = new Date(flight.getTimeAt(index) * 1000);
-	time = date.getHours() + ":";
+  // legend-values
+  timeList = flight.getTimeList();
+  duration = (timeList[timeList.length - 1] - timeList[0]);
+  time = timeList[0] + Math.round(pos * duration / plot.getPlotAreaWidth());
+  index = getIndex(timeList, time);
+  date = new Date(flight.getTimeAt(index) * 1000);
+  time = date.getHours() + ":";
 
-	if(date.getMinutes() < 10)
-	{
-		time += '0';
-	}
+  if(date.getMinutes() < 10)
+  {
+      time += '0';
+  }
 
-	time += date.getMinutes() + " UTC";
-	altValue = flight.getAltAt(index);
-	alt = altValue.toFixed(0) + " m";
-	elevationValue = flight.getElevationAt(index);
-	elevation = elevationValue.toFixed(0) + " m";
-	agl = (altValue - elevationValue).toFixed(0) + " m";
-	sog = flight.getSogAt(index).toFixed(1) + " km/h";
-	vario = flight.getVarioAt(index).toFixed(1) + " m/s";
-	plot.setValues([time, alt, elevation, agl, sog, vario]);
+  time += date.getMinutes() + " UTC";
+  altValue = flight.getAltAt(index);
+  alt = altValue.toFixed(0) + " m";
+  elevationValue = flight.getElevationAt(index);
+  elevation = elevationValue.toFixed(0) + " m";
+  agl = (altValue - elevationValue).toFixed(0) + " m";
+  sog = flight.getSogAt(index).toFixed(1) + " km/h";
+  vario = flight.getVarioAt(index).toFixed(1) + " m/s";
+  plot.setValues([time, alt, elevation, agl, sog, vario]);
 
-	// glider
-	index = Math.round(pos * flight.getTrackPts().length / plot.getPlotAreaWidth());
-	flight.moveGliderTo(index);
+  // glider
+  index = Math.round(pos * flight.getTrackPts().length / plot.getPlotAreaWidth());
+  flight.moveGliderTo(index);
 }
 
 function updateCursorClick(pos)
 {
-	var index;
+  var index;
 
-	index = Math.round(pos * flight.getTrackPts().length / plot.getPlotAreaWidth());
-	map.setCenter(flight.getTrackPtAt(index));
-	map.setZoom(14);
+  index = Math.round(pos * flight.getTrackPts().length / plot.getPlotAreaWidth());
+  map.setCenter(flight.getTrackPtAt(index));
+  map.setZoom(14);
 }
 
 function measureChanged()
 {
-	wm_setDivValue("measure", measure.getDist().toFixed(1) + " km", false);
+  wm_setDivValue("measure", measure.getDist().toFixed(1) + " km", false);
+}
+
+function findAirspaceById(id)
+{
+  var nr;
+  var airspace = null
+
+  for(nr=0; nr<airspaces.length; nr++)
+  {
+    if(airspaces[nr].getId() === id)
+    {
+      airspace = airspaces[nr];
+      break;
+    }
+  }
+
+  return airspace;
 }
 
 function getIndex(arr, value)
 {
-	var index;
-	var deltaLow = 0;
-	var deltaHigh;
+  var index;
+  var deltaLow = 0;
+  var deltaHigh;
 
-	index = bSearch(arr, 0, (arr.length - 1), value);
+  index = bSearch(arr, 0, (arr.length - 1), value);
 
-	if(index > 0)
-	{
-		deltaLow = (value - arr[index - 1]);
-	}
+  if(index > 0)
+  {
+    deltaLow = (value - arr[index - 1]);
+  }
 
-	deltaHigh = (arr[index] - value);
+  deltaHigh = (arr[index] - value);
 
-	if(((deltaLow > 0) && (deltaHigh > 0)) && (deltaLow < deltaHigh))
-	{
-		index--;
-	}
+  if(((deltaLow > 0) && (deltaHigh > 0)) && (deltaLow < deltaHigh))
+  {
+    index--;
+  }
 
-	return index;
+  return index;
 }
 
 function bSearch(arr, low, high, key)
 {
-	var mid;
+  var mid;
 
-	if(low == high)
-	{
-		mid = low;
-	}
-	else
-	{
-		mid = Math.floor((low + high) / 2);
+  if(low === high)
+  {
+     mid = low;
+  }
+  else
+  {
+    mid = Math.floor((low + high) / 2);
 
-		if(key > arr[mid])
-		{
-			mid = bSearch(arr, mid + 1, high, key);
-		}
-		else if(key < arr[mid])
-		{
-			mid = bSearch(arr, low, mid, key);
-		}
-	}
+    if(key > arr[mid])
+    {
+      mid = bSearch(arr, mid + 1, high, key);
+    }
+    else if(key < arr[mid])
+    {
+      mid = bSearch(arr, low, mid, key);
+    }
+  }
 
-	return mid;
+  return mid;
 }

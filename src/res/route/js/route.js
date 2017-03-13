@@ -23,399 +23,405 @@
 
 Route.ScoreType =
 {
-	Undefined: 0,
-	Free: 1,
-	Straight: 2,
-	Flat: 3,
-	Fai: 4
+  Undefined: 0,
+  Free: 1,
+  Straight: 2,
+  Flat: 3,
+  Fai: 4
 };
 
 Route.ScoreTypeText = ["Undefined", "Free distance", "Straight distance", "Flat triangle", "FAI triangle"];
 
 function Route(map)
 {
-	this.map = map;
-	this.changeCallback = null;
-	this.firstTurnPt = null;
-	this.turnPtCount = 0;
-	this.type = 0;
-	this.dist = 0;
-	this.score = 0;
-	this.fai = new Fai(this);
-	this.trackDist = 0;
-	this.editable = true;
-	this.speed = 0;
-	this.duration = 0;
-	this.glueToCenter = false;
+  this.map = map;
+  this.changeCallback = null;
+  this.firstTurnPt = null;
+  this.turnPtCount = 0;
+  this.type = 0;
+  this.dist = 0;
+  this.score = 0;
+  this.fai = new Fai(this);
+  this.trackDist = 0;
+  this.editable = true;
+  this.speed = 0;
+  this.duration = 0;
+  this.glueToCenter = false;
+  this.line = null;
 
-	this.line = new google.maps.Polyline({
-		strokeColor: '#FFFFFF',
-		strokeOpacity: 1.0,
-		strokeWeight: 2,
-		map: null,
-		zIndex: 2
-	});
+/*
+  this.line = new google.maps.Polyline({
+    strokeColor: '#FFFFFF',
+    strokeOpacity: 1.0,
+    strokeWeight: 2,
+    map: null,
+    zIndex: 2
+  });
+*/
 }
 
 Route.prototype.getMap = function()
 {
-	return this.map;
+  return this.map;
 };
 
 Route.prototype.setChangeCallback = function(callback)
 {
-	this.changeCallback = callback;
+  this.changeCallback = callback;
 };
 
 Route.prototype.centerChanged = function()
 {
-	var turnPt;
+  var turnPt;
 
-	if(this.glueToCenter)
-	{
-		turnPt = this.firstTurnPt;
+  if(this.glueToCenter)
+  {
+    turnPt = this.firstTurnPt;
 
-		while(turnPt !== null)
-		{
-			turnPt.setPosition(new google.maps.LatLng(this.map.getCenter().lat() + turnPt.getDelta().lat(),
-																								this.map.getCenter().lng() + turnPt.getDelta().lng()));
-			turnPt = turnPt.getNextTurnPt();
-		}
-	}
+    while(turnPt !== null)
+    {
+      turnPt.setPosition(L.latLng(this.map.getCenter().lat + turnPt.getDelta().lat,
+                                  this.map.getCenter().lng + turnPt.getDelta().lng));
+      turnPt = turnPt.getNextTurnPt();
+    }
+  }
 };
 
 Route.prototype.getType = function()
 {
-	return this.type;
+  return this.type;
 };
 
 Route.prototype.getScore = function()
 {
-	return this.score;
+  return this.score;
 };
 
 Route.prototype.getDist = function()
 {
-	return this.dist;
+  return this.dist;
 };
 
 Route.prototype.getTrackDist = function()
 {
-	return this.trackDist;
+  return this.trackDist;
 };
 
 Route.prototype.setSpeed = function(speed)
 {
-	this.speed = speed;
-	this.calcDuration();
+  this.speed = speed;
+  this.calcDuration();
 };
 
 Route.prototype.getSpeed = function()
 {
-	return this.speed;
+  return this.speed;
 };
 
 Route.prototype.setDuration = function(duration)
 {
-	this.duration = duration;
-	this.calcSpeed();
+  this.duration = duration;
+  this.calcSpeed();
 };
 
 Route.prototype.getDuration = function()
 {
-	return this.duration;
+  return this.duration;
 };
 
 Route.prototype.addTurnPt = function(turnPt)
 {
-	var beginTurnPt;
-	var leg;
+  var beginTurnPt;
+  var leg;
 
-	turnPt.setEditable(this.getEditable());
+  turnPt.setEditable(this.getEditable());
 
-	if(this.firstTurnPt === null)
-	{
-		this.firstTurnPt = turnPt;
-	}
-	else
-	{
-		beginTurnPt = this.firstTurnPt;
+  if(this.firstTurnPt === null)
+  {
+    this.firstTurnPt = turnPt;
+  }
+  else
+  {
+    beginTurnPt = this.firstTurnPt;
 
-		while(beginTurnPt.getNextTurnPt() !== null)
-		{
-			beginTurnPt = beginTurnPt.getNextTurnPt();
-		}
+    while(beginTurnPt.getNextTurnPt() !== null)
+    {
+      beginTurnPt = beginTurnPt.getNextTurnPt();
+    }
 
-		beginTurnPt.setNextTurnPt(turnPt);
-		leg = new Leg(this);
-		leg.setEditable(this.getEditable());
-		leg.setTurnPts(beginTurnPt, turnPt);
-		beginTurnPt.setNextLeg(leg);
-		turnPt.setPrevLeg(leg);
-		this.update();
-	}
+    beginTurnPt.setNextTurnPt(turnPt);
+    leg = new Leg(this);
+    leg.setEditable(this.getEditable());
+    leg.setTurnPts(beginTurnPt, turnPt);
+    beginTurnPt.setNextLeg(leg);
+    turnPt.setPrevLeg(leg);
+    this.update();
+  }
 
-	this.turnPtCount++;
+  this.turnPtCount++;
 };
 
 Route.prototype.getTurnPts = function()
 {
-	var turnPts = [];
-	var turnPt;
+  var turnPts = [];
+  var turnPt;
 
-	turnPt = this.firstTurnPt;
+  turnPt = this.firstTurnPt;
 
-	while(turnPt !== null)
-	{
-		turnPts.push(turnPt);
-		turnPt = turnPt.getNextTurnPt();
-	}
+  while(turnPt !== null)
+  {
+    turnPts.push(turnPt);
+    turnPt = turnPt.getNextTurnPt();
+  }
 
-	return turnPts;
+  return turnPts;
 };
 
 Route.prototype.setEditable = function(en)
 {
-	var turnPt;
-	var leg;
+  var turnPt;
+  var leg;
 
-	this.editable = en;
-	turnPt = this.firstTurnPt;
+  this.editable = en;
+  turnPt = this.firstTurnPt;
 
-	while(turnPt !== null)
-	{
-		turnPt.setEditable(en);
-		leg = turnPt.getNextLeg();
+  while(turnPt !== null)
+  {
+    turnPt.setEditable(en);
+    leg = turnPt.getNextLeg();
 
-		if(leg !== null)
-		{
-			leg.setEditable(en);
-		}
+    if(leg !== null)
+    {
+      leg.setEditable(en);
+    }
 
-		turnPt = turnPt.getNextTurnPt();
-	}
+    turnPt = turnPt.getNextTurnPt();
+  }
 };
 
 Route.prototype.getEditable = function(en)
 {
-	return this.editable;
+  return this.editable;
 };
 
 Route.prototype.calcSpeed = function()
 {
-	this.speed = Math.round((this.getTrackDist() / this.getDuration()) * 2) / 2; // * 10 / 5
+  this.speed = Math.round((this.getTrackDist() / this.getDuration()) * 2) / 2; // * 10 / 5
 };
 
 Route.prototype.calcDuration = function()
 {
-	this.duration = Math.round((this.getTrackDist() / this.getSpeed()) * 2) / 2; // * 10 / 5
+  this.duration = Math.round((this.getTrackDist() / this.getSpeed()) * 2) / 2; // * 10 / 5
 };
 
 Route.prototype.spliceLeg = function(turnPt)
 {
-	var leg;
-	var beginTurnPt;
-	var endTurnPt;
+  var leg;
+  var beginTurnPt;
+  var endTurnPt;
 
-	// turnPt is cross on the middle of the line between two turn points
-	// after: WayPoint-------Cross--------WayPoint
-	// this is not the neatest solution, but this is the simplest
+  // turnPt is cross on the middle of the line between two turn points
+  // after: WayPoint-------Cross--------WayPoint
+  // this is not the neatest solution, but this is the simplest
 
-	// get begin and end
-	leg = turnPt.getPrevLeg();
-	beginTurnPt = leg.getBeginTurnPt();
-	endTurnPt = leg.getEndTurnPt();
+  // get begin and end
+  leg = turnPt.getPrevLeg();
+  beginTurnPt = leg.getBeginTurnPt();
+  endTurnPt = leg.getEndTurnPt();
 
-	// reconnect leg to turnPt
-	leg.setTurnPts(beginTurnPt, turnPt);
-	turnPt.setPrevLeg(leg);
-	beginTurnPt.setNextTurnPt(turnPt);
+  // reconnect leg to turnPt
+  leg.setTurnPts(beginTurnPt, turnPt);
+  turnPt.setPrevLeg(leg);
+  beginTurnPt.setNextTurnPt(turnPt);
 
-	// create new leg between turnPt and endTurnPt
-	leg = new Leg(this);
-	leg.setTurnPts(turnPt, endTurnPt);
-	turnPt.setNextLeg(leg);
-	endTurnPt.setPrevLeg(leg);
-	turnPt.setNextTurnPt(endTurnPt);
-	
-	turnPt.setType(TurnPt.Type.WayPoint);
-	this.turnPtCount++;
-	this.update();
+  // create new leg between turnPt and endTurnPt
+  leg = new Leg(this);
+  leg.setTurnPts(turnPt, endTurnPt);
+  turnPt.setNextLeg(leg);
+  endTurnPt.setPrevLeg(leg);
+  turnPt.setNextTurnPt(endTurnPt);
+
+  turnPt.setType(TurnPt.Type.WayPoint);
+  this.turnPtCount++;
+  this.update();
 };
 
 Route.prototype.removeMarker = function(turnPt)
 {
-	var leg;
-	var beginTurnPt;
-	var endTurnPt;
+  var leg;
+  var beginTurnPt;
+  var endTurnPt;
 
-	if(this.turnPtCount > 2)
-	{
-		prevLeg = turnPt.getPrevLeg();
-		nextLeg = turnPt.getNextLeg();
+  if(this.turnPtCount > 2)
+  {
+    prevLeg = turnPt.getPrevLeg();
+    nextLeg = turnPt.getNextLeg();
 
-		if((prevLeg !== null) && (nextLeg !== null))
-		{
-			// turnPt is between two legs
-			beginTurnPt = prevLeg.getBeginTurnPt();
-			endTurnPt = turnPt.getNextTurnPt();
-			prevLeg.setEndTurnPt(endTurnPt);
-			endTurnPt.setPrevLeg(prevLeg);
-			beginTurnPt.setNextTurnPt(endTurnPt);
-			nextLeg.remove();
-		}
-		else if(prevLeg === null)
-		{ 
-			// turnPt is first turn point
-			endTurnPt = turnPt.getNextTurnPt();
-			endTurnPt.setPrevLeg(null);
-			nextLeg.remove();
-			this.firstTurnPt = endTurnPt;
-		}
-		else if(nextLeg === null)
-		{
-			// turnPt is last turn point
-			beginTurnPt = prevLeg.getBeginTurnPt();
-			beginTurnPt.setNextLeg(null);
-			beginTurnPt.setNextTurnPt(null);
-			prevLeg.remove();
-		}
+    if((prevLeg !== null) && (nextLeg !== null))
+    {
+      // turnPt is between two legs
+      beginTurnPt = prevLeg.getBeginTurnPt();
+      endTurnPt = turnPt.getNextTurnPt();
+      prevLeg.setEndTurnPt(endTurnPt);
+      endTurnPt.setPrevLeg(prevLeg);
+      beginTurnPt.setNextTurnPt(endTurnPt);
+      nextLeg.remove();
+    }
+    else if(prevLeg === null)
+    {
+      // turnPt is first turn point
+      endTurnPt = turnPt.getNextTurnPt();
+      endTurnPt.setPrevLeg(null);
+      nextLeg.remove();
+      this.firstTurnPt = endTurnPt;
+    }
+    else if(nextLeg === null)
+    {
+      // turnPt is last turn point
+      beginTurnPt = prevLeg.getBeginTurnPt();
+      beginTurnPt.setNextLeg(null);
+      beginTurnPt.setNextTurnPt(null);
+      prevLeg.remove();
+    }
 
-		turnPt.remove();
-		this.turnPtCount--;
-		this.update();
-	}
+    turnPt.remove();
+    this.turnPtCount--;
+    this.update();
+  }
 };
 
 Route.prototype.update = function()
 {
-	var locInput;
-	var turnPt;
-	var turnPts = [];
-	var faiPts = [];
-	var path = [];
-	var scoreType;
-	var bestScore;
-	var score;
-	var bestDist;
-	var dist;
-	var nr;
-	var indexs = null;
-	var optimizer;
+  var locInput;
+  var turnPt;
+  var turnPts = [];
+  var faiPts = [];
+  var path = [];
+  var scoreType;
+  var bestScore;
+  var score;
+  var bestDist;
+  var dist;
+  var nr;
+  var indexs = null;
+  var optimizer;
 
-	turnPt = this.firstTurnPt;
+  turnPt = this.firstTurnPt;
 
-	while(turnPt !== null)
-	{
-		turnPts.push(turnPt);
-		turnPt = turnPt.getNextTurnPt();
-	}
+  while(turnPt !== null)
+  {
+    turnPts.push(turnPt);
+    turnPt = turnPt.getNextTurnPt();
+  }
 
-	optimizer = new Optimizer();
-	optimizer.optimize(turnPts);
+  optimizer = new Optimizer();
+  optimizer.optimize(turnPts);
 
-	scoreType = Route.ScoreType.Free;
-	dist = optimizer.getFreeDist() / 1000.0;
-	indexs = optimizer.getFreeIndex();
-	bestDist = dist;
-	bestScore = dist * 1.0;
+  scoreType = Route.ScoreType.Free;
+  dist = optimizer.getFreeDist() / 1000.0;
+  indexs = optimizer.getFreeIndex();
+  bestDist = dist;
+  bestScore = dist * 1.0;
 
-	dist = optimizer.getStraightDist() / 1000.0;
-	score = dist * 1.2;
+  dist = optimizer.getStraightDist() / 1000.0;
+  score = dist * 1.2;
 
-	if(score > bestScore)
-	{
-		scoreType = Route.ScoreType.Straight;
-		bestDist = dist;
-		bestScore = score;
-		indexs = optimizer.getStraightIndex();
-	}
+  if(score > bestScore)
+  {
+    scoreType = Route.ScoreType.Straight;
+    bestDist = dist;
+    bestScore = score;
+    indexs = optimizer.getStraightIndex();
+  }
 
-	dist = optimizer.getFlatDist() / 1000.0;
-	score = dist * 1.2;
+  dist = optimizer.getFlatDist() / 1000.0;
+  score = dist * 1.2;
 
-	if(score > bestScore)
-	{
-		scoreType = Route.ScoreType.Flat;
-		bestDist = dist;
-		bestScore = score;
-		indexs = optimizer.getFlatIndex();
-	}
+  if(score > bestScore)
+  {
+    scoreType = Route.ScoreType.Flat;
+    bestDist = dist;
+    bestScore = score;
+    indexs = optimizer.getFlatIndex();
+  }
 
-	dist = optimizer.getFaiDist() / 1000.0;
-	score = dist * 1.3;
+  dist = optimizer.getFaiDist() / 1000.0;
+  score = dist * 1.3;
 
-	if(score > bestScore)
-	{
-		scoreType = Route.ScoreType.Fai;
-		bestDist = dist;
-		bestScore = score;
-		indexs = optimizer.getFaiIndex();
-	}
+  if(score > bestScore)
+  {
+    scoreType = Route.ScoreType.Fai;
+    bestDist = dist;
+    bestScore = score;
+    indexs = optimizer.getFaiIndex();
+  }
 
-	switch(scoreType)
-	{
-		case Route.ScoreType.Free:
-			path.push(turnPts[indexs[0]].getPosition());
-			path.push(turnPts[indexs[1]].getPosition());
-			path.push(turnPts[indexs[2]].getPosition());
-			path.push(turnPts[indexs[3]].getPosition());
-			path.push(turnPts[indexs[4]].getPosition());
-			this.fai.show(null);
-		break;
-		case Route.ScoreType.Straight:
-			path.push(turnPts[indexs[0]].getPosition());
-			path.push(turnPts[indexs[1]].getPosition());
-			this.fai.show(null);
-		break;
-		case Route.ScoreType.Flat:
-		case Route.ScoreType.Fai:
-			path.push(turnPts[indexs[0]].getPosition());
-			path.push(turnPts[indexs[1]].getPosition());
-			path.push(turnPts[indexs[2]].getPosition());
-			path.push(turnPts[indexs[3]].getPosition());
-			path.push(turnPts[indexs[4]].getPosition());
-			this.fai.show(path);
-		break;
-	}
+  switch(scoreType)
+  {
+    case Route.ScoreType.Free:
+      path.push(turnPts[indexs[0]].getPosition());
+      path.push(turnPts[indexs[1]].getPosition());
+      path.push(turnPts[indexs[2]].getPosition());
+      path.push(turnPts[indexs[3]].getPosition());
+      path.push(turnPts[indexs[4]].getPosition());
+      this.fai.show(null);
+    break;
+    case Route.ScoreType.Straight:
+      path.push(turnPts[indexs[0]].getPosition());
+      path.push(turnPts[indexs[1]].getPosition());
+      this.fai.show(null);
+    break;
+    case Route.ScoreType.Flat:
+    case Route.ScoreType.Fai:
+      path.push(turnPts[indexs[0]].getPosition());
+      path.push(turnPts[indexs[1]].getPosition());
+      path.push(turnPts[indexs[2]].getPosition());
+      path.push(turnPts[indexs[3]].getPosition());
+      path.push(turnPts[indexs[4]].getPosition());
+      this.fai.show(path);
+    break;
+  }
 
-	this.line.setMap(this.getMap());
-	this.line.setPath(path);
-	this.type = scoreType;
-	this.dist = bestDist;
-	this.score = bestScore;
-	this.trackDist = optimizer.getTrackDist() / 1000.0;
-	this.calcDuration();
+  this.line = L.polyline(path, {color: '#FFFFFF', weight: 2}).addTo(this.getMap());
+/*
+  this.line.setMap(this.getMap());
+  this.line.setPath(path);
+*/
+  this.type = scoreType;
+  this.dist = bestDist;
+  this.score = bestScore;
+  this.trackDist = optimizer.getTrackDist() / 1000.0;
+  this.calcDuration();
 
-	if(this.changeCallback !== null)
-	{
-		this.changeCallback();
-	}
+  if(this.changeCallback !== null)
+  {
+    this.changeCallback();
+  }
 };
 
 Route.prototype.setGlueToCenter = function(en)
 {
-	var turnPt;
-	var dLat;
-	var dLng;
+  var turnPt;
+  var dLat;
+  var dLng;
 
-	if(en)
-	{
-		turnPt = this.firstTurnPt;
+  if(en)
+  {
+    turnPt = this.firstTurnPt;
 
-		while(turnPt !== null)
-		{
-			dLat = turnPt.getPosition().lat() - this.map.getCenter().lat();
-			dLng = turnPt.getPosition().lng() - this.map.getCenter().lng();
-			turnPt.setDelta(new google.maps.LatLng(dLat, dLng));
-			turnPt = turnPt.getNextTurnPt();
-		}
-	}
+    while(turnPt !== null)
+    {
+      dLat = turnPt.getPosition().lat - this.map.getCenter().lat;
+      dLng = turnPt.getPosition().lng - this.map.getCenter().lng;
+      turnPt.setDelta(L.latLng(dLat, dLng));
+      turnPt = turnPt.getNextTurnPt();
+    }
+  }
 
-	this.glueToCenter = en;
+  this.glueToCenter = en;
 };
 
 Route.prototype.turnPtDrag = function()
 {
-	this.setGlueToCenter(false);
+  this.setGlueToCenter(false);
 };

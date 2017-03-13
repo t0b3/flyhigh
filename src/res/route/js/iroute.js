@@ -40,356 +40,356 @@ var airspaceNr;
 
 function rt_init()
 {
-	var mapLoaded = false;
-	var mapOptions =
-	{
-		zoom: 9,
-		center: new google.maps.LatLng(47.0, 8.5),
-		mapTypeId: google.maps.MapTypeId.TERRAIN,
-		disableDefaultUI: false,
-		mapTypeControl: true,
-		panControl: false,
-		zoomControl: false,
-		streetViewControl: false
-	};
+  var mapLoaded = false;
+  var mapOptions =
+  {
+    zoom: 9,
+    center: new google.maps.LatLng(47.0, 8.5),
+    mapTypeId: google.maps.MapTypeId.TERRAIN,
+    disableDefaultUI: false,
+    mapTypeControl: true,
+    panControl: false,
+    zoomControl: false,
+    streetViewControl: false
+  };
 
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-	google.maps.event.addListener(map, 'idle', function()
-	{
-		if(!mapLoaded)
-		{
-			mapLoaded = true;
-			route = new Route(map);
-			route.setSpeed(22.0);
-			route.setChangeCallback(routeChanged);
-			measure = new Measure(map);
-			measure.setChangeCallback(measureChanged);
-			wm_emitAppReady();
-		}
-	});
+  google.maps.event.addListener(map, 'idle', function()
+  {
+    if(!mapLoaded)
+    {
+      mapLoaded = true;
+      route = new Route(map);
+      route.setSpeed(22.0);
+      route.setChangeCallback(routeChanged);
+      measure = new Measure(map);
+      measure.setChangeCallback(measureChanged);
+      wm_emitAppReady();
+    }
+  });
 
-	google.maps.event.addListener(map, 'click', function(event)
-	{
-		var inside = false;
-		
-		if(!measure.getEnable())
-		{
-			// select next airspace
-			airspaceNr = oldSelect;
+  google.maps.event.addListener(map, 'click', function(event)
+  {
+    var inside = false;
 
-			for(var i=0; i<airspaces.length; i++)
-			{
-				airspaceNr = (airspaceNr + 1) % airspaces.length;
-				inside = airspaces[airspaceNr].isInside(event.latLng);
+    if(!measure.getEnable())
+    {
+      // select next airspace
+      airspaceNr = oldSelect;
 
-				if(inside)
-				{
-					if(airspaceNr != oldSelect)
-					{
-						break; // jump out of loop
-					}
-				}
-			}
-			
-			if(inside)
-			{
-				as_selectAirSpaceNr(airspaceNr);
-			}
-			else
-			{
-				as_selectAirSpaceNr(-1);
-			}
-		}
-	});
+      for(var i=0; i<airspaces.length; i++)
+      {
+        airspaceNr = (airspaceNr + 1) % airspaces.length;
+        inside = airspaces[airspaceNr].isInside(event.latLng);
 
-	google.maps.event.addListener(map, 'center_changed', function(event)
-	{
-		route.centerChanged();
-	});
+        if(inside)
+        {
+          if(airspaceNr != oldSelect)
+          {
+            break; // jump out of loop
+          }
+        }
+      }
+
+      if(inside)
+      {
+        as_selectAirSpaceNr(airspaceNr);
+      }
+      else
+      {
+        as_selectAirSpaceNr(-1);
+      }
+    }
+  });
+
+  google.maps.event.addListener(map, 'center_changed', function(event)
+  {
+    route.centerChanged();
+  });
 }
 
 function as_pushAirSpace(coords, opts)
 {
-	var latlngs = [];
-	var airspace;
-	var nr;
+  var latlngs = [];
+  var airspace;
+  var nr;
 
-	for(nr=0; nr<coords.length; nr++)
-	{
-		latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
-	}
+  for(nr=0; nr<coords.length; nr++)
+  {
+    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
+  }
 
-	airspace = new AirSpace(map, latlngs, opts);
-	airspaces.push(airspace);
+  airspace = new AirSpace(map, latlngs, opts);
+  airspaces.push(airspace);
 }
 
 function as_selectAirSpaceNr(num)
 {
-	var airspace;
+  var airspace;
 
-	if(num < airspaces.length)
-	{
-		if(oldSelect >= 0)
-		{
-			airspaces[oldSelect].setSelect(false);
-		}
+  if(num < airspaces.length)
+  {
+    if(oldSelect >= 0)
+    {
+      airspaces[oldSelect].setSelect(false);
+    }
 
-		oldSelect = num;
+    oldSelect = num;
 
-		if(num >= 0)
-		{
-			airspace = airspaces[num];
-			airspace.setSelect(true);
-			wm_setDivValue("airspace", airspace.getName(), false);
+    if(num >= 0)
+    {
+      airspace = airspaces[num];
+      airspace.setSelect(true);
+      wm_setDivValue("airspace", airspace.getName(), false);
 
-			if(airspace.getLow() === 0)
-			{
-				wm_setDivValue("low", "GND", false);
-			}
-			else
-			{
-				wm_setDivValue("low", airspace.getLow() + " m", false);
-			}
+      if(airspace.getLow() === 0)
+      {
+        wm_setDivValue("low", "GND", false);
+      }
+      else
+      {
+        wm_setDivValue("low", airspace.getLow() + " m", false);
+      }
 
-			wm_setDivValue("high", airspace.getHigh() + " m", false);
-			wm_setDivValue("class", airspace.getClass(), false);
-		}
-		else
-		{
-			wm_setDivValue("airspace", "", false);
-			wm_setDivValue("low", "", false);
-			wm_setDivValue("high", "", false);
-			wm_setDivValue("class", "", false);
-		}
-	}
+      wm_setDivValue("high", airspace.getHigh() + " m", false);
+      wm_setDivValue("class", airspace.getClass(), false);
+    }
+    else
+    {
+      wm_setDivValue("airspace", "", false);
+      wm_setDivValue("low", "", false);
+      wm_setDivValue("high", "", false);
+      wm_setDivValue("class", "", false);
+    }
+  }
 }
 
 function rt_setName(name)
 {
-	var locInput;
+  var locInput;
 
-	if(route.getEditable())
-	{
-		locInput = document.getElementById("name");
-		locInput.value = name;
-	}
-	else
-	{
-		locInput = document.getElementById("sname");
-		locInput.innerHTML = name;
-	}
+  if(route.getEditable())
+  {
+    locInput = document.getElementById("name");
+    locInput.value = name;
+  }
+  else
+  {
+    locInput = document.getElementById("sname");
+    locInput.innerHTML = name;
+  }
 }
 
 function rt_getName()
 {
-	var locInput;
-	var name;
+  var locInput;
+  var name;
 
-	if(route.getEditable())
-	{
-		locInput = document.getElementById("name");
-		name = locInput.value;
-	}
-	else
-	{
-		locInput = document.getElementById("sname");
-		name = locInput.innerHTML;
-	}
+  if(route.getEditable())
+  {
+    locInput = document.getElementById("name");
+    name = locInput.value;
+  }
+  else
+  {
+    locInput = document.getElementById("sname");
+    name = locInput.innerHTML;
+  }
 
-	return name;
+  return name;
 }
 
 function rt_setTurnPts(turnPts)
 {
-	var turnPt;
-	var tpNr;
-	var bounds;
-	var latlng;
+  var turnPt;
+  var tpNr;
+  var bounds;
+  var latlng;
 
-	bounds = new google.maps.LatLngBounds();
-	
-	for(tpNr=0; tpNr<turnPts.length; tpNr++)
-	{
-		latlng = new google.maps.LatLng(turnPts[tpNr][0], turnPts[tpNr][1]);
-		bounds.extend(latlng);
-		turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
-		route.addTurnPt(turnPt);
-	}
+  bounds = new google.maps.LatLngBounds();
 
-	map.fitBounds(bounds);
+  for(tpNr=0; tpNr<turnPts.length; tpNr++)
+  {
+    latlng = new google.maps.LatLng(turnPts[tpNr][0], turnPts[tpNr][1]);
+    bounds.extend(latlng);
+    turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
+    route.addTurnPt(turnPt);
+  }
+
+  map.fitBounds(bounds);
 }
 
 function rt_getTurnPts()
 {
-	var turnPts;
-	var turnPt;
-	var turnPtArray = [];
-	var tpNr;
+  var turnPts;
+  var turnPt;
+  var turnPtArray = [];
+  var tpNr;
 
-	turnPts = route.getTurnPts();
+  turnPts = route.getTurnPts();
 
-	for(tpNr=0; tpNr<turnPts.length; tpNr++)
-	{
-		turnPt = turnPts[tpNr];
-		turnPtArray.push(new Array(turnPt.getPosition().lat(), turnPt.getPosition().lng(), turnPt.getAltitude()));
-	}
+  for(tpNr=0; tpNr<turnPts.length; tpNr++)
+  {
+    turnPt = turnPts[tpNr];
+    turnPtArray.push(new Array(turnPt.getPosition().lat, turnPt.getPosition().lng, turnPt.getAltitude()));
+  }
 
-	return turnPtArray;
+  return turnPtArray;
 }
 
 function rt_getType()
 {
-	return route.getType();
+  return route.getType();
 }
 
 function rt_getDist()
 {
-	return route.getDist();
+  return route.getDist();
 }
 
 function rt_setEditable(en)
 {
-	var nameInput;
-	var snameInput;
-	var name;
+  var nameInput;
+  var snameInput;
+  var name;
 
-	name = rt_getName();
-	route.setEditable(en);
-	rt_setName(name);
-	nameInput = document.getElementById("name");
-	snameInput = document.getElementById("sname");
+  name = rt_getName();
+  route.setEditable(en);
+  rt_setName(name);
+  nameInput = document.getElementById("name");
+  snameInput = document.getElementById("sname");
 
-	if(en)
-	{
-		nameInput.style.display = "";
-		snameInput.style.display = "none";
-	}
-	else
-	{
-		nameInput.style.display = "none";
-		snameInput.style.display = "";
-	}
+  if(en)
+  {
+    nameInput.style.display = "";
+    snameInput.style.display = "none";
+  }
+  else
+  {
+    nameInput.style.display = "none";
+    snameInput.style.display = "";
+  }
 }
 
 function rt_setGlueToCenter(en)
 {
-	route.setGlueToCenter(en);
+  route.setGlueToCenter(en);
 }
 
 function rt_speedUp()
 {
-	var speed;
+  var speed;
 
-	if(route.getEditable())
-	{
-		speed = route.getSpeed();
+  if(route.getEditable())
+  {
+    speed = route.getSpeed();
 
-		if(speed < 50.0)
-		{
-			route.setSpeed(speed + 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(speed < 50.0)
+    {
+      route.setSpeed(speed + 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function rt_speedDown()
 {
-	var speed;
+  var speed;
 
-	if(route.getEditable())
-	{
-		speed = route.getSpeed();
+  if(route.getEditable())
+  {
+    speed = route.getSpeed();
 
-		if(speed > 1.0)
-		{
-			route.setSpeed(speed - 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(speed > 1.0)
+    {
+      route.setSpeed(speed - 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function rt_durationUp()
 {
-	var duration;
+  var duration;
 
-	if(route.getEditable())
-	{
-		duration = route.getDuration();
+  if(route.getEditable())
+  {
+    duration = route.getDuration();
 
-		if(duration < 24)
-		{
-			route.setDuration(duration + 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+    if(duration < 24)
+    {
+      route.setDuration(duration + 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function rt_durationDown()
 {
-	var duration;
+  var duration;
 
-	if(route.getEditable())
-	{
-		duration = route.getDuration();
-		
-		if(duration > 1)
-		{
-			route.setDuration(duration - 0.5);
-			updateDurationAndSpeed();
-		}
-	}
+  if(route.getEditable())
+  {
+    duration = route.getDuration();
+
+    if(duration > 1)
+    {
+      route.setDuration(duration - 0.5);
+      updateDurationAndSpeed();
+    }
+  }
 }
 
 function rt_measure(div)
 {
-	var show;
-	
-	show = (div.className == "button_up");
-	measure.show(show);
+  var show;
 
-	if(show)
-	{
-		div.className = "button_down";
-		div = document.getElementById("smeasure");
-		div.innerHTML = "0.0 km";
-	}
-	else
-	{
-		div.className = "button_up";
-		div = document.getElementById("smeasure");
-		div.innerHTML = "Off";
-	}
+  show = (div.className == "button_up");
+  measure.show(show);
+
+  if(show)
+  {
+    div.className = "button_down";
+    div = document.getElementById("smeasure");
+    div.innerHTML = "0.0 km";
+  }
+  else
+  {
+    div.className = "button_up";
+    div = document.getElementById("smeasure");
+    div.innerHTML = "Off";
+  }
 }
 
 function rt_setOk(ok)
 {
-	wm_emitOk(ok);
+  wm_emitOk(ok);
 }
 
 function routeChanged()
 {
-	wm_setDivValue("type", Route.ScoreTypeText[route.getType()], false);
-	wm_setDivValue("distance", route.getDist().toFixed(2) + " km", false);
-	wm_setDivValue("score", route.getScore().toFixed(2) + " points", false);
-	wm_setDivValue("track", route.getTrackDist().toFixed(0) + " km", false);
-	updateDurationAndSpeed();
+  wm_setDivValue("type", Route.ScoreTypeText[route.getType()], false);
+  wm_setDivValue("distance", route.getDist().toFixed(2) + " km", false);
+  wm_setDivValue("score", route.getScore().toFixed(2) + " points", false);
+  wm_setDivValue("track", route.getTrackDist().toFixed(0) + " km", false);
+  updateDurationAndSpeed();
 }
 
 function measureChanged()
 {
-	var div;
+  var div;
 
-	div = document.getElementById("smeasure");
-	div.innerHTML = measure.getDist().toFixed(1) + " km";
+  div = document.getElementById("smeasure");
+  div.innerHTML = measure.getDist().toFixed(1) + " km";
 }
 
 function updateDurationAndSpeed()
 {
-	var locInput;
+  var locInput;
 
-	locInput = document.getElementById("speed");
-	locInput.value = route.getSpeed().toFixed(1) + " km/h";
-	locInput = document.getElementById("duration");
-	locInput.value = route.getDuration().toFixed(1) + " h";
+  locInput = document.getElementById("speed");
+  locInput.value = route.getSpeed().toFixed(1) + " km/h";
+  locInput = document.getElementById("duration");
+  locInput.value = route.getDuration().toFixed(1) + " h";
 }

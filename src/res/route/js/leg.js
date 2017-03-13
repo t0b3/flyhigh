@@ -23,118 +23,121 @@
 
 function Leg(route)
 {
-	this.line = new google.maps.Polyline({
-		strokeColor: '#FF0000',
-		strokeOpacity: 1.0,
-		strokeWeight: 1,
-		map: route.getMap(),
-		zIndex: 5
-	});
-
-	this.route = route;
-	this.beginTurnPt = null;
-	this.endTurnPt = null;
-	this.cross = null;
-	this.editable = true;
+/*
+  this.line = new google.maps.Polyline({
+    strokeColor: '#FF0000',
+    strokeOpacity: 1.0,
+    strokeWeight: 1,
+    map: route.getMap(),
+    zIndex: 5
+  });
+*/
+  this.line = null;
+  this.route = route;
+  this.beginTurnPt = null;
+  this.endTurnPt = null;
+  this.cross = null;
+  this.editable = true;
 }
 
 Leg.prototype.getRoute = function()
 {
-	return this.route;
+  return this.route;
 };
 
 Leg.prototype.remove = function()
 {
-	if(this.cross !== null)
-	{
-		this.cross.remove();
-		this.cross = null;
-	}
+  if(this.cross !== null)
+  {
+    this.cross.remove();
+    this.cross = null;
+  }
 
-	this.line.setMap(null);
-	this.beginTurnPt = null;
-	this.endTurnPt = null;
+  this.line.remove();
+  this.beginTurnPt = null;
+  this.endTurnPt = null;
 };
 
 Leg.prototype.setTurnPts = function(beginTurnPt, endTurnPt)
 {
-	var path = [beginTurnPt.getPosition(), endTurnPt.getPosition()];
-	var pos;
+  var path = [beginTurnPt.getPosition(), endTurnPt.getPosition()];
+  var latlng;
 
-	this.beginTurnPt = beginTurnPt;
-	this.endTurnPt = endTurnPt;
-	this.line.setPath(path);
+  this.beginTurnPt = beginTurnPt;
+  this.endTurnPt = endTurnPt;
 
-	pos = lg_getMidPoint(beginTurnPt.getPosition(), endTurnPt.getPosition());
-	this.cross = new TurnPt(this.getRoute(), pos, TurnPt.Type.Cross);
-	this.cross.setEditable(this.getEditable());
-	this.cross.setPrevLeg(this);
+  this.line = L.polyline(path, {color: '#FF0000', weight: 1}).addTo(this.getRoute().getMap());
+//  this.line.setPath(path);
+  latlng = lg_getMidPoint(beginTurnPt.getPosition(), endTurnPt.getPosition());
+  this.cross = new TurnPt(this.getRoute(), latlng, TurnPt.Type.Cross);
+  this.cross.setEditable(this.getEditable());
+  this.cross.setPrevLeg(this);
 };
 
 Leg.prototype.setBeginTurnPt = function(turnPt)
 {
-	this.beginTurnPt = turnPt;
-	this.setBeginPosition(turnPt.getPosition());
+  this.beginTurnPt = turnPt;
+  this.setBeginPosition(turnPt.getPosition());
 };
 
 Leg.prototype.getBeginTurnPt = function()
 {
-	return this.beginTurnPt;
+  return this.beginTurnPt;
 };
 
 Leg.prototype.setEndTurnPt = function(turnPt)
 {
-	this.endTurnPt = turnPt;
-	this.setEndPosition(turnPt.getPosition());
+  this.endTurnPt = turnPt;
+  this.setEndPosition(turnPt.getPosition());
 };
 
 Leg.prototype.getEndTurnPt = function()
 {
-	return this.endTurnPt;
+  return this.endTurnPt;
 };
 
 Leg.prototype.setBeginPosition = function(pos)
 {
-	this.line.getPath().setAt(0, pos);
-	this.updateCross();
+  this.line.getPath().setAt(0, pos);
+  this.updateCross();
 };
 
 Leg.prototype.setEndPosition = function(pos)
 {
-	this.line.getPath().setAt(1, pos);
-	this.updateCross();
+  this.line.getPath().setAt(1, pos);
+  this.updateCross();
 };
 
 Leg.prototype.setEditable = function(en)
 {
-	this.editable = en;
+  this.editable = en;
 
-	if(this.cross !== null)
-	{
-		this.cross.setEditable(en);
-	}
+  if(this.cross !== null)
+  {
+    this.cross.setEditable(en);
+  }
 };
 
 Leg.prototype.getEditable = function()
 {
-	return this.editable;
+  return this.editable;
 };
 
 Leg.prototype.updateCross = function()
 {
-	var pos;
-	
-	pos = lg_getMidPoint(this.beginTurnPt.getPosition(), this.endTurnPt.getPosition());
-	this.cross.setPosition(pos);
+  var latlng;
+
+  latlng = lg_getMidPoint(this.beginTurnPt.getPosition(), this.endTurnPt.getPosition());
+  this.cross.setPosition(pos);
 };
 
 function lg_getMidPoint(pos1, pos2)
 {
-	var midX;
-	var midY;
+  var midX;
+  var midY;
 
-	var midLat = (pos2.lat() - pos1.lat()) / 2 + pos1.lat();
-	var midLng = (pos2.lng() - pos1.lng()) / 2 + pos1.lng();
+  var midLat = (pos2.lat - pos1.lat) / 2 + pos1.lat;
+  var midLng = (pos2.lng - pos1.lng) / 2 + pos1.lng;
 
-	return new google.maps.LatLng(midLat, midLng);
+  return L.latLng(midLat, midLng);
 }

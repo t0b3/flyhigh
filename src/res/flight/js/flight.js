@@ -23,219 +23,228 @@
 
 function Flight(map)
 {
-	var flight = this;
+  var flight = this;
 
-	this.map = map;
+  this.map = map;
 
-	this.glider = new google.maps.Marker({
-		map: map,
-		draggable: true,
-		raiseOnDrag: false,
-		zIndex: 15,
-		icon: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png'
-	});
+/**
+  this.glider = new google.maps.Marker({
+    map: map,
+    draggable: true,
+    raiseOnDrag: false,
+    zIndex: 15,
+    icon: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png'
+  });
 
-	this.track = new google.maps.Polyline({
-		strokeColor: '#FFBB00',
-		strokeOpacity: 1.0,
-		strokeWeight: 3,
-		map: map,
-		zIndex: 1
-	});
+  this.track = new google.maps.Polyline({
+    strokeColor: '#FFBB00',
+    strokeOpacity: 1.0,
+    strokeWeight: 3,
+    map: map,
+    zIndex: 1
+  });
+*/
 
-	this.stpos = null;
-	this.trackPts = null;
-	this.sogList = null;
-	this.varioList = null;
-	this.altList = null;
-	this.elevationList = null;
-	this.minAlt = 0;
-	this.maxAlt = 0;
-	this.timeList = null;
+  this.track = null;
+  this.glider = null;
+  this.stpos = null;
+  this.trackPts = null;
+  this.sogList = null;
+  this.varioList = null;
+  this.altList = null;
+  this.elevationList = null;
+  this.minAlt = 0;
+  this.maxAlt = 0;
+  this.timeList = null;
 
-	google.maps.event.addListener(this.glider, 'dragstart', function(event) {fl_dragstart(flight);});
-	google.maps.event.addListener(this.glider, 'drag', function(event) {fl_drag(flight);});
+/**
+  google.maps.event.addListener(this.glider, 'dragstart', function(event) {fl_dragstart(flight);});
+  google.maps.event.addListener(this.glider, 'drag', function(event) {fl_drag(flight);});
+*/
 }
 
 Flight.prototype.getMap = function()
 {
-	return this.map;
+  return this.map;
 };
 
 Flight.prototype.setTrackPts = function(trackPts)
 {
-	this.trackPts = trackPts;
-	this.track.setPath(trackPts);
+  this.trackPts = trackPts;
+  this.track = L.polyline(trackPts, {color: '#FF0000', weight: 3}).addTo(this.getMap());
+  this.glider = L.marker(trackPts[0], {draggable: false}).addTo(this.getMap());
 };
 
 Flight.prototype.getTrackPts = function()
 {
-	return this.trackPts;
+  return this.trackPts;
 };
 
 Flight.prototype.getTrackPtAt = function(index)
 {
-	var trackPt = null;
+  var trackPt = null;
 
-	if((this.trackPts !== null) && (index < this.trackPts.length))
-	{
-		trackPt = this.trackPts[index];
-	}
+  if((this.trackPts !== null) && (index < this.trackPts.length))
+  {
+    trackPt = this.trackPts[index];
+  }
 
-	return trackPt;
+  return trackPt;
 };
 
 Flight.prototype.setSogList = function(sogList)
 {
-	this.sogList = sogList;
+  this.sogList = sogList;
 };
 
 Flight.prototype.getSogAt = function(index)
 {
-	var sog = null;
+  var sog = null;
 
-	if((this.sogList !== null) && (index < this.sogList.length))
-	{
-		sog = this.sogList[index];
-	}
+  if((this.sogList !== null) && (index < this.sogList.length))
+  {
+    sog = this.sogList[index];
+  }
 
-	return sog;
+  return sog;
 };
 
 Flight.prototype.setVarioList = function(varioList)
 {
-	this.varioList = varioList;
+  this.varioList = varioList;
 };
 
 Flight.prototype.getVarioAt = function(index)
 {
-	var vario = null;
+  var vario = null;
 
-	if((this.varioList !== null) && (index < this.varioList.length))
-	{
-		vario = this.varioList[index];
-	}
+  if((this.varioList !== null) && (index < this.varioList.length))
+  {
+    vario = this.varioList[index];
+  }
 
-	return vario;
+  return vario;
 };
 
 Flight.prototype.setAltList= function(altList, minAlt, maxAlt)
 {
-	this.altList = altList;
-	this.minAlt = minAlt;
-	this.maxAlt = maxAlt;
+  this.altList = altList;
+  this.minAlt = minAlt;
+  this.maxAlt = maxAlt;
 };
 
 Flight.prototype.getAltList= function()
 {
-	return this.altList;
+  return this.altList;
 };
 
 Flight.prototype.getAltAt = function(index)
 {
-	var alt = null;
+  var alt = null;
 
-	if((this.altList !== null) && (index < this.altList.length))
-	{
-		alt = this.altList[index];
-	}
+  if((this.altList !== null) && (index < this.altList.length))
+  {
+    alt = this.altList[index];
+  }
 
-	return alt;
+  return alt;
 };
 
 Flight.prototype.getMinAlt = function()
 {
-	return this.minAlt;
+  return this.minAlt;
 };
 
 Flight.prototype.getMaxAlt = function()
 {
-	return this.maxAlt;
+  return this.maxAlt;
 };
 
 Flight.prototype.setElevationList= function(elevationList)
 {
-	this.elevationList = elevationList;
+  this.elevationList = elevationList;
 };
 
 Flight.prototype.getElevationList = function()
 {
-	return this.elevationList;
+  return this.elevationList;
 };
 
 Flight.prototype.getElevationAt = function(index)
 {
-	var elevation = null;
+  var elevation = null;
 
-	if((this.elevationList !== null) && (index < this.elevationList.length))
-	{
-		elevation = this.elevationList[index];
-	}
+  if((this.elevationList !== null) && (index < this.elevationList.length))
+  {
+    elevation = this.elevationList[index];
+  }
 
-	return elevation;
+  return elevation;
 };
 
 Flight.prototype.setTimeList = function(timeList)
 {
-	this.timeList = timeList;
+  this.timeList = timeList;
 };
 
 Flight.prototype.getTimeList = function()
 {
-	return this.timeList;
+  return this.timeList;
 };
 
 Flight.prototype.getTimeAt = function(index)
 {
-	var time = null;
+  var time = null;
 
-	if((this.timeList !== null) && (index < this.timeList.length))
-	{
-		time = this.timeList[index];
-	}
+  if((this.timeList !== null) && (index < this.timeList.length))
+  {
+    time = this.timeList[index];
+  }
 
-	return time;
+  return time;
 };
 
 Flight.prototype.moveGliderTo = function(index)
 {
-	var time = null;
+  var time = null;
 
-	if((this.trackPts !== null) && (index < this.trackPts.length))
-	{
-		this.glider.setPosition(this.trackPts[index]);
-	}
+  if((this.trackPts !== null) && (index < this.trackPts.length))
+  {
+    this.glider.setLatLng(this.trackPts[index]);
+  }
 };
 
 Flight.prototype.getGliderPosition = function()
 {
-	return this.glider.getPosition();
+  return this.glider.getLatLng();
 };
 
 /*
-	This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-	markers which are not draggable. In a later version, this should be fixed through
-	setting markers draggable=this.editable.
+  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
+  markers which are not draggable. In a later version, this should be fixed through
+  setting markers draggable=this.editable.
 */
+/**
 Flight.prototype.storePos = function()
 {
-	this.stpos = new google.maps.LatLng(this.glider.getPosition().lat(), this.glider.getPosition().lng());
+  this.stpos = new google.maps.LatLng(this.glider.getPosition().lat(), this.glider.getPosition().lng());
 };
 
 Flight.prototype.restorePos = function()
 {
-	if(this.storePos !== null)
-	{
-		this.glider.setPosition(this.stpos);
-	}
+  if(this.storePos !== null)
+  {
+    this.glider.setPosition(this.stpos);
+  }
 };
 
 function fl_dragstart(flight)
 {
-	flight.storePos();
+  flight.storePos();
 }
 
 function fl_drag(flight)
 {
-	flight.restorePos();
+  flight.restorePos();
 }
+*/
