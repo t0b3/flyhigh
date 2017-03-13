@@ -80,52 +80,131 @@ Fai.prototype.getMap = function()
 Fai.prototype.show = function(latlngs)
 {
   var pixels;
-  var path;
+  var path = [];
   var sector;
+  var create = this.sectors.length === 0;
 
   if(latlngs !== null)
   {
     pixels = this.toPixels(latlngs);
 
-    path = this.faiSector([pixels[2], pixels[3], pixels[1]]);
-    sector = L.polygon(path, {
-      color: '#FF0000',
-      stroke: '#FF0000',
-      weight: 1,
-      fillColor: '#FF0000',
-      fillOpacity: 0.1
-    }).addTo(this.getMap());
-    this.sectors.push_back(sector);
+    if(create)
+    {
+      path = [];
+      this.faiSector([pixels[2], pixels[3], pixels[1]], path);
+      sector = L.polygon(path, {
+        color: '#FF0000',
+        stroke: '#FF0000',
+        weight: 1,
+        fillColor: '#FF0000',
+        fillOpacity: 0.1
+      }).addTo(this.getMap());
+      this.sectors.push(sector);
+    }
+    else
+    {
+      sector = this.sectors[0];
+      path = sector.getLatLngs();
+      this.faiSector([pixels[2], pixels[3], pixels[1]], path);
+      sector.redraw();
+    }
 
-    path = this.faiSector([pixels[3], pixels[1], pixels[2]]);
-    sector = L.polygon(path, {
-      color: '#00FF00',
-      stroke: '#00FF00',
-      weight: 1,
-      fillColor: '#00FF00',
-      fillOpacity: 0.1
-    }).addTo(this.getMap());
-    this.sectors.push_back(sector);
+    if(create)
+    {
+      path = [];
+      this.faiSector([pixels[3], pixels[1], pixels[2]], path);
+      sector = L.polygon(path, {
+        color: '#00FF00',
+        stroke: '#00FF00',
+        weight: 1,
+        fillColor: '#00FF00',
+        fillOpacity: 0.1
+      }).addTo(this.getMap());
+      this.sectors.push(sector);
+    }
+    else
+    {
+      sector = this.sectors[1];
+      path = sector.getLatLngs();
+      this.faiSector([pixels[3], pixels[1], pixels[2]], path);
+      sector.redraw();
+    }
 
-    path = this.faiSector([pixels[1], pixels[2], pixels[3]]);
-    sector = L.polygon(path, {
-      color: '#0000FF',
-      stroke: '#0000FF',
-      weight: 1,
-      fillColor: '#0000FF',
-      fillOpacity: 0.1
-    }).addTo(this.getMap());
-    this.sectors.push_back(sector);
+    if(create)
+    {
+      path = [];
+      this.faiSector([pixels[1], pixels[2], pixels[3]], path);
+      sector = L.polygon(path, {
+        color: '#0000FF',
+        stroke: '#0000FF',
+        weight: 1,
+        fillColor: '#0000FF',
+        fillOpacity: 0.1
+      }).addTo(this.getMap());
+      this.sectors.push(sector);
+    }
+    else
+    {
+      sector = this.sectors[2];
+      path = sector.getLatLngs();
+      this.faiSector([pixels[1], pixels[2], pixels[3]], path);
+      sector.redraw();
+    }
 
-    path = this.endSector(latlngs);
-    sector = L.polygon(path, {
-      color: '#00FFFF',
-      stroke: '#00FFFF',
-      weight: 1,
-      fillColor: '#00FFFF',
-      fillOpacity: 0.1
-    }).addTo(this.getMap());
-    this.sectors.push_back(sector);
+
+if(create)
+{
+  path = [];
+  this.endSector(latlngs, path);
+  sector = L.polygon(path, {
+    color: '#00FFFF',
+    stroke: '#00FFFF',
+    weight: 1,
+    fillColor: '#00FFFF',
+    fillOpacity: 0.1
+  }).addTo(this.getMap());
+
+  this.sectors.push(sector);
+}
+else
+{
+  sector = this.sectors[3];
+  sector.remove();
+
+  path = [];
+  this.endSector(latlngs, path);
+  sector = L.polygon(path, {
+    color: '#00FFFF',
+    stroke: '#00FFFF',
+    weight: 1,
+    fillColor: '#00FFFF',
+    fillOpacity: 0.1
+  }).addTo(this.getMap());
+
+  this.sectors[3] = sector;
+}
+/*
+    if(create)
+    {
+      path = [];
+      this.endSector(latlngs, path);
+      sector = L.polygon(path, {
+        color: '#00FFFF',
+        stroke: '#00FFFF',
+        weight: 1,
+        fillColor: '#00FFFF',
+        fillOpacity: 0.1
+      }).addTo(this.getMap());
+      this.sectors.push(sector);
+    }
+    else
+    {
+      sector = this.sectors[3];
+      path = sector.getLatLngs();
+      this.endSector(latlngs, path);
+      sector.redraw();
+    }
+*/
   }
 };
 
@@ -133,21 +212,20 @@ Fai.prototype.toPixels = function(latlngs)
 {
   var pixels = [];
   var pixel;
-  var proj;
   var nr;
-
-  proj = this.getMap().getProjection();
+  var map = this.getMap();
+  var zoom = map.getZoom();
 
   for(nr=0; nr<latlngs.length; nr++)
   {
-    pixel = proj.fromLatLngToPoint(latlngs[nr]);
+    pixel = map.project(latlngs[nr], zoom);
     pixels.push(pixel);
   }
 
   return pixels;
 };
 
-Fai.prototype.faiSector = function(pixels)
+Fai.prototype.faiSector = function(pixels, path)
 {
   var flip = isClockwise(pixels) ? 1 : -1;
   var deltaX;
@@ -155,7 +233,6 @@ Fai.prototype.faiSector = function(pixels)
   var theta;
   var cos_theta;
   var sin_theta;
-  var proj;
   var pixel;
   var pixelX;
   var pixelY;
@@ -164,7 +241,10 @@ Fai.prototype.faiSector = function(pixels)
   var c;
   var x;
   var y;
-  var result = [];
+  var map = this.getMap();
+  var zoom = map.getZoom();
+  var create = path.length === 0;
+  var nr = 0;
 
   deltaX = (pixels[1].x - pixels[0].x);
   deltaY = (pixels[1].y - pixels[0].y);
@@ -174,7 +254,6 @@ Fai.prototype.faiSector = function(pixels)
   c = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
   pixelX = pixels[0].x;
   pixelY = pixels[0].y;
-  proj = this.getMap().getProjection();
 
   for(ap = 28; ap < 44; ++ap)
   {
@@ -184,7 +263,13 @@ Fai.prototype.faiSector = function(pixels)
     y = Math.sqrt(b * b - x * x);
     pixel = L.point(pixelX + x * cos_theta - y * sin_theta,
                     pixelY + flip * (x * sin_theta + y * cos_theta));
-    result.push(proj.fromPointToLatLng(pixel));
+
+    if(create)
+      {path.push(map.unproject(pixel, zoom));}
+    else
+      {path[nr] = map.unproject(pixel, zoom);}
+
+    nr++;
   }
 
   for(cp = 28; cp < 44; ++cp)
@@ -195,7 +280,13 @@ Fai.prototype.faiSector = function(pixels)
     y = Math.sqrt(b * b - x * x);
     pixel = L.point(pixelX + x * cos_theta - y * sin_theta,
                     pixelY + flip * (x * sin_theta + y * cos_theta));
-    result.push(proj.fromPointToLatLng(pixel));
+
+    if(create)
+      {path.push(map.unproject(pixel, zoom));}
+    else
+      {path[nr] = map.unproject(pixel, zoom);}
+
+    nr++;
   }
 
   for(cp = 44; cp >= 28; --cp)
@@ -206,13 +297,17 @@ Fai.prototype.faiSector = function(pixels)
     y = Math.sqrt(b * b - x * x);
     pixel = L.point(pixelX + x * cos_theta - y * sin_theta,
                     pixelY + flip * (x * sin_theta + y * cos_theta));
-    result.push(proj.fromPointToLatLng(pixel));
-  }
 
-  return result;
+    if(create)
+      {path.push(map.unproject(pixel, zoom));}
+    else
+      {path[nr] = map.unproject(pixel, zoom);}
+
+    nr++;
+  }
 };
 
-Fai.prototype.endSector = function(latlngs)
+Fai.prototype.endSector = function(latlngs, path)
 {
   var SegCount = 32;
   var Phi = Math.PI / 2.0;
@@ -220,7 +315,8 @@ Fai.prototype.endSector = function(latlngs)
   var theta;
   var segNr;
   var dist;
-  var result = [];
+  var create = path.length === 0;
+  var nr = 1;
 
   latLngStart = latlngs[0];
   theta = initialBearingTo(latLngStart, latlngs[4]);
@@ -229,16 +325,30 @@ Fai.prototype.endSector = function(latlngs)
   dist += distHaversine(latlngs[3], latlngs[1]);
   dist = ((dist * 0.20) / Fai.EarthRadius); // 20 % rule
 
-  result.push(latLngStart);
+  if(create)
+    {path.push(latLngStart);}
+  else
+    {path[nr] = latLngStart;}
 
   for(segNr=0; segNr<SegCount; segNr++)
   {
-    result.push(latLngAt(latLngStart, theta + (segNr / SegCount - 0.5) * Phi, dist));
+    if(create)
+    {
+      path.push(latLngAt(latLngStart,
+                          theta + (segNr / SegCount - 0.5) * Phi, dist));
+    }
+    else
+    {
+      path[nr] = latLngAt(latLngStart,
+                           theta + (segNr / SegCount - 0.5) * Phi, dist);
+      nr++;
+    }
   }
 
-  result.push(latLngStart);
-
-  return result;
+  if(create)
+    {path.push(latLngStart);}
+  else
+    {path[nr] = latLngStart;}
 };
 
 function isClockwise(pixels)

@@ -144,11 +144,7 @@ TurnPt.prototype.getPrevLeg = function()
 
 TurnPt.prototype.setPosition = function(latlng)
 {
-alert("TurnPt setPosition " + this.marker.getLatLng());
-
   this.marker.setLatLng(latlng);
-
-alert("TurnPt setPosition done " + latlng);
 };
 
 TurnPt.prototype.getPosition = function()

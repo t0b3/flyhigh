@@ -305,6 +305,8 @@ Route.prototype.update = function()
   var nr;
   var indexs = null;
   var optimizer;
+  var prevLength = 0;
+  var nr;
 
   turnPt = this.firstTurnPt;
 
@@ -382,7 +384,33 @@ Route.prototype.update = function()
     break;
   }
 
-  this.line = L.polyline(path, {color: '#FFFFFF', weight: 2}).addTo(this.getMap());
+  if(this.line !== null)
+  {
+    prevLength = this.line.getLatLngs().length;
+
+    if(prevLength !== path.length)
+    {
+      this.line.remove();
+      this.line = null;
+    }
+  }
+
+  if(this.line === null)
+  {
+    this.line = L.polyline(path, {color: '#FFFFFF', weight: 2}).addTo(this.getMap());
+  }
+  else
+  {
+    var latlngs = this.line.getLatLngs();
+
+    for(nr=0; nr<path.length; nr++)
+    {
+      latlngs[nr] = path[nr];
+    }
+
+    this.line.redraw();
+  }
+
 /*
   this.line.setMap(this.getMap());
   this.line.setPath(path);

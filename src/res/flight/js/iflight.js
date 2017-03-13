@@ -97,6 +97,10 @@ alert("measure");
 alert("photo");
 */
 
+/*
+var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
+rt_setTurnPts(turnPts);
+*/
       wm_emitAppReady();
   });
 

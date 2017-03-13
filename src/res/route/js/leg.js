@@ -98,14 +98,20 @@ Leg.prototype.getEndTurnPt = function()
 
 Leg.prototype.setBeginPosition = function(pos)
 {
-  this.line.getPath().setAt(0, pos);
+  var latlngs = this.line.getLatLngs();
+  latlngs[0] = pos;
+//  this.line.getPath().setAt(0, pos);
   this.updateCross();
+  this.line.redraw();
 };
 
 Leg.prototype.setEndPosition = function(pos)
 {
-  this.line.getPath().setAt(1, pos);
+  var latlngs = this.line.getLatLngs();
+  latlngs[1] = pos;
+//  this.line.getPath().setAt(1, pos);
   this.updateCross();
+  this.line.redraw();
 };
 
 Leg.prototype.setEditable = function(en)
@@ -128,7 +134,7 @@ Leg.prototype.updateCross = function()
   var latlng;
 
   latlng = lg_getMidPoint(this.beginTurnPt.getPosition(), this.endTurnPt.getPosition());
-  this.cross.setPosition(pos);
+  this.cross.setPosition(latlng);
 };
 
 function lg_getMidPoint(pos1, pos2)
