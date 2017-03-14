@@ -151,39 +151,6 @@ Fai.prototype.show = function(latlngs)
       sector.redraw();
     }
 
-
-if(create)
-{
-  path = [];
-  this.endSector(latlngs, path);
-  sector = L.polygon(path, {
-    color: '#00FFFF',
-    stroke: '#00FFFF',
-    weight: 1,
-    fillColor: '#00FFFF',
-    fillOpacity: 0.1
-  }).addTo(this.getMap());
-
-  this.sectors.push(sector);
-}
-else
-{
-  sector = this.sectors[3];
-  sector.remove();
-
-  path = [];
-  this.endSector(latlngs, path);
-  sector = L.polygon(path, {
-    color: '#00FFFF',
-    stroke: '#00FFFF',
-    weight: 1,
-    fillColor: '#00FFFF',
-    fillOpacity: 0.1
-  }).addTo(this.getMap());
-
-  this.sectors[3] = sector;
-}
-/*
     if(create)
     {
       path = [];
@@ -200,11 +167,10 @@ else
     else
     {
       sector = this.sectors[3];
-      path = sector.getLatLngs();
+      path = sector.getLatLngs()[0];
       this.endSector(latlngs, path);
       sector.redraw();
     }
-*/
   }
 };
 
@@ -316,7 +282,7 @@ Fai.prototype.endSector = function(latlngs, path)
   var segNr;
   var dist;
   var create = path.length === 0;
-  var nr = 1;
+  var nr = 0;
 
   latLngStart = latlngs[0];
   theta = initialBearingTo(latLngStart, latlngs[4]);
@@ -328,7 +294,7 @@ Fai.prototype.endSector = function(latlngs, path)
   if(create)
     {path.push(latLngStart);}
   else
-    {path[nr] = latLngStart;}
+    {path[nr] = latLngStart; nr++;}
 
   for(segNr=0; segNr<SegCount; segNr++)
   {
