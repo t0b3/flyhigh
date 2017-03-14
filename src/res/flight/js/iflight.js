@@ -226,7 +226,7 @@ function as_pushAirSpace(coords, opts)
 //    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
   }
 
-  airspace = new AirSpace(map, latlngs, opts, as_selectAirSpaceNr);
+  airspace = new AirSpace(map, latlngs, opts);
   airspaces.push(airspace);
 }
 
