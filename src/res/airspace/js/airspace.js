@@ -27,6 +27,7 @@ function AirSpace(map, path, opts)
   var vertexNr;
   var vertex;
 
+  this.map = map;
   this.id = opts.id;
   this.name = opts.name;
   this.low = opts.low;

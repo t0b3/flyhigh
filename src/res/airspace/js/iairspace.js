@@ -21,124 +21,185 @@
  *   service in combination with closed source.                            *
  ***************************************************************************/
 
-wm_include('js/airspace.js');
-
 var map = null;
 var airspaces = [];
-var oldSelect = -1;
+var selectedAirspace = -1;
 var airspaceNr;
 
 function as_init()
 {
-	var mapLoaded = false;
-	var mapOptions =
-	{
-		zoom: 9,
-		center: new google.maps.LatLng(47.0, 8.5),
-		mapTypeId: google.maps.MapTypeId.TERRAIN,
-		disableDefaultUI: false,
-		mapTypeControl: true,
-		panControl: false,
-		zoomControl: false,
-		streetViewControl: false
-	};
+  map = L.map('map');
 
-	map = new google.maps.Map(document.getElementById('map'), mapOptions);
+  L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+          maxZoom: 15,
+          attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  }).addTo(map);
 
-	google.maps.event.addListener(map, 'idle', function()
-	{
-		if(!mapLoaded)
-		{
-			mapLoaded = true;
-			wm_emitAppReady();
-		}
-	});
+  map.on('load', function()
+  {
+    wm_emitAppReady();
+  });
 
-	google.maps.event.addListener(map, 'click', function(event)
-	{
-		// select next airspace
-		airspaceNr = oldSelect;
+  map.on('click', function(event)
+  {
+    var airspaceNr;
+    var inside = false;
 
-		for(var i=0; i<airspaces.length; i++)
-		{
-			airspaceNr = (airspaceNr + 1) % airspaces.length;
+    // select next airspace
+    airspaceNr = selectedAirspace;
 
-			if(airspaces[airspaceNr].isInside(event.latLng))
-			{
-				if(airspaceNr != oldSelect)
-				{
-					as_selectAirSpaceNr(airspaceNr);
-					wm_emitLineChanged(airspaces[airspaceNr].getId());
-					break; // jump out of loop
-				}
-			}
-		}
-	});
+    for(var i=0; i<airspaces.length; i++)
+    {
+      airspaceNr = (airspaceNr + 1) % airspaces.length;
+      inside = airspaces[airspaceNr].isInside(event.latlng);
+
+      if(inside)
+      {
+        if(airspaceNr !== selectedAirspace)
+        {
+          wm_emitLineChanged(airspaces[airspaceNr].getId());
+          break; // jump out of loop
+        }
+      }
+    }
+
+    if(inside)
+    {
+      as_selectAirSpaceNr(airspaceNr);
+    }
+    else
+    {
+      as_selectAirSpaceNr(-1);
+    }
+  });
+
+  map.setView([47.0, 8.5], 9);
+
+/*
+  var mapLoaded = false;
+  var mapOptions =
+  {
+    zoom: 9,
+    center: new google.maps.LatLng(47.0, 8.5),
+    mapTypeId: google.maps.MapTypeId.TERRAIN,
+    disableDefaultUI: false,
+    mapTypeControl: true,
+    panControl: false,
+    zoomControl: false,
+    streetViewControl: false
+  };
+
+  map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+  google.maps.event.addListener(map, 'idle', function()
+  {
+    if(!mapLoaded)
+    {
+      mapLoaded = true;
+      wm_emitAppReady();
+    }
+  });
+
+  google.maps.event.addListener(map, 'click', function(event)
+  {
+    // select next airspace
+    airspaceNr = selectedAirspace;
+
+    for(var i=0; i<airspaces.length; i++)
+    {
+      airspaceNr = (airspaceNr + 1) % airspaces.length;
+
+      if(airspaces[airspaceNr].isInside(event.latLng))
+      {
+        if(airspaceNr != selectedAirspace)
+        {
+          as_selectAirSpaceNr(airspaceNr);
+          wm_emitLineChanged(airspaces[airspaceNr].getId());
+          break; // jump out of loop
+        }
+      }
+    }
+  });
+*/
 }
 
 function as_pushAirSpace(coords, opts)
 {
-	var latlngs = [];
-	var airspace;
-	var nr;
+  var latlngs = [];
+  var latlng;
+  var airspace;
+  var nr;
 
-	for(nr=0; nr<coords.length; nr++)
-	{
-		latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
-	}
+  for(nr=0; nr<coords.length; nr++)
+  {
+    latlng = L.latLng(coords[nr][0], coords[nr][1]);
+    latlngs.push(latlng);
+//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
+  }
 
-	airspace = new AirSpace(map, latlngs, opts);
-	airspaces.push(airspace);
+  airspace = new AirSpace(map, latlngs, opts);
+  airspaces.push(airspace);
 }
 
 function as_selectAirSpace(id)
 {
-	var airspaceNr;
-	var airspace;
+  var airspaceNr;
+  var airspace;
 
-	for(airspaceNr=0; airspaceNr<airspaces.length; airspaceNr++)
-	{
-		airspace = airspaces[airspaceNr];
+  for(airspaceNr=0; airspaceNr<airspaces.length; airspaceNr++)
+  {
+    airspace = airspaces[airspaceNr];
 
-		if(airspace.getId() == id)
-		{
-			as_selectAirSpaceNr(airspaceNr);
-			break;
-		}
-	}
+    if(airspace.getId() === id)
+    {
+      as_selectAirSpaceNr(airspaceNr);
+      break;
+    }
+  }
 }
 
 function as_selectAirSpaceNr(num)
 {
-	var airspace;
+  var airspace;
 
-	if(num < airspaces.length)
-	{
-		if(oldSelect >= 0)
-		{
-			airspaces[oldSelect].setSelect(false);
-		}
+  if(num < airspaces.length)
+  {
+    if(selectedAirspace >= 0)
+    {
+      airspaces[selectedAirspace].setSelect(false);
+    }
 
-		oldSelect = num;
-		airspace = airspaces[num];
-		airspace.setSelect(true);
-		wm_setDivValue("name", airspace.getName(), false);
+    selectedAirspace = num;
 
-		if(airspace.getLow() === 0)
-		{
-			wm_setDivValue("low", "GND", false);
-		}
-		else
-		{
-			wm_setDivValue("low", airspace.getLow() + " m", false);
-		}
+    if(num >= 0)
+    {
+      airspace = airspaces[num];
+      airspace.setSelect(true);
+      wm_setDivValue("airspace", airspace.getName(), false);
 
-		wm_setDivValue("high", airspace.getHigh() + " m", false);
-		wm_setDivValue("class", airspace.getClass(), false);
-	}
+      if(airspace.getLow() === 0)
+      {
+        wm_setDivValue("low", "GND", false);
+      }
+      else
+      {
+        wm_setDivValue("low", airspace.getLow() + " m", false);
+      }
+
+      wm_setDivValue("high", airspace.getHigh() + " m", false);
+      wm_setDivValue("class", airspace.getClass(), false);
+    }
+    else
+    {
+      wm_setDivValue("airspace", "", false);
+      wm_setDivValue("low", "", false);
+      wm_setDivValue("high", "", false);
+      wm_setDivValue("class", "", false);
+    }
+  }
 }
 
 function as_setOk(ok)
 {
-	wm_emitOk(ok);
+  wm_emitOk(ok);
 }
