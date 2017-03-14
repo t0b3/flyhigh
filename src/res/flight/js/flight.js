@@ -70,9 +70,21 @@ Flight.prototype.getMap = function()
 
 Flight.prototype.setTrackPts = function(trackPts)
 {
+  var icon;
+
+  icon = L.icon({
+      iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png',
+      shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png',
+      iconSize:     [20, 32],
+      shadowSize:   [0, 0],
+      iconAnchor:   [10, 32],
+      shadowAnchor: [0, 0],
+      popupAnchor:  [-3, -76]
+  });
+
   this.trackPts = trackPts;
   this.track = L.polyline(trackPts, {color: '#FF0000', weight: 3}).addTo(this.getMap());
-  this.glider = L.marker(trackPts[0], {draggable: false}).addTo(this.getMap());
+  this.glider = L.marker(trackPts[0], {icon: icon, draggable: false}).addTo(this.getMap());
 };
 
 Flight.prototype.getTrackPts = function()
