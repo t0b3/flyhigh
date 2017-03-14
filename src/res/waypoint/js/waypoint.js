@@ -27,12 +27,13 @@ WayPoint.CallbackType =
   DragEnd: 2
 };
 
-function WayPoint(map, opts)
+function WayPoint(map, cluster, opts)
 {
   var wayPoint = this;
   var marker;
   var latlng = [opts.lat, opts.lng];
   this.map = map;
+  this.cluster = cluster;
   this.id = opts.id;
   this.name = opts.name;
   this.spot = opts.spot;
@@ -44,16 +45,24 @@ function WayPoint(map, opts)
   this.stPos = null;
   this.changeCallback = null;
 
-  marker = L.marker(latlng, {draggable: true});
+
+  marker = L.marker(latlng, {draggable: false});
   marker.on('click', function(event) {wp_click(wayPoint);});
   marker.on('dragstart', function(event) {wp_dragstart(wayPoint);});
   marker.on('drag', function(event) {wp_drag(wayPoint);});
   marker.on('dragend', function(event) {wp_dragend(wayPoint);});
-//  marker.addTo(map);
+  cluster.addLayer(marker);
+
+/*
+  marker.on('click', function(event) {wp_click(wayPoint);});
+  marker.on('dragstart', function(event) {wp_dragstart(wayPoint);});
+  marker.on('drag', function(event) {wp_drag(wayPoint);});
+  marker.on('dragend', function(event) {wp_dragend(wayPoint);});
+*/
+//marker.addTo(map);
 
   this.marker = marker;
 
-alert("WayPoint");
 /*
   this.marker = new google.maps.Marker({
     map: map,
@@ -68,13 +77,17 @@ alert("WayPoint");
   google.maps.event.addListener(this.marker, 'drag', function(event) {wp_drag(wayPoint);});
   google.maps.event.addListener(this.marker, 'dragend', function(event) {wp_dragend(wayPoint);});
 */
-
   this.updateIcon();
 }
 
 WayPoint.prototype.getMap = function()
 {
   return this.map;
+};
+
+WayPoint.prototype.getCluster = function()
+{
+  return this.cluster;
 };
 
 WayPoint.prototype.getMarker = function()
@@ -165,6 +178,15 @@ WayPoint.prototype.setChangeCallback = function(callback)
 
 WayPoint.prototype.setEditable = function(editable)
 {
+  if(editable)
+  {
+    this.marker.dragging.enable();
+  }
+  else
+  {
+    this.marker.dragging.disable();
+  }
+
   this.editable = editable;
 };
 
@@ -300,18 +322,6 @@ function wp_click(wayPoint)
 
 function wp_dragstart(wayPoint)
 {
-  wayPoint.setSelected(true);
-
-  if(wayPoint.getEditable())
-  {
-    wayPoint.setModified(true);
-  }
-/*
-  else
-  {
-    wayPoint.storePos();
-  }
-*/
 }
 
 function wp_drag(wayPoint)
@@ -320,12 +330,6 @@ function wp_drag(wayPoint)
   {
     wayPoint.emitChange(WayPoint.CallbackType.Position);
   }
-/*
-  else
-  {
-    wayPoint.restorePos();
-  }
-*/
 }
 
 function wp_dragend(wayPoint)
@@ -333,5 +337,7 @@ function wp_dragend(wayPoint)
   if(wayPoint.getEditable())
   {
     wayPoint.emitChange(WayPoint.CallbackType.DragEnd);
+    wayPoint.setSelected(true);
+    wayPoint.setModified(true);
   }
 }
