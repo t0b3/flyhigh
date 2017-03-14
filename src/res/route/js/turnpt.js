@@ -165,6 +165,15 @@ TurnPt.prototype.getAltitude = function()
 TurnPt.prototype.setEditable = function(en)
 {
   this.editable = en;
+
+  if(en)
+  {
+    this.marker.dragging.enable();
+  }
+  else
+  {
+    this.marker.dragging.disable();
+  }
 };
 
 TurnPt.prototype.getEditable = function()

@@ -21,25 +21,76 @@
  *   service in combination with closed source.                            *
  ***************************************************************************/
 
-wm_include('js/fai.js');
-wm_include('js/infobox.js');
-wm_include('js/leg.js');
-wm_include('js/measure.js');
-wm_include('js/optimizer.js');
-wm_include('js/route.js');
-wm_include('js/turnpt.js');
-wm_include('js/webmap.js');
-wm_include('../airspace/js/airspace.js');
-
 var airspaces = [];
 var map;
 var route;
 var measure;
-var oldSelect = -1;
+var selectedAirspace = -1;
 var airspaceNr;
 
 function rt_init()
 {
+  map = L.map('map');
+
+  L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+          maxZoom: 15,
+          attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+  }).addTo(map);
+
+  map.on('load', function()
+  {
+    route = new Route(map);
+    route.setSpeed(22.0);
+    route.setChangeCallback(routeChanged);
+    measure = new Measure(map);
+    measure.setChangeCallback(measureChanged);
+
+/*
+var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
+rt_setTurnPts(turnPts);
+rt_setEditable(false);
+*/
+    wm_emitAppReady();
+  });
+
+  map.on('click', function(event)
+  {
+    var inside = false;
+    var airspaceNr;
+
+    if(!measure.getEnable())
+    {
+      // select next airspace
+      airspaceNr = selectedAirspace;
+
+      for(var i=0; i<airspaces.length; i++)
+      {
+        airspaceNr = (airspaceNr + 1) % airspaces.length;
+        inside = airspaces[airspaceNr].isInside(event.latlng);
+
+        if(inside)
+        {
+          if(airspaceNr !== selectedAirspace)
+          {
+            break; // jump out of loop
+          }
+        }
+      }
+
+      if(inside)
+      {
+        as_selectAirSpaceNr(airspaceNr);
+      }
+      else
+      {
+        as_selectAirSpaceNr(-1);
+      }
+    }
+  });
+
+  map.setView([47.0, 8.5], 9);
+
+/*
   var mapLoaded = false;
   var mapOptions =
   {
@@ -76,7 +127,7 @@ function rt_init()
     if(!measure.getEnable())
     {
       // select next airspace
-      airspaceNr = oldSelect;
+      airspaceNr = selectedAirspace;
 
       for(var i=0; i<airspaces.length; i++)
       {
@@ -85,7 +136,7 @@ function rt_init()
 
         if(inside)
         {
-          if(airspaceNr != oldSelect)
+          if(airspaceNr != selectedAirspace)
           {
             break; // jump out of loop
           }
@@ -107,20 +158,24 @@ function rt_init()
   {
     route.centerChanged();
   });
+*/
 }
 
 function as_pushAirSpace(coords, opts)
 {
   var latlngs = [];
+  var latlng;
   var airspace;
   var nr;
 
   for(nr=0; nr<coords.length; nr++)
   {
-    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
+    latlng = L.latLng(coords[nr][0], coords[nr][1]);
+    latlngs.push(latlng);
+//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
   }
 
-  airspace = new AirSpace(map, latlngs, opts);
+  airspace = new AirSpace(map, latlngs, opts, as_selectAirSpaceNr);
   airspaces.push(airspace);
 }
 
@@ -130,12 +185,12 @@ function as_selectAirSpaceNr(num)
 
   if(num < airspaces.length)
   {
-    if(oldSelect >= 0)
+    if(selectedAirspace >= 0)
     {
-      airspaces[oldSelect].setSelect(false);
+      airspaces[selectedAirspace].setSelect(false);
     }
 
-    oldSelect = num;
+    selectedAirspace = num;
 
     if(num >= 0)
     {
@@ -204,15 +259,15 @@ function rt_setTurnPts(turnPts)
 {
   var turnPt;
   var tpNr;
-  var bounds;
+  var bounds = L.latLngBounds(turnPts);
   var latlng;
 
-  bounds = new google.maps.LatLngBounds();
+//  bounds = new google.maps.LatLngBounds();
 
   for(tpNr=0; tpNr<turnPts.length; tpNr++)
   {
-    latlng = new google.maps.LatLng(turnPts[tpNr][0], turnPts[tpNr][1]);
-    bounds.extend(latlng);
+    latlng = L.latLng(turnPts[tpNr][0], turnPts[tpNr][1]);
+//    bounds.extend(latlng);
     turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
     route.addTurnPt(turnPt);
   }
