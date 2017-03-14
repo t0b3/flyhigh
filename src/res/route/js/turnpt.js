@@ -51,7 +51,6 @@ function TurnPt(route, latlng, type)
 */
 
   this.infoBox = null;
-  this.setType(type);
   this.delta = null;
 
   marker = L.marker(latlng, {draggable:'true'});
@@ -73,6 +72,7 @@ function TurnPt(route, latlng, type)
 */
 
   this.marker = marker;
+  this.setType(type);
 //  this.setPosition(latlng);
 }
 
@@ -203,16 +203,50 @@ TurnPt.prototype.updateIcon = function()
     case TurnPt.Type.WayPoint:
       if(this.getPrevLeg() === null)
       {
+        var start = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+
+        this.marker.setIcon(start);
+
         // start
 ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
       }
       else if(this.getNextLeg() === null)
       {
+        var end = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+
+        this.marker.setIcon(end);
         // end
 ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
       }
       else
       {
+        var end = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+
+        this.marker.setIcon(end);
         // normal
 ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
       }
@@ -220,18 +254,15 @@ TurnPt.prototype.updateIcon = function()
       this.infoBox = null;
     break;
     case TurnPt.Type.Cross:
-/**
-var cross = L.icon({
-    iconUrl: '../route/images/quad.png',
-//    shadowUrl: 'leaf-shadow.png',
-    iconSize:     [15, 15], // size of the icon
-//    shadowSize:   [50, 64], // size of the shadow
-    iconAnchor:   [4, 4], // point of the icon which will correspond to marker's location
-//    shadowAnchor: [4, 62],  // the same for the shadow
-//    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-});
-*/
-
+      var quad = L.icon({
+          iconUrl: '../route/images/quad.png',
+          shadowUrl: '../route/images/quad.png',
+          iconSize:     [7, 7],
+          shadowSize:   [0, 0],
+          iconAnchor:   [4, 4],
+          shadowAnchor: [4, 4],
+          popupAnchor:  [-3, -76]
+      });
 /*
       var image = new google.maps.MarkerImage('../route/images/quad.png',
             new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
@@ -243,10 +274,8 @@ var cross = L.icon({
       };
 */
 
-/**
-      this.marker.setIcon(cross);
-      this.infoBox = new InfoBox(this.getRoute().getMap());
-*/
+      this.marker.setIcon(quad);
+//      this.infoBox = new InfoBox(this.getRoute().getMap());
     break;
   }
 };
