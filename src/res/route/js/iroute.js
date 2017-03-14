@@ -345,7 +345,7 @@ function rt_measure(div)
 {
   var show;
 
-  show = (div.className == "button_up");
+  show = (div.className === "button_up");
   measure.show(show);
 
   if(show)
