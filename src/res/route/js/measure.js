@@ -57,24 +57,40 @@ Measure.prototype.show = function(enable)
 {
   var nr;
   var measure = this;
+  var map = this.getMap();
 
   this.enable = enable;
 
   if(enable)
   {
-    this.getMap().setOptions({draggableCursor: 'crosshair'});
-    this.line.setMap(this.getMap());
+    document.getElementById('map').style.cursor = 'crosshair';
+//    map.setOptions({draggableCursor: 'crosshair'});
+    map.on('click', function(event){ms_click(measure, event);});
+    map.on('mousemove', function(event){ms_mousemove(measure, event);});
+/*
     this.clickListener = google.maps.event.addListener(map, 'click', function(event){ms_click(measure, event);});
     this.moveListener = google.maps.event.addListener(map, 'mousemove', function(event){ms_mousemove(measure, event);});
+*/
   }
   else
   {
-    this.getMap().setOptions({draggableCursor: 'default'});
+    document.getElementById('map').style.cursor = '';
+//    map.setOptions({draggableCursor: 'default'});
+    map.off('click', function(event){ms_click(measure, event);});
+    map.off('mousemove', function(event){ms_mousemove(measure, event);});
+
+/*
     google.maps.event.removeListener(this.clickListener);
     google.maps.event.removeListener(this.moveListener);
-//    this.line.getPath().clear();
-    this.line.remove();
+    this.line.getPath().clear();
 //    this.line.setMap(null);
+*/
+    if(this.line !== null)
+    {
+      this.line.remove();
+      this.line = null;
+    }
+
     this.clearMarkers();
   }
 };
@@ -86,14 +102,18 @@ Measure.prototype.getEnable = function()
 
 Measure.prototype.getDist = function()
 {
-  var dist = 0;
+  var latlngs = 0;
 
-  path = this.line.getPath();
-
-  if(path.getLength() > 1)
+  if(this.line !== null)
   {
-    dist = google.maps.geometry.spherical.computeDistanceBetween(path.getAt(0), path.getAt(1));
-    dist /= 1000.0;
+    latlngs = this.line.getLatLngs();
+
+    if(latlngs.length === 2)
+    {
+      dist = latlngs[0].distanceTo(latlngs[1]);
+//      dist = google.maps.geometry.spherical.computeDistanceBetween(path.getAt(0), path.getAt(1));
+      dist /= 1000.0;
+    }
   }
 
   return dist;
@@ -101,23 +121,23 @@ Measure.prototype.getDist = function()
 
 Measure.prototype.click = function(latlng)
 {
-  var path;
+  var latlngs = [];
   var length;
   var marker;
 
-  path = this.line.getPath();
+  if(this.markers.length === 2)
+  {
+    this.line.remove();
+    this.line = null;
+    this.clearMarkers();
+  }
 
   if(this.markers.length === 0)
   {
     // only on first click
-    path.push(latlng);
-    path.push(latlng);
-  }
-  else if(this.markers.length === 2)
-  {
-    path.setAt(0, latlng);
-    path.setAt(1, latlng);
-    this.clearMarkers();
+    latlngs.push(latlng);
+    latlngs.push(latlng);
+    this.line = L.polyline(latlngs, {color: '#5500ff', weight: 1}).addTo(this.getMap());
   }
 
   marker = new MeasureMarker(this.getMap(), latlng);
@@ -127,14 +147,15 @@ Measure.prototype.click = function(latlng)
 
 Measure.prototype.mousemove = function(latlng)
 {
-  var path;
+  var latlngs;
   var length;
 
   if(this.markers.length === 1)
   {
-    path = this.line.getPath();
-    length = path.getLength();
-    path.setAt(length - 1, latlng);
+    latlngs = this.line.getLatLngs();
+    length = latlngs.length;
+    latlngs[length - 1] = latlng;
+    this.line.redraw();
     this.changeCallback();
   }
 };
@@ -142,12 +163,10 @@ Measure.prototype.mousemove = function(latlng)
 Measure.prototype.clearMarkers = function()
 {
   var nr;
-  var marker;
 
   for(nr=0; nr<this.markers.length; nr++)
   {
-    marker = this.markers[nr];
-    marker.setMap(null);
+    this.markers[nr].remove();
   }
 
   this.markers = [];
@@ -155,19 +174,38 @@ Measure.prototype.clearMarkers = function()
 
 function ms_click(measure, event)
 {
-  measure.click(event.latLng);
+  measure.click(event.latlng);
 }
 
 function ms_mousemove(measure, event)
 {
-  measure.mousemove(event.latLng);
+  measure.mousemove(event.latlng);
 }
 
 function MeasureMarker(map, latlng)
 {
-  var marker = this;
+  var measure = this;
+  var marker;
 
   this.stpos = null;
+
+  var icon = L.icon({
+      iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,5500ff,000000&ext=.png',
+      shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,5500ff,000000&ext=.png',
+      draggable: true,
+      iconSize: [20, 32],
+      shadowSize: [0, 0],
+      iconAnchor: [10, 32],
+      shadowAnchor: [0, 0],
+      popupAnchor: [-3, -76]
+  });
+
+  marker = L.marker(latlng, {draggable:'true', icon: icon});
+  marker.on('dragstart', function(event) {mm_dragstart(measure);});
+  marker.on('drag', function(event) {mm_drag(measure);});
+  marker.addTo(map);
+  this.marker = marker;
+
 /*
   this.marker = new google.maps.Marker({
     position: latlng,
@@ -195,6 +233,11 @@ MeasureMarker.prototype.setPosition = function(latlng)
 MeasureMarker.prototype.getPosition = function()
 {
   return this.marker.getLatLng();
+};
+
+MeasureMarker.prototype.remove = function()
+{
+  this.marker.remove();
 };
 
 /*
