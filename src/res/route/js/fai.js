@@ -83,6 +83,7 @@ Fai.prototype.show = function(latlngs)
   var path = [];
   var sector;
   var create = this.sectors.length === 0;
+  var nr;
 
   if(latlngs !== null)
   {
@@ -171,6 +172,16 @@ Fai.prototype.show = function(latlngs)
       this.endSector(latlngs, path);
       sector.redraw();
     }
+  }
+  else
+  {
+    for(nr=0; nr<this.sectors.length; nr++)
+    {
+      sector = this.sectors[nr];
+      sector.remove();
+    }
+
+    this.sectors = [];
   }
 };
 
