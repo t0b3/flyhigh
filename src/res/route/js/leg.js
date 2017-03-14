@@ -60,13 +60,26 @@ Leg.prototype.remove = function()
 
 Leg.prototype.setTurnPts = function(beginTurnPt, endTurnPt)
 {
-  var path = [beginTurnPt.getPosition(), endTurnPt.getPosition()];
+  var latlngs;
   var latlng;
 
   this.beginTurnPt = beginTurnPt;
   this.endTurnPt = endTurnPt;
 
-  this.line = L.polyline(path, {color: '#FF0000', weight: 1}).addTo(this.getRoute().getMap());
+  if(this.line === null)
+  {
+    latlngs = [beginTurnPt.getPosition(), endTurnPt.getPosition()];
+    this.line = L.polyline(latlngs, {color: '#FF0000', weight: 1})
+                                              .addTo(this.getRoute().getMap());
+  }
+  else
+  {
+    latlngs = this.line.getLatLngs();
+    latlngs[0] = beginTurnPt.getPosition();
+    latlngs[1] = endTurnPt.getPosition();
+    this.line.redraw();
+  }
+
 //  this.line.setPath(path);
   latlng = lg_getMidPoint(beginTurnPt.getPosition(), endTurnPt.getPosition());
   this.cross = new TurnPt(this.getRoute(), latlng, TurnPt.Type.Cross);
