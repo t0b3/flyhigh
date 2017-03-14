@@ -54,19 +54,12 @@ var selectedAirspace = -1;
 
 function fl_init()
 {
-  var airspaceNr;
   map = L.map('map');
 
   L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
           maxZoom: 15,
           attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
   }).addTo(map);
-
-/*
-  var marker = L.marker([47.0, 8.5], {draggable:'true'});
-  //	marker.on('move', function(event){ alert("move") });
-  marker.addTo(map);
-*/
 
   map.on('load', function()
   {
@@ -86,11 +79,10 @@ function fl_init()
 
 //alert("plot");
 
+    measure = new Measure(map);
+    measure.setChangeCallback(measureChanged);
 /*
-        measure = new Measure(map);
-        measure.setChangeCallback(measureChanged);
-
-alert("measure");
+// alert("measure");
 
         ph_initPhotoList(map);
 
@@ -101,7 +93,7 @@ alert("photo");
 var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
 rt_setTurnPts(turnPts);
 */
-      wm_emitAppReady();
+    wm_emitAppReady();
   });
 
 
@@ -110,8 +102,9 @@ rt_setTurnPts(turnPts);
   map.on('click', function(event)
   {
     var inside = false;
+    var airspaceNr;
 
-///      if(!measure.getEnable())
+    if(!measure.getEnable())
     {
       // select next airspace
       airspaceNr = selectedAirspace;
@@ -483,7 +476,7 @@ function fl_measure(div)
 {
   var show;
 
-  show = (div.className == "button_up");
+  show = (div.className === "button_up");
   measure.show(show);
 
   if(show)
