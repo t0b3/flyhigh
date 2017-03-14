@@ -65,8 +65,8 @@ Measure.prototype.show = function(enable)
   {
     document.getElementById('map').style.cursor = 'crosshair';
 //    map.setOptions({draggableCursor: 'crosshair'});
-    map.on('click', function(event){ms_click(measure, event);});
-    map.on('mousemove', function(event){ms_mousemove(measure, event);});
+    map.on('click', this.click, this);
+    map.on('mousemove', this.mousemove, this);
 /*
     this.clickListener = google.maps.event.addListener(map, 'click', function(event){ms_click(measure, event);});
     this.moveListener = google.maps.event.addListener(map, 'mousemove', function(event){ms_mousemove(measure, event);});
@@ -76,8 +76,8 @@ Measure.prototype.show = function(enable)
   {
     document.getElementById('map').style.cursor = '';
 //    map.setOptions({draggableCursor: 'default'});
-    map.off('click', function(event){ms_click(measure, event);});
-    map.off('mousemove', function(event){ms_mousemove(measure, event);});
+    map.off('click', this.click, this);
+    map.off('mousemove', this.mousemove, this);
 
 /*
     google.maps.event.removeListener(this.clickListener);
@@ -119,7 +119,7 @@ Measure.prototype.getDist = function()
   return dist;
 };
 
-Measure.prototype.click = function(latlng)
+Measure.prototype.click = function(event)
 {
   var latlngs = [];
   var length;
@@ -135,17 +135,17 @@ Measure.prototype.click = function(latlng)
   if(this.markers.length === 0)
   {
     // only on first click
-    latlngs.push(latlng);
-    latlngs.push(latlng);
+    latlngs.push(event.latlng);
+    latlngs.push(event.latlng);
     this.line = L.polyline(latlngs, {color: '#5500ff', weight: 1}).addTo(this.getMap());
   }
 
-  marker = new MeasureMarker(this.getMap(), latlng);
+  marker = new MeasureMarker(this.getMap(), event.latlng);
   this.markers.push(marker);
   this.changeCallback();
 };
 
-Measure.prototype.mousemove = function(latlng)
+Measure.prototype.mousemove = function(event)
 {
   var latlngs;
   var length;
@@ -154,7 +154,7 @@ Measure.prototype.mousemove = function(latlng)
   {
     latlngs = this.line.getLatLngs();
     length = latlngs.length;
-    latlngs[length - 1] = latlng;
+    latlngs[length - 1] = event.latlng;
     this.line.redraw();
     this.changeCallback();
   }
@@ -200,9 +200,7 @@ function MeasureMarker(map, latlng)
       popupAnchor: [-3, -76]
   });
 
-  marker = L.marker(latlng, {draggable:'true', icon: icon});
-  marker.on('dragstart', function(event) {mm_dragstart(measure);});
-  marker.on('drag', function(event) {mm_drag(measure);});
+  marker = L.marker(latlng, {draggable: false, icon: icon});
   marker.addTo(map);
   this.marker = marker;
 
