@@ -397,7 +397,8 @@ Route.prototype.update = function()
 
   if(this.line === null)
   {
-    this.line = L.polyline(path, {color: '#FFFFFF', weight: 2}).addTo(this.getMap());
+    this.line = L.polyline(path, {color: '#FFFFFF', weight: 3}).addTo(this.getMap());
+    this.line.bringToBack();
   }
   else
   {
