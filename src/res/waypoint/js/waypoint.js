@@ -44,6 +44,7 @@ function WayPoint(map, cluster, opts)
   this.editable = opts.editable;
   this.stPos = null;
   this.changeCallback = null;
+  this.dragActive = false;
 
 
   marker = L.marker(latlng, {draggable: false});
@@ -222,6 +223,16 @@ WayPoint.prototype.getModified = function()
   return this.modified;
 };
 
+WayPoint.prototype.setDragActive = function(active)
+{
+  this.dragActive = active;
+};
+
+WayPoint.prototype.getDragActive = function()
+{
+  return this.dragActive;
+};
+
 WayPoint.prototype.emitChange = function(type)
 {
   if(this.changeCallback !== null)
@@ -253,66 +264,69 @@ WayPoint.prototype.updateIcon = function()
 {
   var icon;
 
-  if(this.getSelected())
+  if(!this.dragActive)
   {
-    if(this.getModified())
+    if(this.getSelected())
     {
-      icon = L.icon({
-          iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
-          shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
-          iconSize:     [20, 32],
-          shadowSize:   [0, 0],
-          iconAnchor:   [10, 32],
-          shadowAnchor: [0, 0],
-          popupAnchor:  [-3, -76]
-      });
-//      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png';
+      if(this.getModified())
+      {
+        icon = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png';
+      }
+      else
+      {
+        icon = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png';
+      }
     }
     else
     {
-      icon = L.icon({
-          iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
-          shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
-          iconSize:     [20, 32],
-          shadowSize:   [0, 0],
-          iconAnchor:   [10, 32],
-          shadowAnchor: [0, 0],
-          popupAnchor:  [-3, -76]
-      });
-//      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png';
+      if(this.getModified())
+      {
+        icon = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png';
+      }
+      else
+      {
+        icon = L.icon({
+            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+            iconSize:     [20, 32],
+            shadowSize:   [0, 0],
+            iconAnchor:   [10, 32],
+            shadowAnchor: [0, 0],
+            popupAnchor:  [-3, -76]
+        });
+  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png';
+      }
     }
-  }
-  else
-  {
-    if(this.getModified())
-    {
-      icon = L.icon({
-          iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-          shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-          iconSize:     [20, 32],
-          shadowSize:   [0, 0],
-          iconAnchor:   [10, 32],
-          shadowAnchor: [0, 0],
-          popupAnchor:  [-3, -76]
-      });
-//      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png';
-    }
-    else
-    {
-      icon = L.icon({
-          iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-          shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-          iconSize:     [20, 32],
-          shadowSize:   [0, 0],
-          iconAnchor:   [10, 32],
-          shadowAnchor: [0, 0],
-          popupAnchor:  [-3, -76]
-      });
-//      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png';
-    }
-  }
 
-  this.marker.setIcon(icon);
+    this.marker.setIcon(icon);
+  }
 };
 
 function wp_click(wayPoint)
@@ -322,6 +336,12 @@ function wp_click(wayPoint)
 
 function wp_dragstart(wayPoint)
 {
+  if(wayPoint.getEditable())
+  {
+    wayPoint.setDragActive(true);
+    wayPoint.setSelected(true);
+    wayPoint.setModified(true);
+  }
 }
 
 function wp_drag(wayPoint)
@@ -336,8 +356,8 @@ function wp_dragend(wayPoint)
 {
   if(wayPoint.getEditable())
   {
+    wayPoint.setDragActive(false);
     wayPoint.emitChange(WayPoint.CallbackType.DragEnd);
-    wayPoint.setSelected(true);
-    wayPoint.setModified(true);
+    wayPoint.updateIcon();
   }
 }
