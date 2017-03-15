@@ -39,6 +39,7 @@ function TurnPt(route, latlng, type)
   this.prevLeg = null;
   this.nextLeg = null;
   this.editable = true;
+  this.dragActive = false;
 //  this.stpos = null;
 
 /*
@@ -56,6 +57,7 @@ function TurnPt(route, latlng, type)
   marker = L.marker(latlng, {draggable: true});
   marker.on('dragstart', function(event) {tp_dragstart(turnPt);});
   marker.on('drag', function(event) {tp_drag(turnPt);});
+  marker.on('dragend', function(event) {tp_dragend(turnPt);});
   marker.on('move', function(event){tp_position_changed(turnPt);});
   marker.on('dblclick', function(event){tp_dblclick(turnPt);});
   marker.on('mouseover', function(event){tp_mouseover(turnPt);});
@@ -181,6 +183,16 @@ TurnPt.prototype.getEditable = function()
   return this.editable;
 };
 
+TurnPt.prototype.setDragActive = function(active)
+{
+  this.dragActive = active;
+};
+
+TurnPt.prototype.getDragActive = function()
+{
+  return this.dragActive;
+};
+
 TurnPt.prototype.getInfoBox = function()
 {
   return this.infoBox;
@@ -209,85 +221,88 @@ TurnPt.prototype.updateIcon = function()
 {
   var icon;
 
-  switch(this.getType())
+  if(!this.dragActive)
   {
-    case TurnPt.Type.WayPoint:
-      if(this.getPrevLeg() === null)
-      {
+    switch(this.getType())
+    {
+      case TurnPt.Type.WayPoint:
+        if(this.getPrevLeg() === null)
+        {
+          icon = L.icon({
+              iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
+              iconSize:     [20, 32],
+              shadowSize:   [0, 0],
+              iconAnchor:   [10, 32],
+              shadowAnchor: [0, 0],
+              popupAnchor:  [-3, -76]
+          });
+
+          this.marker.setIcon(icon);
+
+          // start
+  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
+        }
+        else if(this.getNextLeg() === null)
+        {
+          icon = L.icon({
+              iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
+              iconSize:     [20, 32],
+              shadowSize:   [0, 0],
+              iconAnchor:   [10, 32],
+              shadowAnchor: [0, 0],
+              popupAnchor:  [-3, -76]
+          });
+
+          this.marker.setIcon(icon);
+          // end
+  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
+        }
+        else
+        {
+          icon = L.icon({
+              iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
+              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
+              iconSize:     [20, 32],
+              shadowSize:   [0, 0],
+              iconAnchor:   [10, 32],
+              shadowAnchor: [0, 0],
+              popupAnchor:  [-3, -76]
+          });
+
+          this.marker.setIcon(icon);
+          // normal
+  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
+        }
+
+        this.infoBox = null;
+      break;
+      case TurnPt.Type.Cross:
         icon = L.icon({
-            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-            iconSize:     [20, 32],
+            iconUrl: '../route/images/quad.png',
+            shadowUrl: '../route/images/quad.png',
+            iconSize:     [7, 7],
             shadowSize:   [0, 0],
-            iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
+            iconAnchor:   [4, 4],
+            shadowAnchor: [4, 4],
             popupAnchor:  [-3, -76]
         });
+  /*
+        var image = new google.maps.MarkerImage('../route/images/quad.png',
+              new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
+              new google.maps.Point(0, 0), // The origin for this image is 0,0.
+              new google.maps.Point(4, 4));// The anchor for this image is the base of the flagpole at 7,7.
+        var shape = {
+          coord: [0, 0, 7, 0, 7, 7, 0 , 7],
+          type: 'poly'
+        };
+  */
 
         this.marker.setIcon(icon);
-
-        // start
-///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
-      }
-      else if(this.getNextLeg() === null)
-      {
-        icon = L.icon({
-            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-            iconSize:     [20, 32],
-            shadowSize:   [0, 0],
-            iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
-            popupAnchor:  [-3, -76]
-        });
-
-        this.marker.setIcon(icon);
-        // end
-///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
-      }
-      else
-      {
-        icon = L.icon({
-            iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
-            iconSize:     [20, 32],
-            shadowSize:   [0, 0],
-            iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
-            popupAnchor:  [-3, -76]
-        });
-
-        this.marker.setIcon(icon);
-        // normal
-///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
-      }
-
-      this.infoBox = null;
-    break;
-    case TurnPt.Type.Cross:
-      icon = L.icon({
-          iconUrl: '../route/images/quad.png',
-          shadowUrl: '../route/images/quad.png',
-          iconSize:     [7, 7],
-          shadowSize:   [0, 0],
-          iconAnchor:   [4, 4],
-          shadowAnchor: [4, 4],
-          popupAnchor:  [-3, -76]
-      });
-/*
-      var image = new google.maps.MarkerImage('../route/images/quad.png',
-            new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
-            new google.maps.Point(0, 0), // The origin for this image is 0,0.
-            new google.maps.Point(4, 4));// The anchor for this image is the base of the flagpole at 7,7.
-      var shape = {
-        coord: [0, 0, 7, 0, 7, 7, 0 , 7],
-        type: 'poly'
-      };
-*/
-
-      this.marker.setIcon(icon);
-//      this.infoBox = new InfoBox(this.getRoute().getMap());
-    break;
+  //      this.infoBox = new InfoBox(this.getRoute().getMap());
+      break;
+    }
   }
 };
 
@@ -313,6 +328,9 @@ function tp_dragstart(turnPt)
 {
   if(turnPt.getEditable())
   {
+    // this prevents icon change on drag (or we loose drag)
+    turnPt.setDragActive(true);
+
     if((turnPt.getType() === TurnPt.Type.Cross) &&
         (turnPt.getPrevLeg() !== null))
     {
@@ -338,6 +356,12 @@ function tp_drag(turnPt)
     turnPt.restorePos();
   }
 */
+}
+
+function tp_dragend(turnPt)
+{
+  turnPt.setDragActive(false);
+  turnPt.updateIcon();
 }
 
 function tp_dblclick(turnPt)
