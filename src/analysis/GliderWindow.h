@@ -28,27 +28,27 @@ class IDataBase;
 
 class GliderWindow: public TableWindow
 {
-	Q_OBJECT
-	public:
-		GliderWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags);
+  Q_OBJECT
+  public:
+    GliderWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags);
 
-	private:
-		void setGliderToRow(uint row, Glider &glider);
+  private:
+    void setGliderToRow(uint row, Glider &glider);
 
-	private slots:
-		void file_new();
+  private slots:
+    void file_new();
 
-		void file_edit();
+    void file_edit();
 
-		void file_delete();
+    void file_delete();
 
-		void file_update();
+    void file_update();
 
-	private:
-		enum Fields{Manufacturer, Model, Serial, Flights, Airtime};
+  private:
+    enum Fields{Manufacturer, Model, Serial, Flights, Airtime, Passengers};
 
-		IDataBase *m_pDb;
-		Glider::GliderListType m_gliderList;
+    IDataBase *m_pDb;
+    Glider::GliderListType m_gliderList;
 };
 
 #endif

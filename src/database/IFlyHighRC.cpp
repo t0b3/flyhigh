@@ -80,9 +80,9 @@ IFlyHighRC::IFlyHighRC()
   m_deviceSpeedList += "38400";*/
   m_deviceSpeedList += "57600";
 
-  m_versionInfo = "FlyHigh Version 1.0.0";
+  m_versionInfo = "FlyHigh Version 1.0.1";
   m_copyInfo =
-      "Copyright (c): 2004-2016 by Alex Graf <grafal@sf.net>, "
+      "Copyright (c): 2004-2017 by Alex Graf <grafal@sf.net>, "
       "Jurg Allemann <ja_kern@sf.net>.\n\n"
       "Thank you Markus Franke for popup edits, Thomas Kuhlmann for OLC"
       "optimizer, Luke Mahe for MarkerClusterer and George MacKerron for"

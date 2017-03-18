@@ -27,17 +27,18 @@ class ISql;
 
 class FlightExpWindow: public TableWindow
 {
-	Q_OBJECT
-	public:
-		FlightExpWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags);
+  Q_OBJECT
+  public:
+    FlightExpWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags);
 
-	private slots:
-		void file_update();
+  private slots:
+    void file_update();
 
-	private:
-		enum Fields{Year, NrFlights, Airtime};
+  private:
+    enum Fields{Year, FlightsSolo, AirtimeSolo, FlightsTandem, AirtimeTandem,
+                FlightsTotal, AirtimeTotal};
 
-		ISql *m_pDb;
+    ISql *m_pDb;
 };
 
 #endif

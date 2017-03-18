@@ -27,21 +27,20 @@ GliderFormImpl::GliderFormImpl(QWidget* parent, const QString &caption, Glider *
 {
   QStringList manus;
   QStringList models;
-  QStringList serials;
   int gliderNr;
 
-	setupUi(this);
-	setWindowTitle(caption);
+  setupUi(this);
+  setWindowTitle(caption);
 
-	for(gliderNr=0; gliderNr<gliderList.count(); gliderNr++)
-	{
-	  manus.push_back(gliderList.value(gliderNr).manufacturer());
-	  models.push_back(gliderList.value(gliderNr).model());
-	}
+  for(gliderNr=0; gliderNr<gliderList.count(); gliderNr++)
+  {
+    manus.push_back(gliderList.value(gliderNr).manufacturer());
+    models.push_back(gliderList.value(gliderNr).model());
+  }
 
   // manufacturers
-	manus.removeDuplicates();
-	manus.sort();
+  manus.removeDuplicates();
+  manus.sort();
   manus.removeOne("");
   comboBoxManu->addItems(manus);
 
@@ -54,8 +53,8 @@ GliderFormImpl::GliderFormImpl(QWidget* parent, const QString &caption, Glider *
   setGlider(pGlider);
 
 /**
-	connect(comboBoxManu, SIGNAL(activated(int)), this, SLOT(updateGlider(int)));
-	connect(comboBoxModel, SIGNAL(activated(int)), this, SLOT(updateGlider(int)));
+  connect(comboBoxManu, SIGNAL(activated(int)), this, SLOT(updateGlider(int)));
+  connect(comboBoxModel, SIGNAL(activated(int)), this, SLOT(updateGlider(int)));
 */
 }
 
@@ -63,16 +62,21 @@ void GliderFormImpl::setGlider(Glider *pGlider)
 {
   m_pGlider = pGlider;
 
-	if(m_pGlider != NULL)
-	{
-	  select(comboBoxManu, m_pGlider->manufacturer());
-	  select(comboBoxModel, m_pGlider->model());
-	  lineEditSerial->setText(m_pGlider->serial());
+  if(m_pGlider != NULL)
+  {
+    select(comboBoxManu, m_pGlider->manufacturer());
+    select(comboBoxModel, m_pGlider->model());
+    lineEditSerial->setText(m_pGlider->serial());
+
+    if(m_pGlider->passengers() == 0)
+      checkBoxPassengers->setCheckState(Qt::Unchecked);
+    else
+      checkBoxPassengers->setCheckState(Qt::Checked);
 /*
-	  selectModel();
-	  selectSerial();
+    selectModel();
+    selectSerial();
 */
-	}
+  }
 }
 
 void GliderFormImpl::accept()
@@ -82,6 +86,11 @@ void GliderFormImpl::accept()
     m_pGlider->setManufacturer(comboBoxManu->currentText());
     m_pGlider->setModel(comboBoxModel->currentText());
     m_pGlider->setSerial(lineEditSerial->text());
+
+    if(checkBoxPassengers->checkState() == Qt::Unchecked)
+      m_pGlider->setPassengers(0);
+    else
+      m_pGlider->setPassengers(1);
   }
 
   QDialog::accept();
@@ -96,20 +105,20 @@ void GliderFormImpl::updateGlider(int index)
 
 void GliderFormImpl::select(QComboBox *pCombo, const QString &text)
 {
-	int index;
-	int maxIndex;
-	bool found = false;
+  int index;
+  int maxIndex;
+  bool found = false;
 
-	maxIndex = pCombo->count();
+  maxIndex = pCombo->count();
 
-	for(index=0; index<maxIndex; index++)
-	{
-		found = (pCombo->itemText(index) == text);
+  for(index=0; index<maxIndex; index++)
+  {
+    found = (pCombo->itemText(index) == text);
 
-		if(found)
-		{
-			pCombo->setCurrentIndex(index);
-			break;
-		}
-	}
+    if(found)
+    {
+      pCombo->setCurrentIndex(index);
+      break;
+    }
+  }
 }

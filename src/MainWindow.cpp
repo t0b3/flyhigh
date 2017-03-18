@@ -108,7 +108,7 @@ MainWindow::MainWindow()
   m_pMenuAnalysis->addAction(pAction);
   m_pMenuAnalysis->addSeparator();
 
-  pAction = new QAction(tr("Flight &Exp"), this);
+  pAction = new QAction(tr("Flight &Stats"), this);
   connect(pAction, SIGNAL(triggered()), this, SLOT(flights_experience()));
   m_pMenuAnalysis->addAction(pAction);
   m_pMenuAnalysis->addSeparator();
@@ -117,7 +117,7 @@ MainWindow::MainWindow()
   connect(pAction, SIGNAL(triggered()), this, SLOT(analysis_gliders()));
   m_pMenuAnalysis->addAction(pAction);
 
-  pAction = new QAction(tr("&Servicing"), this);
+  pAction = new QAction(tr("Se&rvicing"), this);
   connect(pAction, SIGNAL(triggered()), this, SLOT(analysis_servicing()));
   m_pMenuAnalysis->addAction(pAction);
 

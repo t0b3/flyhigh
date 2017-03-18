@@ -38,13 +38,13 @@ const Upgrade::DataBaseVersion Upgrade::DataBaseVersion_0_9_2 = QDateTime(QDate(
 const Upgrade::DataBaseVersion Upgrade::DataBaseVersion_0_9_5 = QDateTime(QDate(2012, 10, 31), QTime( 0, 0));
 const Upgrade::DataBaseVersion Upgrade::DataBaseVersion_0_9_8 = QDateTime(QDate(2013, 11, 23), QTime( 0, 0));
 const Upgrade::DataBaseVersion Upgrade::DataBaseVersion_1_0_0 = QDateTime(QDate(2015,  1, 25), QTime( 0, 0));
+const Upgrade::DataBaseVersion Upgrade::DataBaseVersion_1_0_1 = QDateTime(QDate(2017,  3, 18), QTime( 0, 0));
 // points to current db version:
-const Upgrade::DataBaseVersion Upgrade::DataBaseCurrentVersion = Upgrade::DataBaseVersion_1_0_0;
-
+const Upgrade::DataBaseVersion Upgrade::DataBaseCurrentVersion = Upgrade::DataBaseVersion_1_0_1;
 
 Upgrade::Upgrade(QSqlDatabase DB)
-	:DataBaseSub(DB)
-	,m_pExecutor(new QueryExecutor())
+  :DataBaseSub(DB)
+  ,m_pExecutor(new QueryExecutor())
 {
 }
 
@@ -55,120 +55,120 @@ Upgrade::~Upgrade()
 
 bool Upgrade::setup(const DatabaseParameters& params)
 {
-	bool res = true;
-	QueryExecutor::TReplaceMap replacements;
-	QSqlQuery query;
-	QSqlQuery user;
+  bool res = true;
+  QueryExecutor::TReplaceMap replacements;
+  QSqlQuery query;
+  QSqlQuery user;
 
-	// we need db name, username and password as replacement tokens
-	replacements["%dbname"] = params.dBName();
-	replacements["%username"] = params.dBUserName();
-	replacements["%password"] = params.dBPassword();
+  // we need db name, username and password as replacement tokens
+  replacements["%dbname"] = params.dBName();
+  replacements["%username"] = params.dBUserName();
+  replacements["%password"] = params.dBPassword();
 
-	// create the db
-	query = m_pExecutor->executeQuery("setup-create-db",
+  // create the db
+  query = m_pExecutor->executeQuery("setup-create-db",
                                     QueryExecutor::TBindMap(),
                                     replacements,
                                     db());
 
-	// only mysql cares about user management and permissions
-	if(params.isMySQL())
-	{
-		// check if there's already a user
-		user = m_pExecutor->executeQuery("setup-get-user",
+  // only mysql cares about user management and permissions
+  if(params.isMySQL())
+  {
+    // check if there's already a user
+    user = m_pExecutor->executeQuery("setup-get-user",
                                      QueryExecutor::TBindMap(),
                                      replacements,
                                      db());
 
-		// if the user already exists, it won't be touched
-		// which means the user keeps his former password
-		if(user.size() == 0)
-		{
-			// no user with this name
-			m_pExecutor->executeQuery("setup-create-user",
-																QueryExecutor::TBindMap(),
-																replacements,
-																db());
-		}
+    // if the user already exists, it won't be touched
+    // which means the user keeps his former password
+    if(user.size() == 0)
+    {
+      // no user with this name
+      m_pExecutor->executeQuery("setup-create-user",
+                                QueryExecutor::TBindMap(),
+                                replacements,
+                                db());
+    }
 
-		// grant permissions unconditionally, the db is probably new
-		m_pExecutor->executeQuery("setup-privileges",
-															QueryExecutor::TBindMap(),
-															replacements,
-															db());
+    // grant permissions unconditionally, the db is probably new
+    m_pExecutor->executeQuery("setup-privileges",
+                              QueryExecutor::TBindMap(),
+                              replacements,
+                              db());
 
-		// and the 'USE' clause
-		m_pExecutor->executeQuery("setup-finalize",
-															QueryExecutor::TBindMap(),
-															replacements,
-															db());
-	}
+    // and the 'USE' clause
+    m_pExecutor->executeQuery("setup-finalize",
+                              QueryExecutor::TBindMap(),
+                              replacements,
+                              db());
+  }
 
-	if(query.lastError().type()!=QSqlError::NoError)
-	{
-		// something failed
-		return false;
-	}
+  if(query.lastError().type()!=QSqlError::NoError)
+  {
+    // something failed
+    return false;
+  }
 
-	// create tables
-	m_pExecutor->executeQuery("setup-create-gliders", db());
-	m_pExecutor->executeQuery("setup-create-pilots", db());
-	m_pExecutor->executeQuery("setup-create-waypoints", db());
-	m_pExecutor->executeQuery("setup-create-flights", db());
-	m_pExecutor->executeQuery("setup-create-routes", db());
-	m_pExecutor->executeQuery("setup-create-routeitems", db());
-	m_pExecutor->executeQuery("setup-create-servicings", db());
-	m_pExecutor->executeQuery("setup-create-lastmodified", db());
+  // create tables
+  m_pExecutor->executeQuery("setup-create-gliders", db());
+  m_pExecutor->executeQuery("setup-create-pilots", db());
+  m_pExecutor->executeQuery("setup-create-waypoints", db());
+  m_pExecutor->executeQuery("setup-create-flights", db());
+  m_pExecutor->executeQuery("setup-create-routes", db());
+  m_pExecutor->executeQuery("setup-create-routeitems", db());
+  m_pExecutor->executeQuery("setup-create-servicings", db());
+  m_pExecutor->executeQuery("setup-create-lastmodified", db());
   m_pExecutor->executeQuery("setup-create-airspaces", db());
   m_pExecutor->executeQuery("setup-create-airspaceitems", db());
   m_pExecutor->executeQuery("setup-create-accounts", db());
 
-	// finalize db setup
-	replacements.clear();
+  // finalize db setup
+  replacements.clear();
   replacements["%versiontimestamp"] = DataBaseCurrentVersion.toString("yyyy-MM-dd hh:mm:ss");
-	m_pExecutor->executeQuery("setup-set-lastmodified",
-														QueryExecutor::TBindMap(),
-														replacements,
-														db());
+  m_pExecutor->executeQuery("setup-set-lastmodified",
+                            QueryExecutor::TBindMap(),
+                            replacements,
+                            db());
 
-	return res;
+  return res;
 }
 
 bool Upgrade::upgrade()
 {
-	bool res = true;
-	QString sqls;
-	QSqlQuery query(db());
-	DataBaseVersion dbVers = DataBaseVersion_0_5_0;
+  bool res = true;
+  QString sqls;
+  QSqlQuery query(db());
+  DataBaseVersion dbVers = DataBaseVersion_0_5_0;
 
-	if(dataBaseVersion() < DataBaseVersion_0_5_0)
-	{
-		Q_ASSERT(false);
-	}
+  if(dataBaseVersion() < DataBaseVersion_0_5_0)
+  {
+    Q_ASSERT(false);
+  }
 
-	if(dataBaseVersion() < DataBaseVersion_0_8_1)
-	{
-		sqls = "ALTER TABLE Routes ADD Type INT NULL DEFAULT 0;";
-		res &= query.exec(sqls);
-		setDataBaseVersion(DataBaseVersion_0_8_1);
-	}
+  if(dataBaseVersion() < DataBaseVersion_0_8_1)
+  {
+    sqls = "ALTER TABLE Routes ADD Type INT NULL DEFAULT 0;";
+    res &= query.exec(sqls);
+    setDataBaseVersion(DataBaseVersion_0_8_1);
+  }
 
-	if(dataBaseVersion() < DataBaseVersion_0_8_2)
-	{
-		DataBaseSub::setLastModified("Pilots");
-		DataBaseSub::setLastModified("Flights");
-		DataBaseSub::setLastModified("Gliders");
-		DataBaseSub::setLastModified("Servicings");
-		DataBaseSub::setLastModified("WayPoints");
-		DataBaseSub::setLastModified("Routes");
-		setDataBaseVersion(DataBaseVersion_0_8_2);
-	}
+  if(dataBaseVersion() < DataBaseVersion_0_8_2)
+  {
+    DataBaseSub::setLastModified("Pilots");
+    DataBaseSub::setLastModified("Flights");
+    DataBaseSub::setLastModified("Gliders");
+    DataBaseSub::setLastModified("Servicings");
+    DataBaseSub::setLastModified("WayPoints");
+    DataBaseSub::setLastModified("Routes");
+    setDataBaseVersion(DataBaseVersion_0_8_2);
+  }
 
-	if(dataBaseVersion() < DataBaseVersion_0_9_2)
-	{
-	  m_pExecutor->executeQuery("upgrade-waypoints-add-type", db());
-		setDataBaseVersion(DataBaseVersion_0_9_2);
-	}
+  if(dataBaseVersion() < DataBaseVersion_0_9_2)
+  {
+    m_pExecutor->executeQuery("upgrade-waypoints-add-type", db());
+    setDataBaseVersion(DataBaseVersion_0_9_2);
+  }
 
   if(dataBaseVersion() < DataBaseVersion_0_9_5)
   {
@@ -191,32 +191,39 @@ bool Upgrade::upgrade()
     setDataBaseVersion(DataBaseVersion_1_0_0);
   }
 
-	return res;
+  if(dataBaseVersion() < DataBaseVersion_1_0_1)
+  {
+    m_pExecutor->executeQuery("upgrade-gliders-add-passengers", db());
+    DataBaseSub::setLastModified("Gliders");
+    setDataBaseVersion(DataBaseVersion_1_0_1);
+  }
+
+  return res;
 }
 
 Upgrade::DataBaseVersion Upgrade::dataBaseVersion()
 {
-	QString sqls;
-	QSqlQuery query(db());
-	DataBaseVersion dbVers = DataBaseVersion_0_5_0;
+  QString sqls;
+  QSqlQuery query(db());
+  DataBaseVersion dbVers = DataBaseVersion_0_5_0;
 
-	sqls.sprintf("SELECT Time FROM LastModified WHERE Name = 'DataBaseVersion'");
+  sqls.sprintf("SELECT Time FROM LastModified WHERE Name = 'DataBaseVersion'");
 
-	if(query.exec(sqls) && query.first())
-	{
-		dbVers = query.value(0).toDateTime();
-	}
+  if(query.exec(sqls) && query.first())
+  {
+    dbVers = query.value(0).toDateTime();
+  }
 
-	return dbVers;
+  return dbVers;
 }
 
 void Upgrade::setDataBaseVersion(const DataBaseVersion &tabVers)
 {
-	QString sqls;
-	QString version;
-	QSqlQuery query(db());
+  QString sqls;
+  QString version;
+  QSqlQuery query(db());
 
-	version = tabVers.toString("yyyy-MM-dd hh:mm:ss");
-	sqls = QString("UPDATE LastModified SET Time = '%1' WHERE Name = 'DataBaseVersion'").arg(version);
-	query.exec(sqls);
+  version = tabVers.toString("yyyy-MM-dd hh:mm:ss");
+  sqls = QString("UPDATE LastModified SET Time = '%1' WHERE Name = 'DataBaseVersion'").arg(version);
+  query.exec(sqls);
 }

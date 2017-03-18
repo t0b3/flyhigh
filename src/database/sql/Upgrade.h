@@ -28,38 +28,39 @@ class DatabaseParameters;
 
 class Upgrade: public DataBaseSub
 {
-	public:
-		Upgrade(QSqlDatabase DB);
+  public:
+    Upgrade(QSqlDatabase DB);
     virtual ~Upgrade();
 
-		/**
-		 * Creates the database schema
-		 * @param params - db connection parameters
-		 * @return true if the schema was created successfully
-		 */
-		bool setup(const DatabaseParameters& params);
+    /**
+     * Creates the database schema
+     * @param params - db connection parameters
+     * @return true if the schema was created successfully
+     */
+    bool setup(const DatabaseParameters& params);
 
-		bool upgrade();
+    bool upgrade();
 
-	private:
-		typedef QDateTime DataBaseVersion;
-		static const DataBaseVersion DataBaseVersion_0_3_0;
-		static const DataBaseVersion DataBaseVersion_0_3_1;
-		static const DataBaseVersion DataBaseVersion_0_3_2;
-		static const DataBaseVersion DataBaseVersion_0_5_0;
-		static const DataBaseVersion DataBaseVersion_0_8_1;
-		static const DataBaseVersion DataBaseVersion_0_8_2;
-		static const DataBaseVersion DataBaseVersion_0_9_2;
+  private:
+    typedef QDateTime DataBaseVersion;
+    static const DataBaseVersion DataBaseVersion_0_3_0;
+    static const DataBaseVersion DataBaseVersion_0_3_1;
+    static const DataBaseVersion DataBaseVersion_0_3_2;
+    static const DataBaseVersion DataBaseVersion_0_5_0;
+    static const DataBaseVersion DataBaseVersion_0_8_1;
+    static const DataBaseVersion DataBaseVersion_0_8_2;
+    static const DataBaseVersion DataBaseVersion_0_9_2;
     static const DataBaseVersion DataBaseVersion_0_9_5;
     static const DataBaseVersion DataBaseVersion_0_9_8;
     static const DataBaseVersion DataBaseVersion_1_0_0;
+    static const DataBaseVersion DataBaseVersion_1_0_1;
 
     static const DataBaseVersion DataBaseCurrentVersion;
 
-		QueryExecutor* m_pExecutor;
+    QueryExecutor* m_pExecutor;
 
-		DataBaseVersion dataBaseVersion();
-		void setDataBaseVersion(const DataBaseVersion &vers);
+    DataBaseVersion dataBaseVersion();
+    void setDataBaseVersion(const DataBaseVersion &vers);
 };
 
 #endif

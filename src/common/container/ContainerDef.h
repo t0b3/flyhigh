@@ -25,9 +25,13 @@
 
 typedef struct
 {
-	int year;
-	uint nFlights;
-	uint airTimeSecs;
+  int year;
+  uint flightsSolo;
+  uint flightsTandem;
+  uint flightsTotal;
+  uint airTimeSolo;
+  uint airTimeTandem;
+  uint airTimeTotal;
 }FlightsPerYearType;
 
 typedef QList<FlightsPerYearType> FlightsPerYearListType;

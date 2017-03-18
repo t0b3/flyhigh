@@ -30,11 +30,11 @@
 #include "ISql.h"
 
 FlightExpWindow::FlightExpWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-	:TableWindow(parent, name, wflags)
+  :TableWindow(parent, name, wflags)
 {
-	QStringList nameList;
+  QStringList nameList;
   QAction* pAction;
-	QTableWidget *pTable;
+  QTableWidget *pTable;
 
   pTable = TableWindow::getTable();
 
@@ -42,84 +42,125 @@ FlightExpWindow::FlightExpWindow(QWidget* parent, const QString &name, Qt::Windo
   connect(pAction, SIGNAL(triggered()), this, SLOT(exportTable()));
   MDIWindow::addAction(pAction);
 
-  TableWindow::setWindowTitle(tr("Flight experience"));
+  TableWindow::setWindowTitle(tr("Flight statistics"));
   TableWindow::setWindowIcon(QIcon(":/document.xpm"));
 
-	// configure the table
-	pTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	pTable->setSelectionMode(QAbstractItemView::SingleSelection);
-	m_pDb = ISql::pInstance();
-	connect(m_pDb, SIGNAL(flightsChanged()), this, SLOT(file_update()));
+  // configure the table
+  pTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+  pTable->setSelectionMode(QAbstractItemView::SingleSelection);
+  m_pDb = ISql::pInstance();
+  connect(m_pDb, SIGNAL(flightsChanged()), this, SLOT(file_update()));
 
-	// header
-	nameList += tr("Year");
-	nameList += tr("Number of flights");
-	nameList += tr("Airtime [h]");
+  // header
+  nameList += tr("Year");
+  nameList += tr("Solo");
+  nameList += tr("Solo [h]");
+  nameList += tr("Tandem");
+  nameList += tr("Tandem [h]");
+  nameList += tr("Total");
+  nameList += tr("Total [h]");
 
-	setupHeader(nameList);
+  setupHeader(nameList);
 
-	pTable->setColumnWidth(Year, 60);
-	pTable->setColumnWidth(NrFlights, 140);
-	pTable->setColumnWidth(Airtime, 100);
+  pTable->setColumnWidth(Year, 60);
+  pTable->setColumnWidth(FlightsSolo, 100);
+  pTable->setColumnWidth(AirtimeSolo, 100);
+  pTable->setColumnWidth(FlightsTandem, 100);
+  pTable->setColumnWidth(AirtimeTandem, 100);
+  pTable->setColumnWidth(FlightsTotal, 100);
+  pTable->setColumnWidth(AirtimeTotal, 100);
 
-	file_update();
+  file_update();
 }
 
 void FlightExpWindow::file_update()
 {
-	FlightsPerYearListType fpyList;
-	Pilot pilot;
-	QTableWidget *pTable = TableWindow::getTable();
-	QString str;
-	uint flightsTotal = 0;
-	uint airtimeTotal = 0;
+  FlightsPerYearListType fpyList;
+  Pilot pilot;
+  QTableWidget *pTable = TableWindow::getTable();
+  QString str;
+  uint flightsSolo = 0;
+  uint airtimeSolo = 0;
+  uint flightsTandem = 0;
+  uint airtimeTandem = 0;
+  uint flightsTotal = 0;
+  uint airtimeTotal = 0;
   uint fpyCount;
-	uint fpyNr;
+  uint fpyNr;
   uint itemNr;
 
-	TableWindow::setCursor(QCursor(Qt::WaitCursor));
+  TableWindow::setCursor(QCursor(Qt::WaitCursor));
 
-	// pilot info
-	ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), pilot);
+  // pilot info
+  ISql::pInstance()->pilot(IFlyHighRC::pInstance()->pilotId(), pilot);
 
-	if(m_pDb->flightsPerYear(pilot, fpyList))
-	{
-		fpyCount = fpyList.size();
-		TableWindow::setNumRows(fpyCount + 2);
+  if(m_pDb->flightsPerYear(pilot, fpyList))
+  {
+    fpyCount = fpyList.size();
+    TableWindow::setNumRows(fpyCount + 2);
 
-		if(fpyCount > 0)
-		{
-			// statistics, newest first
-			for(fpyNr=0; fpyNr<fpyCount; fpyNr++)
-			{
-			  itemNr = (fpyCount - fpyNr - 1);
-				str.sprintf("%i", fpyList[fpyNr].year);
-				pTable->item(itemNr, Year)->setText(str);
-				str.sprintf("%i", fpyList[fpyNr].nFlights);
-				pTable->item(itemNr, NrFlights)->setText(str);
-				str.sprintf("%.2f",  fpyList[fpyNr].airTimeSecs / 3600.0);
-				pTable->item(itemNr, Airtime)->setText(str);
+    if(fpyCount > 0)
+    {
+      // statistics, newest first
+      for(fpyNr=0; fpyNr<fpyCount; fpyNr++)
+      {
+        itemNr = (fpyCount - fpyNr - 1);
+        str.sprintf("%i", fpyList[fpyNr].year);
+        pTable->item(itemNr, Year)->setText(str);
 
-				flightsTotal += fpyList[fpyNr].nFlights;
-				airtimeTotal += fpyList[fpyNr].airTimeSecs;
-			}
+        str.sprintf("%i", fpyList[fpyNr].flightsSolo);
+        pTable->item(itemNr, FlightsSolo)->setText(str);
+        str.sprintf("%.2f",  fpyList[fpyNr].airTimeSolo / 3600.0);
+        pTable->item(itemNr, AirtimeSolo)->setText(str);
+        flightsSolo += fpyList[fpyNr].flightsSolo;
+        airtimeSolo += fpyList[fpyNr].airTimeSolo;
 
-			// separator
-			itemNr = fpyCount;
-			pTable->item(itemNr, Year)->setText("________");
-			pTable->item(itemNr, NrFlights)->setText("_____________________");
-			pTable->item(itemNr, Airtime)->setText("_______________");
+        str.sprintf("%i", fpyList[fpyNr].flightsTandem);
+        pTable->item(itemNr, FlightsTandem)->setText(str);
+        str.sprintf("%.2f",  fpyList[fpyNr].airTimeTandem / 3600.0);
+        pTable->item(itemNr, AirtimeTandem)->setText(str);
+        flightsTandem += fpyList[fpyNr].flightsTandem;
+        airtimeTandem += fpyList[fpyNr].airTimeTandem;
 
-			// sum
-			itemNr++;
-			str.sprintf("%i", fpyList[fpyCount-1].year - fpyList[0].year + 1);
-			pTable->item(itemNr, Year)->setText(str);
-			str.sprintf("%i", flightsTotal);
-			pTable->item(itemNr, NrFlights)->setText(str);
-			str.sprintf("%.2f",  airtimeTotal / 3600.0);
-			pTable->item(itemNr, Airtime)->setText(str);
-		}
-	}
+        str.sprintf("%i", fpyList[fpyNr].flightsTotal);
+        pTable->item(itemNr, FlightsTotal)->setText(str);
+        str.sprintf("%.2f",  fpyList[fpyNr].airTimeTotal / 3600.0);
+        pTable->item(itemNr, AirtimeTotal)->setText(str);
+        flightsTotal += fpyList[fpyNr].flightsTotal;
+        airtimeTotal += fpyList[fpyNr].airTimeTotal;
+      }
 
-	TableWindow::unsetCursor();
+      // separator
+      itemNr = fpyCount;
+      pTable->item(itemNr, Year)->setText("_______");
+      pTable->item(itemNr, FlightsSolo)->setText("____________");
+      pTable->item(itemNr, AirtimeSolo)->setText("____________");
+      pTable->item(itemNr, FlightsTandem)->setText("____________");
+      pTable->item(itemNr, AirtimeTandem)->setText("____________");
+      pTable->item(itemNr, FlightsTotal)->setText("____________");
+      pTable->item(itemNr, AirtimeTotal)->setText("____________");
+
+      // sum
+      itemNr++;
+      str.sprintf("%i", fpyList[fpyCount-1].year - fpyList[0].year + 1);
+      pTable->item(itemNr, Year)->setText(str);
+
+      str.sprintf("%i", flightsSolo);
+      pTable->item(itemNr, FlightsSolo)->setText(str);
+      str.sprintf("%.2f",  airtimeSolo / 3600.0);
+      pTable->item(itemNr, AirtimeSolo)->setText(str);
+
+      str.sprintf("%i", flightsTandem);
+      pTable->item(itemNr, FlightsTandem)->setText(str);
+      str.sprintf("%.2f",  airtimeTandem / 3600.0);
+      pTable->item(itemNr, AirtimeTandem)->setText(str);
+
+      str.sprintf("%i", flightsTotal);
+      pTable->item(itemNr, FlightsTotal)->setText(str);
+      str.sprintf("%.2f",  airtimeTotal / 3600.0);
+      pTable->item(itemNr, AirtimeTotal)->setText(str);
+    }
+  }
+
+  TableWindow::unsetCursor();
 }
