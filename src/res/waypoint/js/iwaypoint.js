@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 var map = null;
-var cluster = null;
+var wp_cluster = null;
 var wayPts = [];
 var curWayPt = null;
 var wpEditable = true;
@@ -39,8 +39,8 @@ function wp_init()
 
   map.on('load', function()
   {
-    cluster = L.markerClusterGroup({showCoverageOnHover: false});
-    map.addLayer(cluster);
+    wp_cluster = L.markerClusterGroup({showCoverageOnHover: false});
+    map.addLayer(wp_cluster);
     wm_emitAppReady();
   });
 
@@ -99,7 +99,7 @@ function wp_pushWayPoint(opts)
 {
   var wayPt;
 
-  wayPt = new WayPoint(map, cluster, opts);
+  wayPt = new WayPoint(map, wp_cluster, opts);
   wayPt.setChangeCallback(wayPtChanged);
   wayPt.setEditable(wpEditable);
   wayPts.push(wayPt);
@@ -370,7 +370,7 @@ function wayPtChanged(event, wayPt)
     break;
     case WayPoint.CallbackType.DragEnd:
       updateWayPtAlt(wayPt);
-///      cluster.redraw();
+///      wp_cluster.redraw();
     break;
   }
 }
