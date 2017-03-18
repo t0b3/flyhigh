@@ -22,84 +22,99 @@
  ***************************************************************************/
 
 var ph_oms = null;
+var ph_cluster = null;
 
 function ph_initPhotoList(map)
 {
-	var infowin;
+  var infowin;
 
-	ph_oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,
-																						markersWontHide: true,
-																						keepSpiderfied: true});
-	infowin = new google.maps.InfoWindow();
+  ph_cluster = L.markerClusterGroup({showCoverageOnHover: false});
+  map.addLayer(ph_cluster);
 
-	infowin.addListener('closeclick', function()
-	{
-		ph_oms.unspiderfy();
-	});
+/*
+  ph_oms = new OverlappingMarkerSpiderfier(map, {markersWontMove: true,
+                                           markersWontHide: true,
+                                           keepSpiderfied: true});
+  infowin = new google.maps.InfoWindow();
 
-	ph_oms.addListener('click', function(marker)
-	{
-		var content;
+  infowin.addListener('closeclick', function()
+  {
+    ph_oms.unspiderfy();
+  });
 
-		content = '<img src="file://' + marker.path +
-							'" alt="" style="max-width:600px;height:480px;width:auto;">';
-		infowin.setContent(content);
-		infowin.open(map, marker);
-	});
+  ph_oms.addListener('click', function(marker)
+  {
+    var content;
 
-	ph_oms.addListener('spiderfy', function(markers)
-	{
-		infowin.close();
-	});
+    content = '<img src="file://' + marker.path +
+              '" alt="" style="max-width:600px;height:480px;width:auto;">';
+    infowin.setContent(content);
+    infowin.open(map, marker);
+  });
+
+  ph_oms.addListener('spiderfy', function(markers)
+  {
+    infowin.close();
+  });
+*/
 }
 
-function ph_addToPhotoList(photo)
+function ph_addPhoto(map, opts)
 {
-	var marker;
-
-	marker = photo.getMarker();
-	marker.path = photo.getPath();
-	ph_oms.addMarker(marker);
+  var photo;
+  photo = new Photo(map, opts);
+  ph_cluster.addLayer(photo.getMarker());
 }
 
 function Photo(map, opts)
 {
-	var photo = this;
+  var photo = this;
+  var marker;
+  var icon;
+  var latlng = [opts.lat, opts.lng];
 
-	this.map = map;
-	this.path = opts.path;
-	this.marker = new google.maps.Marker({
-		map: map,
-		draggable: false,
-		raiseOnDrag: false,
-		position: new google.maps.LatLng(opts.lat, opts.lng),
-		zIndex: 12
-	});
+  this.map = map;
+  this.path = opts.path;
 
-	this.updateIcon();
+  icon = L.icon({
+      iconUrl: 'qrc:/camera.png',
+      shadowUrl: 'qrc:/camera.png',
+      iconSize:     [24, 24],
+      shadowSize:   [0, 0],
+      iconAnchor:   [12, 12],
+      shadowAnchor: [0, 0],
+      popupAnchor:  [0, -6]
+  });
+
+  marker = L.marker(latlng, {draggable: false, icon: icon});
+  marker.bindPopup('<img src="file://' + opts.path +
+                   '" alt="" style="max-width:600px;height:480px;width:auto;">',
+                   {maxWidth: 'auto'});
+
+  this.marker = marker;
+
+/*
+  this.marker = new google.maps.Marker({
+    map: map,
+    draggable: false,
+    raiseOnDrag: false,
+    position: new google.maps.LatLng(opts.lat, opts.lng),
+    zIndex: 12
+  });
+*/
 }
 
 Photo.prototype.getMap = function()
 {
-	return this.map;
+  return this.map;
 };
 
 Photo.prototype.getMarker = function()
 {
-	return this.marker;
+  return this.marker;
 };
 
 Photo.prototype.getPath = function()
 {
-	return this.path;
-};
-
-Photo.prototype.updateIcon = function()
-{
-	var image = new google.maps.MarkerImage('qrc:/camera.png',
-				new google.maps.Size(24, 24),
-				new google.maps.Point(0, 0),
-				new google.maps.Point(12, 12));
-
-	this.marker.setIcon(image);
+  return this.path;
 };

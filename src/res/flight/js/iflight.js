@@ -81,13 +81,10 @@ function fl_init()
 
     measure = new Measure(map);
     measure.setChangeCallback(measureChanged);
-/*
+
 // alert("measure");
 
-        ph_initPhotoList(map);
-
-alert("photo");
-*/
+    ph_initPhotoList(map);
 
 /*
 var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
@@ -377,12 +374,7 @@ function fl_setVario(varioList)
 
 function fl_pushPhoto(opts)
 {
-/*
-    var photo;
-
-    photo = new Photo(map, opts);
-    ph_addToPhotoList(photo);
-*/
+  ph_addPhoto(map, opts);
 }
 
 function fl_showPlot()
