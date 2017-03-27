@@ -33,7 +33,7 @@
 #include "ISql.h"
 
 Flights::Flights(QSqlDatabase DB)
-	:DataBaseSub(DB)
+  :DataBaseSub(DB)
 {
 }
 
@@ -41,7 +41,7 @@ bool Flights::add(Flight &flight)
 {
   QSqlQuery query(db());
   int id;
-	bool success;
+  bool success;
 
   id = newId("Flights");
   success = query.prepare("INSERT INTO Flights(Id, Number, PilotId, Date, Time, GliderId, StartPtId, "
@@ -61,21 +61,21 @@ bool Flights::add(Flight &flight)
   query.bindValue(":comment",flight.comment());
   query.bindValue(":igcdata", flight.igcData());
   success &= query.exec();
-	DataBaseSub::setLastModified("Flights");
-	Error::verify(success, Error::SQL_CMD);
+  DataBaseSub::setLastModified("Flights");
+  Error::verify(success, Error::SQL_CMD);
 
   if(flight.id() == -1)
   {
     flight.setId(id);
   }
 
-	return success;
+  return success;
 }
 
 bool Flights::updateFlight(Flight &flight)
 {
   QSqlQuery query(db());
-	bool success;
+  bool success;
 
   success = query.prepare("UPDATE Flights SET Number=:number, PilotId=:pilot, Date=:date, Time=:time, GliderId=:glider, "
                           "StartPtId=:start, LandPtId=:land, Duration=:duration, Distance=:distance, PhotoPath=:photopath, Comment=:comment "
@@ -94,209 +94,221 @@ bool Flights::updateFlight(Flight &flight)
   query.bindValue(":id",flight.id());
   success &= query.exec();
 
-	DataBaseSub::setLastModified("Flights");
-	Error::verify(success, Error::SQL_CMD);
+  DataBaseSub::setLastModified("Flights");
+  Error::verify(success, Error::SQL_CMD);
 
-	return success;
+  return success;
 }
 
 bool Flights::delFlight(Flight &flight)
 {
   QSqlQuery query(db());
-	bool success;
+  bool success;
 
   success = query.prepare("DELETE FROM Flights WHERE PilotId=:pilot AND Number=:number");
   query.bindValue(":pilot",flight.pilot().id());
   query.bindValue(":number",flight.number());
   success &= query.exec();
 
-	Error::verify(success, Error::SQL_CMD);
-	DataBaseSub::setLastModified("Flights");
+  Error::verify(success, Error::SQL_CMD);
+  DataBaseSub::setLastModified("Flights");
 
-	return success;
+  return success;
 }
 
 int Flights::newFlightNr(Pilot &pilot)
 {
   QSqlQuery query(db());
-	int newFlightNr = -1;
+  int newFlightNr = -1;
 
   query.prepare("SELECT MAX(Number) FROM Flights WHERE PilotId=:id");
   query.bindValue(":id", pilot.id());
 
   if(query.exec() && query.first())
-	{
-		newFlightNr = query.value(0).toInt() + 1;
-	}
+  {
+    newFlightNr = query.value(0).toInt() + 1;
+  }
 
-	return newFlightNr;
+  return newFlightNr;
 }
 
 bool Flights::flightList(Pilot &pilot, Flight::FlightListType &flightList)
 {
-	Pilot flightPilot;
-	Flight flight;
+  Pilot flightPilot;
+  Flight flight;
   QSqlQuery query(db());
-	bool success;
-	Glider glider;
-	WayPoint wayPoint;
+  bool success;
+  Glider glider;
+  WayPoint wayPoint;
 
   success = query.prepare("SELECT Id, Number, PilotId, Date, Time, GliderId, StartPtId, LandPtId, "
                           "Duration, Distance, PhotoPath, Comment FROM Flights WHERE PilotId=:id ORDER BY Number DESC");
   query.bindValue(":id", pilot.id());
   success &= query.exec();
 
-	if(success)
-	{
-		while(query.next())
-		{
-			flight.setId(query.value(0).toInt());
-			flight.setNumber(query.value(1).toInt());
-			ISql::pInstance()->pPilotTable()->pilot(query.value(2).toInt(), flightPilot);
-			flight.setPilot(flightPilot);
-			flight.setDate(query.value(3).toDate());
-			flight.setTime(query.value(4).toTime());
-			ISql::pInstance()->pGliderTable()->glider(query.value(5).toInt(), glider);
-			flight.setGlider(glider);
-			ISql::pInstance()->pWayPointTable()->wayPoint(query.value(6).toInt(), wayPoint);
-			flight.setStartPt(wayPoint);
-			ISql::pInstance()->pWayPointTable()->wayPoint(query.value(7).toInt(), wayPoint);
-			flight.setLandPt(wayPoint);
-			flight.setDuration(query.value(8).toInt());
-			flight.setDistance(query.value(9).toInt());
-			flight.setPhotoPath(query.value(10).toString());
-			flight.setComment(query.value(11).toString());
-			//flight.setIgcData(query.value(12).toByteArray());
+  if(success)
+  {
+    while(query.next())
+    {
+      flight.setId(query.value(0).toInt());
+      flight.setNumber(query.value(1).toInt());
+      ISql::pInstance()->pPilotTable()->pilot(query.value(2).toInt(), flightPilot);
+      flight.setPilot(flightPilot);
+      flight.setDate(query.value(3).toDate());
+      flight.setTime(query.value(4).toTime());
+      ISql::pInstance()->pGliderTable()->glider(query.value(5).toInt(), glider);
+      flight.setGlider(glider);
+      ISql::pInstance()->pWayPointTable()->wayPoint(query.value(6).toInt(), wayPoint);
+      flight.setStartPt(wayPoint);
+      ISql::pInstance()->pWayPointTable()->wayPoint(query.value(7).toInt(), wayPoint);
+      flight.setLandPt(wayPoint);
+      flight.setDuration(query.value(8).toInt());
+      flight.setDistance(query.value(9).toInt());
+      flight.setPhotoPath(query.value(10).toString());
+      flight.setComment(query.value(11).toString());
+      //flight.setIgcData(query.value(12).toByteArray());
 
-			flightList.push_back(flight);
-		}
-	}
+      flightList.push_back(flight);
+    }
+  }
 
-	Error::verify(success, Error::SQL_CMD);
+  Error::verify(success, Error::SQL_CMD);
 
-	return success;
+  return success;
 }
 
 bool Flights::flightsPerYear(Pilot &pilot, FlightsPerYearListType &fpyList)
 {
   QSqlQuery query(db());
-	QDate now = QDate::currentDate();
-	FlightsPerYearType fpy;
-	bool success = false;
-	int year;
+  QDate now = QDate::currentDate();
+  FlightsPerYearType fpy;
+  int year;
+  int duration;
+  bool success = false;
 
-  success = query.prepare("SELECT Duration FROM Flights "
+  success = query.prepare("SELECT Flights.Duration, Gliders.Passengers "
+                          "FROM Flights LEFT JOIN Gliders ON "
+                          "Flights.GliderId = Gliders.Id "
                           "WHERE PilotId=:pilot AND Date>=:from AND Date<=:to");
   query.bindValue(":pilot", pilot.id());
 
-	for(year=2000; year<=now.year(); year++)
-	{
+  for(year=2000; year<=now.year(); year++)
+  {
     query.bindValue(":from", QDate(year,1,1).toString("yyyy-MM-dd"));
     query.bindValue(":to", QDate(year,12,31).toString("yyyy-MM-dd"));
     success &= query.exec();
 
-		if(success)
-		{
-			fpy.nFlights = 0;
-			fpy.airTimeSecs = 0;
-			fpy.year = year;
+    if(success)
+    {
+      memset(&fpy, 0, sizeof(fpy));
+      fpy.year = year;
 
-			while(query.next())
-			{
-				fpy.nFlights++;
-				fpy.airTimeSecs += query.value(0).toInt();
-			}
+      while(query.next())
+      {
+        duration = query.value(0).toInt();
 
-			if(fpy.nFlights > 0)
-			{
-				fpyList.push_back(fpy);
-			}
-		}
-		else
-		{
-			Error::verify(success, Error::SQL_CMD);
-			break;
-		}
-	}
+        if(query.value(1).toInt() == 0)
+        {
+          fpy.flightsSolo++;
+          fpy.airTimeSolo += duration;
+        }
+        else
+        {
+          fpy.flightsTandem++;
+          fpy.airTimeTandem += duration;
+        }
 
-	return success;
+        fpy.flightsTotal++;
+        fpy.airTimeTotal += duration;
+      }
+
+      if(fpy.flightsTotal > 0)
+        fpyList.push_back(fpy);
+    }
+    else
+    {
+      Error::verify(success, Error::SQL_CMD);
+      break;
+    }
+  }
+
+  return success;
 }
-
 
 bool Flights::loadIGCFile(Flight &flight)
 {
   QSqlQuery query(db());
-	bool success;
+  bool success;
 
   success = query.prepare("SELECT IGCFile FROM Flights WHERE PilotId=:pilot AND Number=:number");
   query.bindValue(":pilot", flight.pilot().id());
   query.bindValue(":number", flight.number());
   success &= (query.exec() && query.first());
 
-	if(success)
-	{
-		flight.setIgcData(query.value(0).toByteArray());
-	}
+  if(success)
+  {
+    flight.setIgcData(query.value(0).toByteArray());
+  }
 
-	Error::verify(success, Error::SQL_CMD);
+  Error::verify(success, Error::SQL_CMD);
 
-	return success;
+  return success;
 }
 
 bool Flights::setFlightStatistic(Glider &glider)
 {
   QSqlQuery query(db());
-	uint airtime = 0;
-	uint flights = 0;
-	bool success;
+  uint airtime = 0;
+  uint flights = 0;
+  bool success;
 
   success = query.prepare("SELECT Duration FROM Flights WHERE GliderId=:glider");
   query.bindValue(":glider", glider.id());
   success &= query.exec();
 
-	if(success)
-	{
-		while(query.next())
-		{
-			flights++;
-			airtime += query.value(0).toInt();
-		}
+  if(success)
+  {
+    while(query.next())
+    {
+      flights++;
+      airtime += query.value(0).toInt();
+    }
 
-		glider.setAirtime(airtime);
-		glider.setFlights(flights);
-	}
+    glider.setAirtime(airtime);
+    glider.setFlights(flights);
+  }
 
-	Error::verify(success, Error::SQL_CMD);
+  Error::verify(success, Error::SQL_CMD);
 
-	return success;
+  return success;
 }
 
 bool Flights::checkModified()
 {
-	return DataBaseSub::checkModified("Flights");
+  return DataBaseSub::checkModified("Flights");
 }
 
 bool Flights::setId(Flight &flight)
 {
   QSqlQuery query(db());
-	bool success;
-	int id = -1;
+  bool success;
+  int id = -1;
 
   success = query.prepare("SELECT Id FROM Flights WHERE Number=:number AND PilotId=:pilot");
   query.bindValue(":number", flight.number());
   query.bindValue(":pilot", flight.pilot().id());
   success &= (query.exec() && query.first());
 
-	if(success)
-	{
-		id = query.value(0).toInt();
-	}
-	else
-	{
-		Error::verify(success, Error::SQL_CMD);
-	}
+  if(success)
+  {
+    id = query.value(0).toInt();
+  }
+  else
+  {
+    Error::verify(success, Error::SQL_CMD);
+  }
 
-	flight.setId(id);
+  flight.setId(id);
 
-	return success;
+  return success;
 }
