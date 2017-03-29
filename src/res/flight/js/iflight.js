@@ -558,7 +558,7 @@ function measureChanged()
 function findAirspaceById(id)
 {
   var nr;
-  var airspace = null
+  var airspace = null;
 
   for(nr=0; nr<airspaces.length; nr++)
   {

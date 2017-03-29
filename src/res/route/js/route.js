@@ -306,7 +306,6 @@ Route.prototype.update = function()
   var indexs = null;
   var optimizer;
   var prevLength = 0;
-  var nr;
 
   turnPt = this.firstTurnPt;
 
