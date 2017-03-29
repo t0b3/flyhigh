@@ -70,7 +70,7 @@ void QueryStore::init()
            "INSERT INTO WayPoints (Id, Name, Spot, Country, Longitude, Latitude, Altitude, Description, Type) VALUES (:Id, :Name, :Spot, :Country, :Longitude, :Latitude, :Altitude, :Description, :Type)");
   addQuery("migrate-read-gliders",
            "common",
-           "SELECT Id, Manufacturer, Model, Serial, Passengers, FROM Gliders");
+           "SELECT Id, Manufacturer, Model, Serial, Passengers FROM Gliders");
   addQuery("migrate-write-gliders",
            "common",
            "INSERT INTO Gliders (Id, Manufacturer, Model, Serial, Passengers) VALUES (:Id, :Manufacturer, :Model, :Serial, :Passengers)");
@@ -166,8 +166,8 @@ void QueryStore::init()
            "`Id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
            "`Manufacturer` VARCHAR(16) DEFAULT '',"
            "`Model` VARCHAR(16) NOT NULL,"
-           "`Serial` VARCHAR(16) DEFAULT '')"
-           "`Passengers` INTEGER DEFAULT '0',");
+           "`Serial` VARCHAR(16) DEFAULT '',"
+           "`Passengers` INTEGER DEFAULT '0')");
 
   addQuery("setup-create-pilots",
            "QMYSQL",
