@@ -423,7 +423,7 @@ bool XContestUploader::checkErrorResponse(const QJsonDocument&jsonDoc, QString& 
   QJsonObject obj = jsonDoc.object();
   QJsonValue e = obj.value(QString("error"));
 
-  if(!e.isNull())
+  if(e!=QJsonValue::Undefined)
   {
     QJsonObject errObj = e.toObject();
     errorMsg = errObj["message"].toString();
@@ -446,7 +446,7 @@ bool XContestUploader::readTicketResponse(const QJsonDocument&jsonDoc, QString& 
   QJsonObject obj = jsonDoc.object();
   QJsonValue t = obj.value(QString("ticket"));
 
-  if(!t.isNull())
+  if(t!=QJsonValue::Undefined)
   {
     ticket = t.toString();
     return true;
@@ -470,20 +470,20 @@ bool XContestUploader::readGateResponse(const QJsonDocument&jsonDoc, bool& succe
   QJsonValue s = obj.value(QString("success"));
   QJsonValue a = obj.value(QString("authTicket"));
 
-  if(!s.isNull())
+  if(s!=QJsonValue::Undefined)
   {
     success = s.toBool();
   }
   if(isFirst)
   {
-    if(!a.isNull())
+    if(a!=QJsonValue::Undefined)
     {
       sessionId = a.toString();
     }
-    return !(s.isNull() || a.isNull());
+    return !(s==QJsonValue::Undefined || a==QJsonValue::Undefined);
   } else
   {
-    return !s.isNull();
+    return s!=QJsonValue::Undefined;
   }
 }
 
@@ -502,21 +502,21 @@ bool XContestUploader::readForm(const QJsonDocument&jsonDoc, bool& formValid, in
   QJsonValue v;
   QJsonValue p;
 
-  if(!f.isNull())
+  if(f!=QJsonValue::Undefined)
   {
     form = f.toObject();
     v = form.value(QString("isValid"));
-    if(!v.isNull())
+    if(v!=QJsonValue::Undefined)
     {
       formValid = v.toBool();
     }
     p = form.value(QString("phase"));
-    if(!p.isNull())
+    if(p!=QJsonValue::Undefined)
     {
       phase = (int)p.toDouble();
     }
   }
-  return !(f.isNull() || v.isNull() || p.isNull());
+  return !(f==QJsonValue::Undefined || v==QJsonValue::Undefined || p==QJsonValue::Undefined);
 }
 
 /**
@@ -532,16 +532,16 @@ bool XContestUploader::readControls(const QJsonDocument&jsonDoc, QJsonObject& co
   QJsonValue c;
   QJsonObject form;
 
-  if(!f.isNull())
+  if(f!=QJsonValue::Undefined)
   {
     form = f.toObject();
     c = form.value(QString("controls"));
-    if(!c.isNull())
+    if(c!=QJsonValue::Undefined)
     {
       controls = c.toObject();
     }
   }
-  return !(f.isNull() || c.isNull());
+  return !(f==QJsonValue::Undefined || c==QJsonValue::Undefined);
 }
 
 QUrl XContestUploader::urlEncodeParams(const QString& baseUrl, QMap<QString,QString>& params)
