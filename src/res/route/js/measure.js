@@ -30,17 +30,6 @@ function Measure(map)
   this.markers = [];
   this.enable = false;
   this.line = null;
-
-/*
-  this.line = new google.maps.Polyline({
-    strokeColor: '#5500ff',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: null,
-    zIndex: 3,
-    clickable: false
-  });
-*/
 }
 
 Measure.prototype.getMap = function()
@@ -191,31 +180,15 @@ function MeasureMarker(map, latlng)
 
   var icon = L.icon({
       iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,5500ff,000000&ext=.png',
-      shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,5500ff,000000&ext=.png',
       draggable: true,
       iconSize: [20, 32],
-      shadowSize: [0, 0],
       iconAnchor: [10, 32],
-      shadowAnchor: [0, 0],
       popupAnchor: [-3, -76]
   });
 
   marker = L.marker(latlng, {draggable: false, icon: icon});
   marker.addTo(map);
   this.marker = marker;
-
-/*
-  this.marker = new google.maps.Marker({
-    position: latlng,
-    map: map,
-    draggable: true,
-    raiseOnDrag: false,
-    icon: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,5500ff,000000&ext=.png'
-  });
-
-  google.maps.event.addListener(this.marker, 'dragstart', function(event) {mm_dragstart(marker);});
-  google.maps.event.addListener(this.marker, 'drag', function(event) {mm_drag(marker);});
-*/
 }
 
 MeasureMarker.prototype.setMap = function(map)
@@ -237,33 +210,3 @@ MeasureMarker.prototype.remove = function()
 {
   this.marker.remove();
 };
-
-/*
-  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-  markers which are not draggable. In a later version, this should be fixed through
-  setting markers draggable=this.editable.
-*/
-/*
-MeasureMarker.prototype.storePos = function()
-{
-  this.stpos = new google.maps.LatLng(this.getPosition().lat(), this.getPosition().lng());
-};
-
-MeasureMarker.prototype.restorePos = function()
-{
-  if(this.stpos !== null)
-  {
-    this.setPosition(this.stpos);
-  }
-};
-
-function mm_dragstart(marker)
-{
-  marker.storePos();
-}
-
-function mm_drag(marker)
-{
-  marker.restorePos();
-}
-*/

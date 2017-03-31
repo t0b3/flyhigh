@@ -41,20 +41,6 @@ function AirSpace(map, path, opts)
     fillColor: '#ff0000',
     fillOpacity: 0.1
   }).addTo(map);
-
-/**
-  this.polygon = new google.maps.Polygon({
-    map: map,
-    paths: path,
-    strokeColor: "#000000",
-    strokeOpacity: 0.8,
-    strokeWeight: 1,
-    fillColor: "#ff0000",
-    fillOpacity: 0.05,
-    zIndex: 10,
-    clickable: false
-  });
-*/
 }
 
 AirSpace.prototype.getMap = function()
@@ -65,7 +51,6 @@ AirSpace.prototype.getMap = function()
 AirSpace.prototype.setMap = function(map)
 {
   this.map = map;
-//  this.polygon.setMap(map);
 };
 
 AirSpace.prototype.getId = function()
@@ -126,53 +111,14 @@ AirSpace.prototype.isInside = function(latlng)
   return oddNodes;
 };
 
-/*
-AirSpace.prototype.isInside = function(latlng)
-{
-  var i;
-  var j = 0;
-  var oddNodes = false;
-  var x = latlng.lng();
-  var y = latlng.lat();
-  var path;
-
-  path = this.polygon.getPath();
-
-  for(i=0; i<path.length; i++)
-  {
-    j++;
-
-    if(j == path.length)
-    {
-      j = 0;
-    }
-
-    if(((path.getAt(i).lat() < y) && (path.getAt(j).lat() >= y)) ||
-      ((path.getAt(j).lat() < y) && (path.getAt(i).lat() >= y)))
-    {
-      if(path.getAt(i).lng() + (y - path.getAt(i).lat()) /
-        (path.getAt(j).lat() - path.getAt(i).lat()) *
-        (path.getAt(j).lng() - path.getAt(i).lng()) < x)
-      {
-        oddNodes = !oddNodes;
-      }
-    }
-  }
-
-  return oddNodes;
-};
-*/
-
 AirSpace.prototype.setSelect = function(select)
 {
   if(select)
   {
     this.polygon.setStyle({fillColor: '#0000FF', fillOpacity: 0.3});
-//    this.polygon.setOptions({fillColor: "#ffff00", fillOpacity: 0.3});
   }
   else
   {
     this.polygon.setStyle({fillColor: "#ff0000", fillOpacity: 0.1});
-//    this.polygon.setOptions({fillColor: "#ff0000", fillOpacity: 0.05});
   }
 };

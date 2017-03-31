@@ -45,34 +45,6 @@ function wp_init()
   });
 
   map.setView([47.0, 8.5], 9);
-
-/*
-  var mapLoaded = false;
-  var wayPt;
-  var mapOptions =
-  {
-    zoom: 9,
-    center: new google.maps.LatLng(47.0, 8.5),
-    mapTypeId: google.maps.MapTypeId.TERRAIN,
-    disableDefaultUI: false,
-    mapTypeControl: true,
-    panControl: false,
-    zoomControl: false,
-    streetViewControl: false
-  };
-
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-  google.maps.event.addListener(map, 'idle', function()
-  {
-    if(!mapLoaded)
-    {
-      mapLoaded = true;
-      cluster = new MarkerClusterer(map);
-      wm_emitAppReady();
-    }
-  });
-*/
 }
 
 function wp_setEditable(editable)
@@ -99,9 +71,10 @@ function wp_pushWayPoint(opts)
 {
   var wayPt;
 
+  opts.editable = wpEditable;
   wayPt = new WayPoint(map, wp_cluster, opts);
   wayPt.setChangeCallback(wayPtChanged);
-  wayPt.setEditable(wpEditable);
+//  wayPt.setEditable(wpEditable);
   wayPts.push(wayPt);
 }
 
@@ -370,7 +343,6 @@ function wayPtChanged(event, wayPt)
     break;
     case WayPoint.CallbackType.DragEnd:
       updateWayPtAlt(wayPt);
-///      wp_cluster.redraw();
     break;
   }
 }

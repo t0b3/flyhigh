@@ -28,48 +28,6 @@ function Fai(route)
   var sector;
   this.route = route;
   this.sectors = [];
-
-/*
-  sector = new google.maps.Polyline({
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: null,
-    zIndex: 2
-  });
-
-  this.sectors.push(sector);
-
-  sector = new google.maps.Polyline({
-    strokeColor: '#00FF00',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: null,
-    zIndex: 2
-  });
-
-  this.sectors.push(sector);
-
-  sector = new google.maps.Polyline({
-    strokeColor: '#0000FF',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: null,
-    zIndex: 2
-  });
-
-  this.sectors.push(sector);
-
-  sector = new google.maps.Polyline({
-    strokeColor: '#00FFFF',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: null,
-    zIndex: 2
-  });
-
-  this.sectors.push(sector);
-*/
 }
 
 Fai.prototype.getMap = function()

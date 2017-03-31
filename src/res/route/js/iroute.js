@@ -45,11 +45,6 @@ function rt_init()
     measure = new Measure(map);
     measure.setChangeCallback(measureChanged);
 
-/*
-var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
-rt_setTurnPts(turnPts);
-rt_setEditable(false);
-*/
     wm_emitAppReady();
   });
 
@@ -89,76 +84,6 @@ rt_setEditable(false);
   });
 
   map.setView([47.0, 8.5], 9);
-
-/*
-  var mapLoaded = false;
-  var mapOptions =
-  {
-    zoom: 9,
-    center: new google.maps.LatLng(47.0, 8.5),
-    mapTypeId: google.maps.MapTypeId.TERRAIN,
-    disableDefaultUI: false,
-    mapTypeControl: true,
-    panControl: false,
-    zoomControl: false,
-    streetViewControl: false
-  };
-
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-  google.maps.event.addListener(map, 'idle', function()
-  {
-    if(!mapLoaded)
-    {
-      mapLoaded = true;
-      route = new Route(map);
-      route.setSpeed(22.0);
-      route.setChangeCallback(routeChanged);
-      measure = new Measure(map);
-      measure.setChangeCallback(measureChanged);
-      wm_emitAppReady();
-    }
-  });
-
-  google.maps.event.addListener(map, 'click', function(event)
-  {
-    var inside = false;
-
-    if(!measure.getEnable())
-    {
-      // select next airspace
-      airspaceNr = selectedAirspace;
-
-      for(var i=0; i<airspaces.length; i++)
-      {
-        airspaceNr = (airspaceNr + 1) % airspaces.length;
-        inside = airspaces[airspaceNr].isInside(event.latLng);
-
-        if(inside)
-        {
-          if(airspaceNr != selectedAirspace)
-          {
-            break; // jump out of loop
-          }
-        }
-      }
-
-      if(inside)
-      {
-        as_selectAirSpaceNr(airspaceNr);
-      }
-      else
-      {
-        as_selectAirSpaceNr(-1);
-      }
-    }
-  });
-
-  google.maps.event.addListener(map, 'center_changed', function(event)
-  {
-    route.centerChanged();
-  });
-*/
 }
 
 function as_pushAirSpace(coords, opts)
@@ -172,7 +97,6 @@ function as_pushAirSpace(coords, opts)
   {
     latlng = L.latLng(coords[nr][0], coords[nr][1]);
     latlngs.push(latlng);
-//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
   }
 
   airspace = new AirSpace(map, latlngs, opts);
@@ -262,12 +186,9 @@ function rt_setTurnPts(turnPts)
   var bounds = L.latLngBounds(turnPts);
   var latlng;
 
-//  bounds = new google.maps.LatLngBounds();
-
   for(tpNr=0; tpNr<turnPts.length; tpNr++)
   {
     latlng = L.latLng(turnPts[tpNr][0], turnPts[tpNr][1]);
-//    bounds.extend(latlng);
     turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
     route.addTurnPt(turnPt);
   }

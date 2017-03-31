@@ -40,17 +40,6 @@ function TurnPt(route, latlng, type)
   this.nextLeg = null;
   this.editable = true;
   this.dragActive = false;
-//  this.stpos = null;
-
-/*
-  this.marker = new google.maps.Marker({
-    map: route.getMap(),
-    draggable: true,
-    raiseOnDrag: false,
-    zIndex: 10
-  });
-*/
-
   this.infoBox = null;
   this.delta = null;
 
@@ -64,18 +53,8 @@ function TurnPt(route, latlng, type)
   marker.on('mouseout', function(event){tp_mouseout(turnPt);});
   marker.addTo(route.getMap());
 
-/*
-  google.maps.event.addListener(this.marker, 'dragstart', function(event) {tp_dragstart(turnPt);});
-  google.maps.event.addListener(this.marker, 'drag', function(event) {tp_drag(turnPt);});
-  google.maps.event.addListener(this.marker, 'position_changed', function(event){tp_position_changed(turnPt);});
-  google.maps.event.addListener(this.marker, 'dblclick', function(event){tp_dblclick(turnPt);});
-  google.maps.event.addListener(this.marker, 'mouseover', function(event){tp_mouseover(turnPt);});
-  google.maps.event.addListener(this.marker, 'mouseout', function(event){tp_mouseout(turnPt);});
-*/
-
   this.marker = marker;
   this.setType(type);
-//  this.setPosition(latlng);
 }
 
 TurnPt.prototype.getRoute = function()
@@ -198,25 +177,6 @@ TurnPt.prototype.getInfoBox = function()
   return this.infoBox;
 };
 
-/*
-  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-  markers which are not draggable. In a later version, this should be fixed through
-  setting markers draggable=this.editable.
-*/
-/*
-TurnPt.prototype.storePos = function()
-{
-  this.stpos = new google.maps.LatLng(this.getPosition().lat(), this.getPosition().lng());
-};
-
-TurnPt.prototype.restorePos = function()
-{
-  if(this.stpos !== null)
-  {
-    this.setPosition(this.stpos);
-  }
-};
-*/
 TurnPt.prototype.updateIcon = function()
 {
   var icon;
@@ -230,50 +190,34 @@ TurnPt.prototype.updateIcon = function()
         {
           icon = L.icon({
               iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
               iconSize:     [20, 32],
-              shadowSize:   [0, 0],
               iconAnchor:   [10, 32],
-              shadowAnchor: [0, 0],
               popupAnchor:  [-3, -76]
           });
 
           this.marker.setIcon(icon);
-
-          // start
-  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png');
         }
         else if(this.getNextLeg() === null)
         {
           icon = L.icon({
               iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
               iconSize:     [20, 32],
-              shadowSize:   [0, 0],
               iconAnchor:   [10, 32],
-              shadowAnchor: [0, 0],
               popupAnchor:  [-3, -76]
           });
 
           this.marker.setIcon(icon);
-          // end
-  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png');
         }
         else
         {
           icon = L.icon({
               iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
-              shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png',
               iconSize:     [20, 32],
-              shadowSize:   [0, 0],
               iconAnchor:   [10, 32],
-              shadowAnchor: [0, 0],
               popupAnchor:  [-3, -76]
           });
 
           this.marker.setIcon(icon);
-          // normal
-  ///        this.marker.setIcon('http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,0000EE,000000&ext=.png');
         }
 
         this.infoBox = null;
@@ -281,26 +225,12 @@ TurnPt.prototype.updateIcon = function()
       case TurnPt.Type.Cross:
         icon = L.icon({
             iconUrl: '../route/images/quad.png',
-            shadowUrl: '../route/images/quad.png',
             iconSize:     [7, 7],
-            shadowSize:   [0, 0],
             iconAnchor:   [4, 4],
-            shadowAnchor: [4, 4],
             popupAnchor:  [-3, -76]
         });
-  /*
-        var image = new google.maps.MarkerImage('../route/images/quad.png',
-              new google.maps.Size(7, 7), // This marker is 15 pixels wide by 15 pixels tall.
-              new google.maps.Point(0, 0), // The origin for this image is 0,0.
-              new google.maps.Point(4, 4));// The anchor for this image is the base of the flagpole at 7,7.
-        var shape = {
-          coord: [0, 0, 7, 0, 7, 7, 0 , 7],
-          type: 'poly'
-        };
-  */
 
         this.marker.setIcon(icon);
-  //      this.infoBox = new InfoBox(this.getRoute().getMap());
       break;
     }
   }
@@ -340,22 +270,10 @@ function tp_dragstart(turnPt)
 
     turnPt.getRoute().turnPtDrag();
   }
-/*
-  else
-  {
-    turnPt.storePos();
-  }
-*/
 }
 
 function tp_drag(turnPt)
 {
-/*
-  if(!turnPt.getEditable())
-  {
-    turnPt.restorePos();
-  }
-*/
 }
 
 function tp_dragend(turnPt)
@@ -388,7 +306,6 @@ function tp_mouseover(turnPt)
     beginPos = leg.getBeginTurnPt().getPosition();
     endPos = leg.getEndTurnPt().getPosition();
     dist = endPos.distanceTo(beginPos);
-//    dist = google.maps.geometry.spherical.computeDistanceBetween(beginPos, endPos);
     dist /= 1000.0;
     duration = dist / turnPt.getRoute().getSpeed();
     duration = Math.round(duration * 10) / 10;

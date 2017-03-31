@@ -23,15 +23,6 @@
 
 function Leg(route)
 {
-/*
-  this.line = new google.maps.Polyline({
-    strokeColor: '#FF0000',
-    strokeOpacity: 1.0,
-    strokeWeight: 1,
-    map: route.getMap(),
-    zIndex: 5
-  });
-*/
   this.line = null;
   this.route = route;
   this.beginTurnPt = null;
@@ -113,7 +104,6 @@ Leg.prototype.setBeginPosition = function(pos)
 {
   var latlngs = this.line.getLatLngs();
   latlngs[0] = pos;
-//  this.line.getPath().setAt(0, pos);
   this.updateCross();
   this.line.redraw();
 };
@@ -122,7 +112,6 @@ Leg.prototype.setEndPosition = function(pos)
 {
   var latlngs = this.line.getLatLngs();
   latlngs[1] = pos;
-//  this.line.getPath().setAt(1, pos);
   this.updateCross();
   this.line.redraw();
 };

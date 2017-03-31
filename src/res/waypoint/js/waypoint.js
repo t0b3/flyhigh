@@ -46,38 +46,14 @@ function WayPoint(map, cluster, opts)
   this.changeCallback = null;
   this.dragActive = false;
 
-
-  marker = L.marker(latlng, {draggable: false});
+  marker = L.marker(latlng, {draggable: this.editable});
   marker.on('click', function(event) {wp_click(wayPoint);});
   marker.on('dragstart', function(event) {wp_dragstart(wayPoint);});
   marker.on('drag', function(event) {wp_drag(wayPoint);});
   marker.on('dragend', function(event) {wp_dragend(wayPoint);});
   cluster.addLayer(marker);
 
-/*
-  marker.on('click', function(event) {wp_click(wayPoint);});
-  marker.on('dragstart', function(event) {wp_dragstart(wayPoint);});
-  marker.on('drag', function(event) {wp_drag(wayPoint);});
-  marker.on('dragend', function(event) {wp_dragend(wayPoint);});
-*/
-//marker.addTo(map);
-
   this.marker = marker;
-
-/*
-  this.marker = new google.maps.Marker({
-    map: map,
-    draggable: true,
-    raiseOnDrag: false,
-    position: new google.maps.LatLng(opts.lat, opts.lng),
-    zIndex: 10
-  });
-
-  google.maps.event.addListener(this.marker, 'click', function(event) {wp_click(wayPoint);});
-  google.maps.event.addListener(this.marker, 'dragstart', function(event) {wp_dragstart(wayPoint);});
-  google.maps.event.addListener(this.marker, 'drag', function(event) {wp_drag(wayPoint);});
-  google.maps.event.addListener(this.marker, 'dragend', function(event) {wp_dragend(wayPoint);});
-*/
   this.updateIcon();
 }
 
@@ -155,7 +131,7 @@ WayPoint.prototype.setLat = function(lat)
 {
   var latlng;
   latlng = this.getPosition();
-  this.setPosition(L.latLng(lat, latlng.lng)); // new google.maps.LatLng(lat, pos.lng()));
+  this.setPosition(L.latLng(lat, latlng.lng));
   this.setModified(true);
 };
 
@@ -163,7 +139,7 @@ WayPoint.prototype.setLng = function(lng)
 {
   var latlng;
   latlng = this.getPosition();
-  this.setPosition(L.latLng(latlng.lat, lng)); //new google.maps.LatLng(pos.lat(), lng));
+  this.setPosition(L.latLng(latlng.lat, lng));
   this.setModified(true);
 };
 
@@ -241,25 +217,6 @@ WayPoint.prototype.emitChange = function(type)
   }
 };
 
-/*
-  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-  markers which are not draggable. In a later version, this should be fixed through
-  setting markers draggable=this.editable.
-*/
-/*
-WayPoint.prototype.storePos = function()
-{
-  this.stPos = new google.maps.LatLng(this.getPosition().lat(), this.getPosition().lng());
-};
-
-WayPoint.prototype.restorePos = function()
-{
-  if(this.stPos !== null)
-  {
-    this.marker.setPosition(this.stPos);
-  }
-};
-*/
 WayPoint.prototype.updateIcon = function()
 {
   var icon;
@@ -272,27 +229,19 @@ WayPoint.prototype.updateIcon = function()
       {
         icon = L.icon({
             iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png',
             iconSize:     [20, 32],
-            shadowSize:   [0, 0],
             iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
             popupAnchor:  [-3, -76]
         });
-  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=EE0000,FFFF00,000000&ext=.png';
       }
       else
       {
         icon = L.icon({
             iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png',
             iconSize:     [20, 32],
-            shadowSize:   [0, 0],
             iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
             popupAnchor:  [-3, -76]
         });
-  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=00EE00,FFFF00,000000&ext=.png';
       }
     }
     else
@@ -301,27 +250,19 @@ WayPoint.prototype.updateIcon = function()
       {
         icon = L.icon({
             iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png',
             iconSize:     [20, 32],
-            shadowSize:   [0, 0],
             iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
             popupAnchor:  [-3, -76]
         });
-  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,EE0000,000000&ext=.png';
       }
       else
       {
         icon = L.icon({
             iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
-            shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png',
             iconSize:     [20, 32],
-            shadowSize:   [0, 0],
             iconAnchor:   [10, 32],
-            shadowAnchor: [0, 0],
             popupAnchor:  [-3, -76]
         });
-  //      icon = 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,00EE00,000000&ext=.png';
       }
     }
 

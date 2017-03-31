@@ -26,25 +26,6 @@ function Flight(map)
   var flight = this;
 
   this.map = map;
-
-/**
-  this.glider = new google.maps.Marker({
-    map: map,
-    draggable: true,
-    raiseOnDrag: false,
-    zIndex: 15,
-    icon: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png'
-  });
-
-  this.track = new google.maps.Polyline({
-    strokeColor: '#FFBB00',
-    strokeOpacity: 1.0,
-    strokeWeight: 3,
-    map: map,
-    zIndex: 1
-  });
-*/
-
   this.track = null;
   this.glider = null;
   this.stpos = null;
@@ -56,11 +37,6 @@ function Flight(map)
   this.minAlt = 0;
   this.maxAlt = 0;
   this.timeList = null;
-
-/**
-  google.maps.event.addListener(this.glider, 'dragstart', function(event) {fl_dragstart(flight);});
-  google.maps.event.addListener(this.glider, 'drag', function(event) {fl_drag(flight);});
-*/
 }
 
 Flight.prototype.getMap = function()
@@ -74,11 +50,8 @@ Flight.prototype.setTrackPts = function(trackPts)
 
   icon = L.icon({
       iconUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png',
-      shadowUrl: 'http://chart.apis.google.com/chart?cht=mm&chs=20x32&chco=FFFFFF,FFFFFF,000000&ext=.png',
       iconSize:     [20, 32],
-      shadowSize:   [0, 0],
       iconAnchor:   [10, 32],
-      shadowAnchor: [0, 0],
       popupAnchor:  [-3, -76]
   });
 
@@ -230,33 +203,3 @@ Flight.prototype.getGliderPosition = function()
 {
   return this.glider.getLatLng();
 };
-
-/*
-  This is an ugly hack, to restore position while drag. Because Qt 4.6 won't display
-  markers which are not draggable. In a later version, this should be fixed through
-  setting markers draggable=this.editable.
-*/
-/**
-Flight.prototype.storePos = function()
-{
-  this.stpos = new google.maps.LatLng(this.glider.getPosition().lat(), this.glider.getPosition().lng());
-};
-
-Flight.prototype.restorePos = function()
-{
-  if(this.storePos !== null)
-  {
-    this.glider.setPosition(this.stpos);
-  }
-};
-
-function fl_dragstart(flight)
-{
-  flight.storePos();
-}
-
-function fl_drag(flight)
-{
-  flight.restorePos();
-}
-*/

@@ -20,30 +20,6 @@
  *   It is prohibited to server or run this code over network p.e. as web  *
  *   service in combination with closed source.                            *
  ***************************************************************************/
-
-//wm_include('js/flight.js');
-
-/*
-wm_include('../airspace/js/airspace.js');
-wm_include('../route/js/fai.js');
-wm_include('../route/js/infobox.js');
-wm_include('../route/js/leg.js');
-wm_include('../route/js/measure.js');
-wm_include('../route/js/optimizer.js');
-wm_include('../route/js/route.js');
-wm_include('../route/js/turnpt.js');
-wm_include('../lib/oms.min.js');
-wm_include('../lib/photo.js');
-*/
-
-/*
-wm_include('../lib/plot/context.js');
-wm_include('../lib/plot/cursor.js');
-wm_include('../lib/plot/legend.js');
-wm_include('../lib/plot/plot.js');
-wm_include('../lib/plot/value.js');
-*/
-
 var airspaces = [];
 var route = null;
 var map = null;
@@ -65,36 +41,21 @@ function fl_init()
   {
     flight = new Flight(map);
 
-//alert("flight loaded");
-
     route = new Route(map);
     route.setChangeCallback(routeChanged);
-
-//alert("route");
 
     plot = new Plot(document.getElementById('plot'));
     plot.setValueLabels(["TIME", "ALT", "GND", "AGL", "SOG", "VARIO"]);
     plot.setUpdateCursorPosCb(updateCursorPos);
     plot.setUpdateCursorClickCb(updateCursorClick);
 
-//alert("plot");
-
     measure = new Measure(map);
     measure.setChangeCallback(measureChanged);
 
-// alert("measure");
-
     ph_initPhotoList(map);
 
-/*
-var turnPts = [[46.9945,9.69802],[46.8755,9.9575],[46.7558,8.92747],[47.1448,9.32853],[46.9786,9.65768]]
-rt_setTurnPts(turnPts);
-*/
     wm_emitAppReady();
   });
-
-
-//    map.on('click', function(event){as_selectAirSpaceNr(-1);});
 
   map.on('click', function(event)
   {
@@ -132,81 +93,6 @@ rt_setTurnPts(turnPts);
   });
 
   map.setView([47.0, 8.5], 9);
-
-/*
-    var mapLoaded = false;
-    var mapOptions =
-    {
-        zoom: 9,
-        center: new google.maps.LatLng(47.0, 8.5),
-        mapTypeId: google.maps.MapTypeId.TERRAIN,
-        disableDefaultUI: false,
-        mapTypeControl: true,
-        panControl: false,
-        zoomControl: false,
-        streetViewControl: false
-    };
-
-    map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-    google.maps.event.addListener(map, 'idle', function()
-    {
-        if(!mapLoaded)
-        {
-            mapLoaded = true;
-            flight = new Flight(map);
-
-            route = new Route(map);
-            route.setChangeCallback(routeChanged);
-
-            plot = new Plot(document.getElementById('plot'));
-            plot.setValueLabels(["TIME", "ALT", "GND", "AGL", "SOG", "VARIO"]);
-            plot.setUpdateCursorPosCb(updateCursorPos);
-            plot.setUpdateCursorClickCb(updateCursorClick);
-
-            measure = new Measure(map);
-            measure.setChangeCallback(measureChanged);
-
-            ph_initPhotoList(map);
-
-            wm_emitAppReady();
-        }
-    });
-
-    google.maps.event.addListener(map, 'click', function(event)
-    {
-        var inside = false;
-
-        if(!measure.getEnable())
-        {
-            // select next airspace
-            airspaceNr = selectedAirspace;
-
-            for(var i=0; i<airspaces.length; i++)
-            {
-                airspaceNr = (airspaceNr + 1) % airspaces.length;
-                inside = airspaces[airspaceNr].isInside(event.latLng);
-
-                if(inside)
-                {
-                    if(airspaceNr != selectedAirspace)
-                    {
-                        break; // jump out of loop
-                    }
-                }
-            }
-
-            if(inside)
-            {
-                as_selectAirSpaceNr(airspaceNr);
-            }
-            else
-            {
-                as_selectAirSpaceNr(-1);
-            }
-        }
-    });
-*/
 }
 
 function as_pushAirSpace(coords, opts)
@@ -220,7 +106,6 @@ function as_pushAirSpace(coords, opts)
   {
     latlng = L.latLng(coords[nr][0], coords[nr][1]);
     latlngs.push(latlng);
-//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
   }
 
   airspace = new AirSpace(map, latlngs, opts);
@@ -275,12 +160,9 @@ function rt_setTurnPts(turnPts)
   var bounds = L.latLngBounds(turnPts);
   var latlng;
 
-//  bounds = new google.maps.LatLngBounds();
-
   for(tpNr=0; tpNr<turnPts.length; tpNr++)
   {
     latlng = L.latLng(turnPts[tpNr][0], turnPts[tpNr][1]);
-//    bounds.extend(latlng);
     turnPt = new TurnPt(route, latlng, TurnPt.Type.WayPoint);
     route.addTurnPt(turnPt);
   }
@@ -341,25 +223,6 @@ function fl_setFlightLatLon(latlngs)
 
   flight.setTrackPts(path);
   map.fitBounds(bounds);
-
-/*
-    var latlng;
-    var posNr;
-    var bounds;
-    var path = [];
-
-    bounds = new google.maps.LatLngBounds();
-
-    for(posNr=0; posNr<latlngs.length; posNr++)
-    {
-        latlng = new google.maps.LatLng(latlngs[posNr][0], latlngs[posNr][1]);
-        path.push(latlng);
-        bounds.extend(latlng);
-    }
-
-    flight.setTrackPts(path);
-    map.fitBounds(bounds);
-*/
 }
 
 function fl_setSog(sogList)
@@ -523,7 +386,7 @@ function updateCursorPos(pos)
 
   if(date.getMinutes() < 10)
   {
-      time += '0';
+    time += '0';
   }
 
   time += date.getMinutes() + " UTC";

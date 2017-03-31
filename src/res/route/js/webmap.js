@@ -27,7 +27,6 @@ function wm_include(file)
   script.src = file;
   script.type = 'text/javascript';
   script.defer = true;
-
   document.getElementsByTagName('head').item(0).appendChild(script);
 }
 
@@ -38,7 +37,6 @@ function wm_setMapPos(top, left)
   div = document.getElementById("map");
   div.style.top = top + "px";
   div.style.left = left + "px";
-///  google.maps.event.trigger(map, 'resize');
 }
 
 function wm_setMapSize(width, height)
@@ -48,7 +46,6 @@ function wm_setMapSize(width, height)
   div = document.getElementById("map");
   div.style.width = width + "px";
   div.style.height = height + "px";
-///  google.maps.event.trigger(map, 'resize');
 }
 
 function wm_setDivValue(divId, value, editable)

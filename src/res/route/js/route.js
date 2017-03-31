@@ -48,16 +48,6 @@ function Route(map)
   this.duration = 0;
   this.glueToCenter = false;
   this.line = null;
-
-/*
-  this.line = new google.maps.Polyline({
-    strokeColor: '#FFFFFF',
-    strokeOpacity: 1.0,
-    strokeWeight: 2,
-    map: null,
-    zIndex: 2
-  });
-*/
 }
 
 Route.prototype.getMap = function()
@@ -411,10 +401,6 @@ Route.prototype.update = function()
     this.line.redraw();
   }
 
-/*
-  this.line.setMap(this.getMap());
-  this.line.setPath(path);
-*/
   this.type = scoreType;
   this.dist = bestDist;
   this.score = bestScore;

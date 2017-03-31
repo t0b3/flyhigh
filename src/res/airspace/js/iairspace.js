@@ -74,53 +74,6 @@ function as_init()
   });
 
   map.setView([47.0, 8.5], 9);
-
-/*
-  var mapLoaded = false;
-  var mapOptions =
-  {
-    zoom: 9,
-    center: new google.maps.LatLng(47.0, 8.5),
-    mapTypeId: google.maps.MapTypeId.TERRAIN,
-    disableDefaultUI: false,
-    mapTypeControl: true,
-    panControl: false,
-    zoomControl: false,
-    streetViewControl: false
-  };
-
-  map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-  google.maps.event.addListener(map, 'idle', function()
-  {
-    if(!mapLoaded)
-    {
-      mapLoaded = true;
-      wm_emitAppReady();
-    }
-  });
-
-  google.maps.event.addListener(map, 'click', function(event)
-  {
-    // select next airspace
-    airspaceNr = selectedAirspace;
-
-    for(var i=0; i<airspaces.length; i++)
-    {
-      airspaceNr = (airspaceNr + 1) % airspaces.length;
-
-      if(airspaces[airspaceNr].isInside(event.latLng))
-      {
-        if(airspaceNr != selectedAirspace)
-        {
-          as_selectAirSpaceNr(airspaceNr);
-          wm_emitLineChanged(airspaces[airspaceNr].getId());
-          break; // jump out of loop
-        }
-      }
-    }
-  });
-*/
 }
 
 function as_pushAirSpace(coords, opts)
@@ -134,7 +87,6 @@ function as_pushAirSpace(coords, opts)
   {
     latlng = L.latLng(coords[nr][0], coords[nr][1]);
     latlngs.push(latlng);
-//    latlngs.push(new google.maps.LatLng(coords[nr][0], coords[nr][1]));
   }
 
   airspace = new AirSpace(map, latlngs, opts);

@@ -78,11 +78,8 @@ function Photo(map, opts)
 
   icon = L.icon({
       iconUrl: 'qrc:/camera.png',
-      shadowUrl: 'qrc:/camera.png',
       iconSize:     [24, 24],
-      shadowSize:   [0, 0],
       iconAnchor:   [12, 12],
-      shadowAnchor: [0, 0],
       popupAnchor:  [0, -6]
   });
 
