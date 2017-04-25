@@ -115,10 +115,10 @@ AirSpace.prototype.setSelect = function(select)
 {
   if(select)
   {
-    this.polygon.setStyle({fillColor: '#0000FF', fillOpacity: 0.3});
+    this.polygon.setStyle({fillColor: '#0000FF', fillOpacity: 0.2});
   }
   else
   {
-    this.polygon.setStyle({fillColor: "#ff0000", fillOpacity: 0.1});
+    this.polygon.setStyle({fillColor: "#FF0000", fillOpacity: 0.1});
   }
 };
