@@ -52,10 +52,10 @@ Fai.prototype.show = function(latlngs)
       path = [];
       this.faiSector([pixels[2], pixels[3], pixels[1]], path);
       sector = L.polygon(path, {
-        color: '#FF0000',
-        stroke: '#FF0000',
-        weight: 1,
-        fillColor: '#FF0000',
+        color: '#0000FF',
+        stroke: '#0000FF',
+        weight: 2,
+        fillColor: '#0000FF',
         fillOpacity: 0.1
       }).addTo(this.getMap());
       this.sectors.push(sector);
@@ -73,10 +73,10 @@ Fai.prototype.show = function(latlngs)
       path = [];
       this.faiSector([pixels[3], pixels[1], pixels[2]], path);
       sector = L.polygon(path, {
-        color: '#00FF00',
-        stroke: '#00FF00',
-        weight: 1,
-        fillColor: '#00FF00',
+        color: '#0000FF',
+        stroke: '#0000FF',
+        weight: 2,
+        fillColor: '#0000FF',
         fillOpacity: 0.1
       }).addTo(this.getMap());
       this.sectors.push(sector);
@@ -96,7 +96,7 @@ Fai.prototype.show = function(latlngs)
       sector = L.polygon(path, {
         color: '#0000FF',
         stroke: '#0000FF',
-        weight: 1,
+        weight: 2,
         fillColor: '#0000FF',
         fillOpacity: 0.1
       }).addTo(this.getMap());
@@ -117,7 +117,7 @@ Fai.prototype.show = function(latlngs)
       sector = L.polygon(path, {
         color: '#00FFFF',
         stroke: '#00FFFF',
-        weight: 1,
+        weight: 2,
         fillColor: '#00FFFF',
         fillOpacity: 0.1
       }).addTo(this.getMap());
