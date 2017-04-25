@@ -44,6 +44,7 @@ function TurnPt(route, latlng, type)
   this.delta = null;
 
   marker = L.marker(latlng, {draggable: true});
+  marker.on('click', L.DomEvent.stopPropagation);
   marker.on('dragstart', function(event) {tp_dragstart(turnPt);});
   marker.on('drag', function(event) {tp_drag(turnPt);});
   marker.on('dragend', function(event) {tp_dragend(turnPt);});
