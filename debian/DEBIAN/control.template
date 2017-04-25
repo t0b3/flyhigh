@@ -2,10 +2,12 @@ Package: flyhigh
 Version:
 Section: database
 Priority: optional
-Architecture: i386
-Depends: libqtcore4 (>= 4.6.3), libqtgui4 (>= 4.6.3), libqt4-webkit (>= 4.6.3), libqt4-xmlpatterns (>= 4.6.3),
- libqt4-sql-sqlite (>= 4.6.3), libsqlite3-0 (>= 0.8.6), libudev0 (>= 0.9.3), gnuplot-qt (>= 4.6.0)
-Suggests: libqt4-sql-mysql (>= 4.6.3)
+Architecture: amd64
+Depends: libQt5Core (>= 5.3.2), libQt5Gui (>= 5.3.2), libQt5Network (>= 5.3.2),
+ libQt5PrintSupport (>= 5.3.2), libQt5Sql (>= 5.3.2), libQt5SerialPort (>= 5.3.2),
+ libQt5WebKit (>= 5.3.2), libQt5WebKitWidgets (>= 5.3.2), libQt5Widgets (>= 5.3.2),
+ libQt5Xml (>= 5.3.2), libsqlite3-0 (>= 0.8.6), libudev0 (>= 1.5.0), gnuplot-qt (>= 4.6.6)
+Suggests:
 Provides: flyhigh
 Installed-Size:
 Maintainer: Alex Graf <grafal@sourceforge.net>
