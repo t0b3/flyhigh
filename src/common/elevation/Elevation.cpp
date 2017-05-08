@@ -24,6 +24,7 @@
 #include <QProcess>
 #include <QUrl>
 #include <QString>
+#include <QtGlobal>
 #include <unistd.h>
 #include "Elevation.h"
 #include "ElevationDef.h"
@@ -164,7 +165,7 @@ void Elevation::elevations(FlightPointList &fpList)
         {
           elevation = prevElevation;
         }
-        else if(abs(prevElevation - elevation) > 1000)
+        else if(qAbs(prevElevation - elevation) > 1000)
         {
           elevation = prevElevation;
         }
