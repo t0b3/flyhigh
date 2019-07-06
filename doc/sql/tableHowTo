@@ -1,5 +1,8 @@
 // use for configuration http://localhost/phpmyadmin/
-# apt-get install apache2 phpmyadmin libapache2-mod-php5 php5-mysql
+# apt-get install mysql-server mysql-client apache2 phpmyadmin libapache2-mod-php5 php5-mysql
+
+// if root password is not set during installation...
+# mysqladmin -u root password
 
 // enable InnoDB
 # vi /etc/mysql/my.cnf
@@ -10,7 +13,7 @@ innodb_data_file_path=ibdata1:10M:autoextend
 # /etc/init.d/mysql restart
 
 // database setup
-$ mysql -u root -p
+# mysql -u root -p
 mysql> CREATE USER 'flyhigh'@'localhost' IDENTIFIED BY 'flyhigh';
 mysql> GRANT ALL PRIVILEGES ON * . * TO 'flyhigh'@'localhost';
 mysql> FLUSH PRIVILEGES;
@@ -20,10 +23,10 @@ mysql> quit
 
 /* OTHERS */
 // backup the database
-$ mysqldump flyhigh_v2 -h localhost -u root -p > flyhigh.sql
+# mysqldump flyhigh_v2 -h localhost -u root -p > flyhigh.sql
 
 // restore the database
-$ mysql -u root -p < flyhigh.sql
+# mysql -u root -p < flyhigh.sql
 Enter password:
 
 // remove the database
