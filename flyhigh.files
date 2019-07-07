@@ -109,6 +109,8 @@ src/common/map/SwissGrid.h
 src/common/map/SwissMap100.cpp
 src/common/map/SwissMap100.h
 src/common/parser/CMakeLists.txt
+src/common/parser/IGCFileParser.cpp
+src/common/parser/IGCFileParser.h
 src/common/parser/OpenAirFileParser.cpp
 src/common/parser/OpenAirFileParser.h
 src/common/qextmedia/CMakeLists.txt
