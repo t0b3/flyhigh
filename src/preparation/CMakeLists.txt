@@ -10,7 +10,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/common/container
 set(preparation_SRCS AirSpaceView.cpp
                      AirSpaceWindow.cpp
                      RouteWindow.cpp
-                     WayPointWindow.cpp
-                     WptFileParser.cpp)
+                     WayPointWindow.cpp)
 
 add_library(preparation ${preparation_SRCS})

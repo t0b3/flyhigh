@@ -113,6 +113,8 @@ src/common/parser/IGCFileParser.cpp
 src/common/parser/IGCFileParser.h
 src/common/parser/OpenAirFileParser.cpp
 src/common/parser/OpenAirFileParser.h
+src/common/parser/WptFileParser.cpp
+src/common/parser/WptFileParser.h
 src/common/qextmedia/CMakeLists.txt
 src/common/qextmedia/qexifimageheader.cpp
 src/common/qextmedia/qexifimageheader.h
