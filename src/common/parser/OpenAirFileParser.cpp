@@ -65,7 +65,7 @@ bool OpenAirFileParser::parse(const QString &fileName, AirSpaceList &airspaceLis
 	float alt;
   bool success;
 
-  airspaceList.clear();
+//  airspaceList.clear(); this has to be done by caller!
   clearOpenAirList();
   success = file.open(QIODevice::ReadOnly | QIODevice::Text);
 

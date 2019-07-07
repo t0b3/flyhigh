@@ -63,6 +63,7 @@ target_link_libraries(flyhigh
   form
   map
   webmap
+  parser
   utils
   res
   qextmedia

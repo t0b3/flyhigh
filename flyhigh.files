@@ -108,6 +108,9 @@ src/common/map/SwissGrid.cpp
 src/common/map/SwissGrid.h
 src/common/map/SwissMap100.cpp
 src/common/map/SwissMap100.h
+src/common/parser/CMakeLists.txt
+src/common/parser/OpenAirFileParser.cpp
+src/common/parser/OpenAirFileParser.h
 src/common/qextmedia/CMakeLists.txt
 src/common/qextmedia/qexifimageheader.cpp
 src/common/qextmedia/qexifimageheader.h
@@ -184,6 +187,10 @@ src/common/window/ProgressDlg.h
 src/common/window/TableWindow.cpp
 src/common/window/TableWindow.h
 src/common/CMakeLists.txt
+src/database/IDbFile.cpp
+src/database/IDbFile.h
+src/database/IFile.cpp
+src/database/IFile.h
 src/database/flytec/CMakeLists.txt
 src/database/flytec/Defs5020.h
 src/database/flytec/Defs6015.h

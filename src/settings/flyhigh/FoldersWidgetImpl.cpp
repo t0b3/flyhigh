@@ -30,6 +30,7 @@ FoldersWidgetImpl::FoldersWidgetImpl(QWidget* parent, const QString& title)
   setWindowTitle(title);
 
   lineEdit_flyhigh->setText(IFlyHighRC::pInstance()->flyHighDir());
+  lineEdit_airspace->setText(IFlyHighRC::pInstance()->airspaceDir());
   lineEdit_elevation->setText(IFlyHighRC::pInstance()->elevationDir());
   lineEdit_swisstopo->setText(IFlyHighRC::pInstance()->swissTopoDir());
 }
@@ -46,6 +47,17 @@ void FoldersWidgetImpl::selectDirFlyHigh()
   {
     lineEdit_flyhigh->setText(path);
     IFlyHighRC::pInstance()->setFlyHighDir(path);
+  }
+}
+
+void FoldersWidgetImpl::selectDirAirspace()
+{
+  QString path;
+
+  if(selectDir(path))
+  {
+    lineEdit_airspace->setText(path);
+    IFlyHighRC::pInstance()->setAirspaceDir(path);
   }
 }
 

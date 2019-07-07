@@ -81,6 +81,10 @@ class IFlyHighRC
 
 		void setFlyHighDir(const QString &path);
 
+		QString airspaceDir() const;
+
+		void setAirspaceDir(const QString &path);
+
 		QString elevationDir() const;
 
 		void setElevationDir(const QString &path);

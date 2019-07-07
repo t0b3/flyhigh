@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>436</width>
-    <height>246</height>
+    <width>424</width>
+    <height>233</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,32 +19,32 @@
      <x>10</x>
      <y>20</y>
      <width>401</width>
-     <height>131</height>
+     <height>191</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="1" column="0">
+    <item row="2" column="0">
      <widget class="QLabel" name="label_elevation">
       <property name="text">
        <string>Elevation</string>
       </property>
      </widget>
     </item>
-    <item row="1" column="1">
+    <item row="2" column="1">
      <widget class="QLineEdit" name="lineEdit_elevation">
       <property name="readOnly">
        <bool>true</bool>
       </property>
      </widget>
     </item>
-    <item row="1" column="2">
+    <item row="2" column="2">
      <widget class="QPushButton" name="pushButton_elevation">
       <property name="text">
        <string>Browse...</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <widget class="QLabel" name="label_swisstopo">
       <property name="text">
        <string>Swiss Topo</string>
@@ -65,7 +65,7 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="1">
+    <item row="3" column="1">
      <widget class="QLineEdit" name="lineEdit_swisstopo">
       <property name="readOnly">
        <bool>true</bool>
@@ -79,8 +79,29 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
+    <item row="3" column="2">
      <widget class="QPushButton" name="pushButton_swisstopo">
+      <property name="text">
+       <string>Browse...</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="lineEdit_airspace">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0">
+     <widget class="QLabel" name="label_airspace">
+      <property name="text">
+       <string>Airspace</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="2">
+     <widget class="QPushButton" name="pushButton_airspace">
       <property name="text">
        <string>Browse...</string>
       </property>
@@ -114,8 +135,8 @@
    <slot>selectDirElevation()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>365</x>
-     <y>43</y>
+     <x>409</x>
+     <y>143</y>
     </hint>
     <hint type="destinationlabel">
      <x>217</x>
@@ -130,12 +151,28 @@
    <slot>selectDirSwissTopo()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>365</x>
-     <y>43</y>
+     <x>409</x>
+     <y>190</y>
     </hint>
     <hint type="destinationlabel">
      <x>217</x>
      <y>122</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_airspace</sender>
+   <signal>clicked()</signal>
+   <receiver>FoldersWidget</receiver>
+   <slot>selectDirAirspace()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>367</x>
+     <y>90</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>211</x>
+     <y>116</y>
     </hint>
    </hints>
   </connection>

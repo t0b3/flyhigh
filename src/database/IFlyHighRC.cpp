@@ -33,6 +33,7 @@ const QString DateTimeUtcKey   = "datetime/utc";
 const QString PilotIdKey       = "pilot/pilotId";
 const QString DirLastKey       = "directory/last";
 const QString DirFlyHighKey    = "directory/flyhigh";
+const QString DirAirspaceKey   = "directory/airspace";
 const QString DirElevationKey  = "directory/elevation";
 const QString DirSwissTopoKey  = "directory/swisstopo";
 const QString DatabaseHostKey  = "database/dbserverhost";
@@ -231,6 +232,16 @@ QString IFlyHighRC::flyHighDir() const
 void IFlyHighRC::setFlyHighDir(const QString &path)
 {
   m_pSettings->setValue(DirFlyHighKey, path);
+}
+
+QString IFlyHighRC::airspaceDir() const
+{
+  return m_pSettings->value(DirAirspaceKey, flyHighDir() + "/airspace").toString();
+}
+
+void IFlyHighRC::setAirspaceDir(const QString &path)
+{
+  m_pSettings->setValue(DirAirspaceKey, path);
 }
 
 QString IFlyHighRC::elevationDir() const

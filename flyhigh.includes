@@ -1,3 +1,7 @@
+/usr/include/x86_64-linux-gnu/qt5/QtCore
+/usr/include/x86_64-linux-gnu/qt5/QtSerialPort
+/usr/include/x86_64-linux-gnu/qt5/QtWebKit
+/usr/include/x86_64-linux-gnu/qt5/QtWidgets
 src
 src/analysis
 src/common/container
@@ -30,3 +34,4 @@ src/res/route
 src/res/route/js
 src/res/waypoint
 src/res/waypoint/js
+src/common/parser

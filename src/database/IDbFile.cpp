@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Alex Graf                                       *
- *   grafal@sourceforge.net                                                         *
+ *   Copyright (C) 2019 by Alex Graf                                       *
+ *   grafal@sourceforge.net                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,46 +17,49 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-
-#include <QApplication>
-#include <QIcon>
-#include <QTextCodec>
-#include "MainWindow.h"
+#include <QDir>
+#include <QStringList>
+#include "AirSpaceList.h"
+#include "Error.h"
 #include "IDbFile.h"
-#include "IFlyHighRC.h"
-#include "IGPSDevice.h"
-#include "ISql.h"
+#include "OpenAirFileParser.h"
 
-int main( int argc, char ** argv )
+IDbFile* IDbFile::m_pInst = NULL;
+
+IDbFile::IDbFile()
 {
-  int res;
-  QApplication appl(argc, argv);
-  Q_INIT_RESOURCE(res);
-  MainWindow* pMainWin;
+}
 
-/* removed in Qt5
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-*/
+IDbFile::~IDbFile()
+{
+}
 
-  // setup db
-  ISql::pInstance()->setDBParameters(IFlyHighRC::pInstance()->getDBParameters());
+IDbFile* IDbFile::pInstance()
+{
+  if(m_pInst == nullptr)
+    m_pInst = new IDbFile();
 
-  pMainWin = new MainWindow();
-  pMainWin->setWindowIcon(QIcon(":/flyhigh.png"));
-  pMainWin->show();
-  appl.connect(&appl, SIGNAL(lastWindowClosed()), &appl, SLOT(quit()));
+  return m_pInst;
+}
 
-  res = appl.exec();
+bool IDbFile::airspaceList(const QString &path, AirSpaceList &airspaceList)
+{
+  OpenAirFileParser parser;
+  QDir dir;
+  QStringList fileNames;
+  bool success;
 
-  // exit
-  IGPSDevice::pInstance()->close();
+  airspaceList.clear();
+  dir.setPath(path);
+  fileNames = dir.entryList(QStringList() << "*.txt" << "*.TXT", QDir::Files);
 
-  delete IFlyHighRC::pInstance();
-  delete IDbFile::pInstance();
-  delete IGPSDevice::pInstance();
-  delete ISql::pInstance();
+  for(const QString &fileName: fileNames)
+  {
+    success = parser.parse(path + "/" + fileName, airspaceList);
+    Error::verify(success, Error::FILE_PARSE);
+  }
 
-  return res;
+  airspaceList.sort();
+
+  return (airspaceList.size() > 0);
 }

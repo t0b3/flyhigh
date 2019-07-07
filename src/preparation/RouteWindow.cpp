@@ -23,6 +23,7 @@
 #include <QString>
 #include <QTableWidget>
 #include "AirSpaceList.h"
+#include "IDbFile.h"
 #include "IGPSDevice.h"
 #include "ProgressDlg.h"
 #include "IRouteForm.h"
@@ -262,7 +263,9 @@ void RouteWindow::file_viewWebMap()
 		route = m_routeList[row];
     pView = new WebMapRouteView(tr("View Route"));
     pView->setRoute(&route);
-    ISql::pInstance()->airspaceList(airSpaceList);
+//    ISql::pInstance()->airspaceList(airSpaceList);
+    IDbFile::pInstance()->airspaceList(IFlyHighRC::pInstance()->airspaceDir(),
+                                       airSpaceList);
     pView->setAirSpaceList(&airSpaceList);
     pView->setEditable(false);
     pView->loadMap();

@@ -1,6 +1,6 @@
 /***************************************************************************
- *   Copyright (C) 2005 by Alex Graf                                       *
- *   grafal@sourceforge.net                                                         *
+ *   Copyright (C) 2019 by Alex Graf                                       *
+ *   grafal@sourceforge.net                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -17,46 +17,30 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
+#ifndef IDbFile_h
+#define IDbFile_h
 
-#include <QApplication>
-#include <QIcon>
-#include <QTextCodec>
-#include "MainWindow.h"
-#include "IDbFile.h"
-#include "IFlyHighRC.h"
-#include "IGPSDevice.h"
-#include "ISql.h"
+#include <QString>
+#include "AirSpace.h"
 
-int main( int argc, char ** argv )
-{
-  int res;
-  QApplication appl(argc, argv);
-  Q_INIT_RESOURCE(res);
-  MainWindow* pMainWin;
+class AirSpaceList;
 
-/* removed in Qt5
-  QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
-  QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+/**
+@author Alex Graf
 */
+class IDbFile
+{
+  public:
+    static IDbFile* pInstance();
 
-  // setup db
-  ISql::pInstance()->setDBParameters(IFlyHighRC::pInstance()->getDBParameters());
+    virtual ~IDbFile();
 
-  pMainWin = new MainWindow();
-  pMainWin->setWindowIcon(QIcon(":/flyhigh.png"));
-  pMainWin->show();
-  appl.connect(&appl, SIGNAL(lastWindowClosed()), &appl, SLOT(quit()));
+    bool airspaceList(const QString &path, AirSpaceList &airspaceList);
 
-  res = appl.exec();
+  private:
+    static IDbFile* m_pInst;
 
-  // exit
-  IGPSDevice::pInstance()->close();
+    IDbFile();
+};
 
-  delete IFlyHighRC::pInstance();
-  delete IDbFile::pInstance();
-  delete IGPSDevice::pInstance();
-  delete ISql::pInstance();
-
-  return res;
-}
+#endif

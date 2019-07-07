@@ -38,6 +38,7 @@
 #include "IFlyHighRC.h"
 #include "IWayPointForm.h"
 #include "IUploadForm.h"
+#include "IDbFile.h"
 #include "ISql.h"
 #include "Flight.h"
 #include "IGCFileParser.h"
@@ -1084,8 +1085,9 @@ void FlightWindow::showOnWebMap()
       {
         pView = new WebMapFlightView(tr("View Flight"));
         pView->setLocation(m_flightList[row].startPt().name());
-
-        ISql::pInstance()->airspaceList(airSpaceList);
+//        ISql::pInstance()->airspaceList(airSpaceList);
+        IDbFile::pInstance()->airspaceList(IFlyHighRC::pInstance()->airspaceDir(),
+                                           airSpaceList);
         pView->setAirSpaceList(&airSpaceList);
 
         // set flight points

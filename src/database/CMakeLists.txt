@@ -1,4 +1,5 @@
 include_directories(${CMAKE_SOURCE_DIR}/src/common/container
+                    ${CMAKE_SOURCE_DIR}/src/common/parser
                     ${CMAKE_SOURCE_DIR}/src/common/utils
                     ${CMAKE_SOURCE_DIR}/src/common/qextserialport
                     ${CMAKE_SOURCE_DIR}/src/database/flytec
@@ -11,6 +12,7 @@ add_subdirectory(garmin)
 add_subdirectory(sql)
 
 set(database_SRCS IDataBase.cpp
+                  IDbFile.cpp
                   IGPSDevice.cpp
                   ISql.cpp
                   IFlyHighRC.cpp

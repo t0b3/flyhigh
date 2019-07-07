@@ -36,6 +36,8 @@ class FoldersWidgetImpl: public QWidget, public Ui::FoldersWidget
   protected slots:
     void selectDirFlyHigh();
 
+    void selectDirAirspace();
+
     void selectDirElevation();
 
     void selectDirSwissTopo();
