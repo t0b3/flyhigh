@@ -23,7 +23,7 @@ mysql> quit
 
 /* OTHERS */
 // backup the database
-# mysqldump flyhigh_v2 -h localhost -u root -p > flyhigh.sql
+# mysqldump flyhigh_v2 -h localhost -u flyhigh -p > flyhigh.sql
 
 // restore the database
 # mysql -u root -p < flyhigh.sql
