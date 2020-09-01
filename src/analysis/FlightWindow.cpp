@@ -466,7 +466,7 @@ void FlightWindow::file_import()
   selected = QFileDialog::getOpenFileName(this,
   tr("IGC file import"),
   IFlyHighRC::pInstance()->lastDir(),
-  tr("IGC Files (*.igc; *.IGC)"));
+  tr("IGC Files (*.igc *.IGC);;All Files (*)"));
   file.setFileName(selected);
 
   if(selected!="" && file.exists())
