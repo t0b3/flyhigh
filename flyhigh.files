@@ -433,6 +433,7 @@ src/common/form/ServicingForm.ui
 src/common/form/RouteForm.ui
 src/common/form/UploadForm.ui
 src/common/form/WayPointForm.ui
+src/res/flight/flight.html
 src/res/flight/js/flight.js
 src/res/flight/js/iflight.js
 src/res/lib/plot/context.js
