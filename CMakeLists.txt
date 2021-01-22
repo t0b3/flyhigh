@@ -17,8 +17,9 @@ find_package(Qt5SerialPort REQUIRED)
 find_package(Qt5Sql 5.3.2 REQUIRED)
 find_package(Qt5Widgets 5.3.2 REQUIRED)
 find_package(Qt5Xml 5.3.2 REQUIRED)
-find_package(Qt5WebKit 5.3.2 REQUIRED)
-find_package(Qt5WebKitWidgets 5.3.2 REQUIRED)
+find_package(Qt5WebEngine 5.3.2 REQUIRED)
+find_package(Qt5WebEngineWidgets 5.3.2 REQUIRED)
+find_package(Qt5WebChannel 5.3.2 REQUIRED)
 
 set(QT_USE_QTWEBKIT TRUE)
 

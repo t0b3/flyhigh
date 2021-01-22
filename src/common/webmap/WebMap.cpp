@@ -21,7 +21,9 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QProgressBar>
-#include <QWebFrame>
+#include <QWebEngineSettings>
+#include <QWebEnginePage>
+#include <QtWebEngine>
 #include <math.h>
 #include "WebMap.h"
 #include "WebMapAirSpace.h"
@@ -32,9 +34,9 @@
 #include <QDebug>
 
 WebMap::WebMap(QWidget *pParent, MapType type)
-	:QWebView(pParent)
+	:QWebEngineView(pParent)
 {
-	QWebFrame *pFrame;
+	QWebEnginePage *pFrame;
 
   m_pAirSpace = NULL;
   m_pFlight = NULL;
@@ -47,14 +49,19 @@ WebMap::WebMap(QWidget *pParent, MapType type)
 	m_pProgress->setGeometry(LeftWidth, 0, ProgressW, ProgressH);
 	m_pProgress->show();
 
-	pFrame = page()->mainFrame();
-	pFrame->setScrollBarPolicy(Qt::Vertical, Qt::ScrollBarAlwaysOff);
-	pFrame->setScrollBarPolicy(Qt::Horizontal, Qt::ScrollBarAlwaysOff);
+	pFrame = page();
+	pFrame->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+
+	// JavaScript can access this WebMap via channel.objects.WebMap
+	QWebChannel *channel = new QWebChannel();
+	channel->registerObject("WebMap", this);
+	// Set up the web channel so the page can access Qt objects
+	page()->setWebChannel(channel);
 
 	connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 	connect(this, SIGNAL(loadProgress(int)), m_pProgress, SLOT(setValue(int)));
   connect(m_pNetMgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(netReply(QNetworkReply*)));
-	connect(pFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(populateObject()));
+//	connect(pFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(populateObject())); // TODO
 }
 
 WebMap::~WebMap()
@@ -133,37 +140,37 @@ bool WebMap::isMapReady() const
 
 void WebMap::resizeEvent(QResizeEvent *pEvent)
 {
-	QWebView::resizeEvent(pEvent);
+	QWebEngineView::resizeEvent(pEvent);
 	setSize(width(), height());
 }
 
 void WebMap::setSize(uint width, uint height)
 {
 	QString code;
-	QWebFrame *pFrame;
+	QWebEnginePage *pFrame;
 
-	pFrame = page()->mainFrame();
+	pFrame = page();
 	width = (width - LeftWidth - Margin);
 
 	switch(m_mapType)
 	{
 	  case MapFlight:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->evaluateJavaScript(code.arg(width).arg(height - PlotHeight));
+      pFrame->runJavaScript(code.arg(width).arg(height - PlotHeight));
       code = "fl_setPlotSize(%1, %2);";
-      pFrame->evaluateJavaScript(code.arg(width).arg(PlotHeight));
+      pFrame->runJavaScript(code.arg(width).arg(PlotHeight));
 	  break;
 	  case MapRoute:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->evaluateJavaScript(code.arg(width).arg(height));
+      pFrame->runJavaScript(code.arg(width).arg(height));
 	  break;
 	  case MapWayPoint:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->evaluateJavaScript(code.arg(width).arg(height));
+      pFrame->runJavaScript(code.arg(width).arg(height));
 	  break;
 	  case MapAirSpace:
 	  	code = "wm_setMapSize(%1, %2);";
-      pFrame->evaluateJavaScript(code.arg(width).arg(height));
+      pFrame->runJavaScript(code.arg(width).arg(height));
 	  break;
 	}
 }
@@ -190,19 +197,20 @@ void WebMap::netReply(QNetworkReply *pReply)
 {
   QString code;
   QString replyStr(pReply->readAll());
-  QWebFrame *pFrame;
+  QWebEnginePage *pFrame;
   int id;
 
   id = m_netReqList.front().id;
   code = m_netReqList.front().callback + "(%1, %2);";
   m_netReqList.pop_front();
-	pFrame = page()->mainFrame();
-  pFrame->evaluateJavaScript(code.arg(id).arg(replyStr));
+	pFrame = page();
+  pFrame->runJavaScript(code.arg(id).arg(replyStr));
 }
 
 void WebMap::populateObject()
 {
-	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this);
+//	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this); // TODO: port to ... https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+//	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this);
 }
 
 void WebMap::setOk(bool ok)

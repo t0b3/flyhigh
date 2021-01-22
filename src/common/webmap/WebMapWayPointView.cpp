@@ -17,12 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <QWebFrame>
 #include "WebMap.h"
 #include "WebMapWayPoint.h"
 #include "WebMapWayPointView.h"
-
-#include <QDebug>
 
 WebMapWayPointView::WebMapWayPointView(const QString &name, WayPoint::Type type)
 {

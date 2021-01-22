@@ -22,7 +22,7 @@
 #define WebMap_h
 
 #include <QVector>
-#include <QWebView>
+#include <QWebEngineView>
 
 class QNetworkAccessManager;
 class QProgressBar;
@@ -31,7 +31,7 @@ class WebMapFlight;
 class WebMapRoute;
 class WebMapWayPoint;
 
-class WebMap: public QWebView
+class WebMap: public QWebEngineView
 {
 	Q_OBJECT
 
