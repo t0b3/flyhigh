@@ -164,9 +164,9 @@ void GliderWindow::setGliderToRow(uint row, Glider &glider)
   pTable->item(row, Manufacturer)->setText(glider.manufacturer());
   pTable->item(row, Model)->setText(glider.model());
   pTable->item(row, Serial)->setText(glider.serial());
-  str.sprintf("%i", glider.fligths());
+  str = QString::number(glider.fligths());
   pTable->item(row, Flights)->setText(str);
-  str.sprintf("%.2f",  glider.airtime() / 3600.0);
+  str = QString::number(glider.airtime() / 3600.0, 'f', 2);
   pTable->item(row, Airtime)->setText(str);
 
   if(glider.passengers() > 0)

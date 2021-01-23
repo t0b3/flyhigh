@@ -95,7 +95,7 @@ bool KmlWriter::save(const QString & name)
 		m_flight.pilot().fullName(str);
 		s << "   <name>XC flight: " << m_flight.startPt().name() << " by " << str << "</name>";
 
-		str.sprintf("%.3f km ", (float)m_flight.distance() / 1000);
+        str = QString("%1 km ").arg((float)m_flight.distance() / 1000, 0, 'f', 3);
 		s << "   <description>"
 			<< "Flight over " << str
 			<< "from " << m_flight.startPt().name() << " to " << m_flight.landPt().name() << " at "

@@ -105,26 +105,26 @@ void FlightExpWindow::file_update()
       for(fpyNr=0; fpyNr<fpyCount; fpyNr++)
       {
         itemNr = (fpyCount - fpyNr - 1);
-        str.sprintf("%i", fpyList[fpyNr].year);
+        str = QString::number(fpyList[fpyNr].year);
         pTable->item(itemNr, Year)->setText(str);
 
-        str.sprintf("%i", fpyList[fpyNr].flightsSolo);
+        str = QString::number(fpyList[fpyNr].flightsSolo);
         pTable->item(itemNr, FlightsSolo)->setText(str);
-        str.sprintf("%.2f",  fpyList[fpyNr].airTimeSolo / 3600.0);
+        str = QString::number(fpyList[fpyNr].airTimeSolo / 3600.0, 'f', 2);
         pTable->item(itemNr, AirtimeSolo)->setText(str);
         flightsSolo += fpyList[fpyNr].flightsSolo;
         airtimeSolo += fpyList[fpyNr].airTimeSolo;
 
-        str.sprintf("%i", fpyList[fpyNr].flightsTandem);
+        str = QString::number(fpyList[fpyNr].flightsTandem);
         pTable->item(itemNr, FlightsTandem)->setText(str);
-        str.sprintf("%.2f",  fpyList[fpyNr].airTimeTandem / 3600.0);
+        str = QString::number(fpyList[fpyNr].airTimeTandem / 3600.0, 'f', 2);
         pTable->item(itemNr, AirtimeTandem)->setText(str);
         flightsTandem += fpyList[fpyNr].flightsTandem;
         airtimeTandem += fpyList[fpyNr].airTimeTandem;
 
-        str.sprintf("%i", fpyList[fpyNr].flightsTotal);
+        str = QString::number(fpyList[fpyNr].flightsTotal);
         pTable->item(itemNr, FlightsTotal)->setText(str);
-        str.sprintf("%.2f",  fpyList[fpyNr].airTimeTotal / 3600.0);
+        str = QString::number(fpyList[fpyNr].airTimeTotal / 3600.0, 'f', 2);
         pTable->item(itemNr, AirtimeTotal)->setText(str);
         flightsTotal += fpyList[fpyNr].flightsTotal;
         airtimeTotal += fpyList[fpyNr].airTimeTotal;
@@ -142,22 +142,22 @@ void FlightExpWindow::file_update()
 
       // sum
       itemNr++;
-      str.sprintf("%i", fpyList[fpyCount-1].year - fpyList[0].year + 1);
+      str = QString::number(fpyList[fpyCount-1].year - fpyList[0].year + 1);
       pTable->item(itemNr, Year)->setText(str);
 
-      str.sprintf("%i", flightsSolo);
+      str = QString::number(flightsSolo);
       pTable->item(itemNr, FlightsSolo)->setText(str);
-      str.sprintf("%.2f",  airtimeSolo / 3600.0);
+      str = QString::number(airtimeSolo / 3600.0, 'f', 2);
       pTable->item(itemNr, AirtimeSolo)->setText(str);
 
-      str.sprintf("%i", flightsTandem);
+      str = QString::number(flightsTandem);
       pTable->item(itemNr, FlightsTandem)->setText(str);
-      str.sprintf("%.2f",  airtimeTandem / 3600.0);
+      str = QString::number(airtimeTandem / 3600.0, 'f', 2);
       pTable->item(itemNr, AirtimeTandem)->setText(str);
 
-      str.sprintf("%i", flightsTotal);
+      str = QString::number(flightsTotal);
       pTable->item(itemNr, FlightsTotal)->setText(str);
-      str.sprintf("%.2f",  airtimeTotal / 3600.0);
+      str = QString::number(airtimeTotal / 3600.0, 'f', 2);
       pTable->item(itemNr, AirtimeTotal)->setText(str);
     }
   }

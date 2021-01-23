@@ -45,11 +45,11 @@ WayPointFormImpl::WayPointFormImpl(QWidget* parent, const QString &caption, WayP
   lineEditCountry->setText(pWayPoint->country());
 
   // latitude
-  str.sprintf("%f", pWayPoint->lat());
+  str = QString::number(pWayPoint->lat(), 'f');
   lineEditLat->setText(str);
 
   // longitude
-  str.sprintf("%f", pWayPoint->lon());
+  str = QString::number(pWayPoint->lon(), 'f');
   lineEditLon->setText(str);
 
   // altitude
@@ -100,7 +100,7 @@ void WayPointFormImpl::limitLatitude()
     lat = 90.0;
   }
 
-  text.sprintf("%.5f", lat);
+  text = QString::number(lat, 'f', 5);
   lineEditLat->setText(text);
 }
 
@@ -120,6 +120,6 @@ void WayPointFormImpl::limitLongitude()
     lon = 180.0;
   }
 
-  text.sprintf("%.5f", lon);
+  text = QString::number(lon, 'f', 5);
   lineEditLon->setText(text);
 }
