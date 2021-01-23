@@ -235,7 +235,7 @@ void DisplayFrameImpl::insertItems(QComboBox * pItem)
       pItem->addItem( tr( "L/D air" ) );
       pItem->addItem( tr( "L/D Req" ) );
       pItem->addItem( tr( "Dist to ^" ) );
-      pItem->addItem( QString::null );
+      pItem->addItem( QString() );
       pItem->addItem( tr( "Alt @ BG" ) );
       pItem->addItem( tr( "FL (ft)" ) );
       pItem->addItem( tr( "Air spd" ) );
@@ -277,7 +277,7 @@ void DisplayFrameImpl::insertItems(QComboBox * pItem)
       pItem->addItem( tr( "Alt BG Goal" ) );
       pItem->addItem( tr( "Temp" ) );
       pItem->addItem( tr( "SMS p/t" ) );
-      pItem->addItem( QString::null );
+      pItem->addItem( QString() );
       pItem->addItem( tr( "Start Race" ) );
       pItem->addItem( tr( "Alt GPS" ) );
       pItem->addItem( tr( "L/D goal" ) );
