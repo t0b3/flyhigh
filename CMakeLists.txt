@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.1.0)
 
 project(flyhigh)
+
+set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -52,7 +54,7 @@ if(NOT FLYHIGH_DOC_DIR)
  set(FLYHIGH_DOC_DIR "${CMAKE_INSTALL_PREFIX}/usr/share/doc/flyhigh")
 endif()
 
-add_definitions(-Wall -fPIC -std=c++11 -msse2)
+add_definitions(-Wall -fPIC -msse2)
 
 include(Functions.cmake) # custom functions
 include_directories(${CMAKE_SOURCE_DIR}
