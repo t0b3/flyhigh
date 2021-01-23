@@ -20,7 +20,7 @@
 
 #include "FlyCalcFrameImpl.h"
 
-FlyCalcFrameImpl::FlyCalcFrameImpl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+FlyCalcFrameImpl::FlyCalcFrameImpl(QWidget* parent, const char* name)
 : QWidget(parent)
 {
   setupUi(this);

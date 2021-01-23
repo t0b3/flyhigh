@@ -28,7 +28,7 @@
 #include "IGliderForm.h"
 #include "ISql.h"
 
-DeviceFrameImpl::DeviceFrameImpl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+DeviceFrameImpl::DeviceFrameImpl(QWidget* parent, const char* name)
 : QWidget(parent)
 {
   Flytec *pFlytec;

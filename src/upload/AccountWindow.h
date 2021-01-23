@@ -30,7 +30,7 @@ class AccountWindow: public TableWindow
 {
 	Q_OBJECT
 	public:
-    AccountWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags);
+    AccountWindow(QWidget* parent, const QString &name);
 
 	private:
     void setAccountToRow(uint row, Account &account);

@@ -51,8 +51,8 @@
 #include "WebMapFlightView.h"
 
 
-FlightWindow::FlightWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags, IDataBase::SourceType src)
-:TableWindow(parent, name, wflags)
+FlightWindow::FlightWindow(QWidget* parent, const QString &name, IDataBase::SourceType src)
+:TableWindow(parent, name)
 {
   QStringList nameList;
   QTableWidget *pTable;

@@ -33,8 +33,8 @@
 #include "WayPoint.h"
 #include "WebMapRouteView.h"
 
-RouteWindow::RouteWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags, IDataBase::SourceType src)
-	:TableWindow(parent, name, wflags)
+RouteWindow::RouteWindow(QWidget* parent, const QString &name, IDataBase::SourceType src)
+    :TableWindow(parent, name)
 {
 	QStringList nameList;
 	QAction *pAction;

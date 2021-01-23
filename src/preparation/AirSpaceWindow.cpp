@@ -36,8 +36,8 @@
 #include "ProgressDlg.h"
 #include "WebMapAirSpaceView.h"
 
-AirSpaceWindow::AirSpaceWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags, IDataBase::SourceType src)
-  :TableWindow(parent, name, wflags)
+AirSpaceWindow::AirSpaceWindow(QWidget* parent, const QString &name, IDataBase::SourceType src)
+  :TableWindow(parent, name)
 {
   QStringList nameList;
   QAction* pAction;

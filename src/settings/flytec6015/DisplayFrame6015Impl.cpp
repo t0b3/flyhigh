@@ -28,7 +28,7 @@
 #include "DisplayFrame6015Impl.h"
 #include "Flytec.h"
 
-DisplayFrame6015Impl::DisplayFrame6015Impl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+DisplayFrame6015Impl::DisplayFrame6015Impl(QWidget* parent, const char* name)
 : QWidget(parent)
 {
   setupUi(this);

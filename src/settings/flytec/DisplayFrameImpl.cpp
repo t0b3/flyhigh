@@ -31,7 +31,7 @@
 
 #include <stdio.h>
 
-DisplayFrameImpl::DisplayFrameImpl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+DisplayFrameImpl::DisplayFrameImpl(QWidget* parent, const char* name)
   :QWidget(parent)
 {
   Flytec *pFlytec;

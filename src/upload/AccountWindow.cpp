@@ -30,8 +30,8 @@
 #include "ISql.h"
 #include "ProgressDlg.h"
 
-AccountWindow::AccountWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-	:TableWindow(parent, name, wflags)
+AccountWindow::AccountWindow(QWidget* parent, const QString &name)
+	:TableWindow(parent, name)
 {
 	QStringList nameList;
 	QTableWidget *pTable;

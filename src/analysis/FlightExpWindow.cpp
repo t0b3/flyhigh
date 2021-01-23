@@ -29,8 +29,8 @@
 #include "IFlyHighRC.h"
 #include "ISql.h"
 
-FlightExpWindow::FlightExpWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-  :TableWindow(parent, name, wflags)
+FlightExpWindow::FlightExpWindow(QWidget* parent, const QString &name)
+  :TableWindow(parent, name)
 {
   QStringList nameList;
   QAction* pAction;

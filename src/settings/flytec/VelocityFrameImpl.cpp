@@ -24,7 +24,7 @@
 #include "VelocityFrameImpl.h"
 #include "Flytec.h"
 
-VelocityFrameImpl::VelocityFrameImpl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+VelocityFrameImpl::VelocityFrameImpl(QWidget* parent, const char* name)
   :QWidget(parent)
 {
   setupUi(this);

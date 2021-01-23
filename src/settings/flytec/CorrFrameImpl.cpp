@@ -22,7 +22,7 @@
 #include "CorrFrameImpl.h"
 #include "Flytec.h"
 
-CorrFrameImpl::CorrFrameImpl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+CorrFrameImpl::CorrFrameImpl(QWidget* parent, const char* name)
 	:QWidget(parent)
 {
   setupUi(this);
