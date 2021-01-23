@@ -232,7 +232,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>lineEditName</tabstop>
   <tabstop>spinBoxLow</tabstop>

@@ -220,7 +220,6 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
  <tabstops>
   <tabstop>lineEdit_FirstName</tabstop>
   <tabstop>lineEdit_LastName</tabstop>
