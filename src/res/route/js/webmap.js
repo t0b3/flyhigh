@@ -90,7 +90,7 @@ function wm_emitNetRequest(id, req, callback)
 
 function wm_emitAppReady()
 {
-  WebMap.appReady();
+  WebMap.emitAppReady();
 }
 
 function wm_emitLineChanged(line)
@@ -102,3 +102,12 @@ function wm_emitOk(ok)
 {
   WebMap.setOk(ok);
 }
+
+//wm_include("qrc:///qtwebchannel/qwebchannel.js");
+
+document.addEventListener("DOMContentLoaded", function () {
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+        window.WebMap = channel.objects.WebMap;
+
+    });
+});

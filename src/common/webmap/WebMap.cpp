@@ -213,6 +213,11 @@ void WebMap::populateObject()
 //	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this);
 }
 
+void WebMap::emitAppReady()
+{
+    emit appReady();
+}
+
 void WebMap::setOk(bool ok)
 {
 	if(ok)

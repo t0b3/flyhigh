@@ -72,8 +72,10 @@ class WebMap: public QWebEngineView
 	protected:
 		void resizeEvent(QResizeEvent *pEvent);
 
-	protected slots:
-		void setOk(bool ok);
+    public slots:
+        void emitAppReady();
+
+        void setOk(bool ok);
 
 		void setLine(int line);
 
