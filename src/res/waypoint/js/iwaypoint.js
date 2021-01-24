@@ -349,8 +349,7 @@ function wayPtChanged(event, wayPt)
 
 function zoomToWayPt(wayPt)
 {
-  map.setCenter(wayPt.getPosition());
-  map.setZoom(13);
+  map.setView(wayPt.getPosition(), 13);
 }
 
 function updateWayPtAlt(wayPt)
