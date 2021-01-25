@@ -151,6 +151,7 @@ void WebMap::setSize(uint width, uint height)
 	switch(m_mapType)
 	{
 	  case MapFlight:
+      //TODO: delay calling as wm_setMapSize() and fl_setPlotSize() are not present during early stage
       code = "wm_setMapSize(%1, %2);";
       m_pPage->runJavaScript(code.arg(width).arg(height - PlotHeight));
       code = "fl_setPlotSize(%1, %2);";

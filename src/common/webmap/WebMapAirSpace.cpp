@@ -101,4 +101,5 @@ void WebMapAirSpace::selectAirSpace(int id)
 {
     QString code = "as_selectAirSpace(%1);";
   m_pPage->runJavaScript(code.arg(id));
+    //TODO: delay calling as as_selectAirSpace() is not present during early stage
 }
