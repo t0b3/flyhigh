@@ -54,8 +54,11 @@ QString WebMapRoute::name() const
 	QString code = "rt_getName();";
 	QString name;
 
-//	name = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+/*  TODO: reimplement broken functionality, i.e. via QWebChannel - JS calling Qt slot */
+//  PREVIOUS CODE with QtWebKit
 //	name = m_pPage->evaluateJavaScript(code).toString();
+    m_pPage->runJavaScript(QString("console.log(rt_getName())")); //DEBUG
+//  TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
 
 	return name;
 }
@@ -95,8 +98,11 @@ void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
 
 	wpName = "%1_" + name();
 	tpList.clear();
-//  tpArray = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+/*  TODO: reimplement broken functionality, i.e. via QWebChannel - JS calling Qt slot */
+//  PREVIOUS CODE with QtWebKit
 //  tpArray = m_pPage->evaluateJavaScript(code).toList();
+    m_pPage->runJavaScript(QString("alert(rt_getTurnPts())")); // DEBUG
+//  TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
 
   for(it=tpArray.begin(); it!=tpArray.end(); it++)
   {
@@ -132,8 +138,11 @@ Route::Type WebMapRoute::type() const
 	QString code = "rt_getType();";
 	int type;
 
-//	type = m_pPage->evaluateJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+/*  TODO: reimplement broken functionality, i.e. via QWebChannel - JS calling Qt slot */
+//  PREVIOUS CODE with QtWebKit
 //	type = m_pPage->evaluateJavaScript(code).toInt();
+    m_pPage->runJavaScript(QString("alert(rt_getType())")); // DEBUG
+//  TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
 
 	return (Route::Type)type;
 }

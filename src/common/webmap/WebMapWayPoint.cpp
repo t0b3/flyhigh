@@ -81,9 +81,13 @@ bool WebMapWayPoint::getNextModified(WayPoint &wp)
 	QVariantMap wpMap;
 	bool valid;
 
-//	wpMap = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+/*  TODO: reimplement broken functionality, i.e. via QWebChannel - JS calling Qt slot */
+//  PREVIOUS CODE with QtWebKit
 //	wpMap = m_pPage->evaluateJavaScript(code).toMap();
-	valid = !wpMap.empty();
+    m_pPage->runJavaScript(QString("console.log(wp_getNextModified())")); //DEBUG
+//  TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+
+    valid = !wpMap.empty();
 
   if(valid)
 	{
