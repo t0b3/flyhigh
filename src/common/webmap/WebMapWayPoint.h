@@ -41,8 +41,6 @@ class WebMapWayPoint: public QObject
 
     void selectWayPoint(uint id);
 
-    void populateObject();
-
     void setEditable(bool en);
 
     bool getNextModified(WayPoint &wp);

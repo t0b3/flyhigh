@@ -76,12 +76,6 @@ void WebMapWayPoint::selectWayPoint(uint id)
 	pFrame->runJavaScript(code.arg(id));
 }
 
-void WebMapWayPoint::populateObject()
-{
-//	m_pWebMap->page()->addToJavaScriptWindowObject("WebMapWayPoint", this); // TODO: port to QWebChannel
-//	m_pWebMap->page()->mainFrame()->addToJavaScriptWindowObject("WebMapWayPoint", this);
-}
-
 void WebMapWayPoint::setEditable(bool en)
 {
 	QString code = "wp_setEditable(%1);";

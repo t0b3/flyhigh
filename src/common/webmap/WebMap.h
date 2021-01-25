@@ -107,7 +107,6 @@ class WebMap: public QWebEngineView
 
 		void netReply(QNetworkReply *pReply);
 
-		void populateObject();
 };
 
 #endif

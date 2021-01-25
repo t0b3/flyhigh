@@ -61,7 +61,6 @@ WebMap::WebMap(QWidget *pParent, MapType type)
 	connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 	connect(this, SIGNAL(loadProgress(int)), m_pProgress, SLOT(setValue(int)));
   connect(m_pNetMgr, SIGNAL(finished(QNetworkReply*)), this, SLOT(netReply(QNetworkReply*)));
-//	connect(pFrame, SIGNAL(javaScriptWindowObjectCleared()), this, SLOT(populateObject())); // TODO
 }
 
 WebMap::~WebMap()
@@ -205,12 +204,6 @@ void WebMap::netReply(QNetworkReply *pReply)
   m_netReqList.pop_front();
 	pFrame = page();
   pFrame->runJavaScript(code.arg(id).arg(replyStr));
-}
-
-void WebMap::populateObject()
-{
-//	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this); // TODO: port to ... https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
-//	page()->mainFrame()->addToJavaScriptWindowObject("WebMap", this);
 }
 
 void WebMap::emitAppReady()
