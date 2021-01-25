@@ -54,6 +54,7 @@ class WebMapFlight: public QObject
 
   private:
     WebMap *m_pWebMap;
+    QWebEnginePage *m_pPage;
     uint m_plotEn;
 };
 

@@ -47,6 +47,7 @@ class WebMapWayPoint: public QObject
 
 	private:
 		WebMap *m_pWebMap;
+        QWebEnginePage *m_pPage;
 		WayPoint::WayPointListType m_wpList;
 };
 

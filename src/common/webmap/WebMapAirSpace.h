@@ -44,6 +44,7 @@ class WebMapAirSpace: public QObject
 
 	private:
 		WebMap *m_pWebMap;
+        QWebEnginePage *m_pPage;
 };
 
 #endif

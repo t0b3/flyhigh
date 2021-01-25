@@ -101,6 +101,7 @@ class WebMap: public QWebEngineView
 		NetRequestList m_netReqList;
     MapType m_mapType;
 		bool m_mapReady;
+        QWebEnginePage *m_pPage;
 
 	private slots:
 		void loadFinished(bool ok);

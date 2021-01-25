@@ -55,6 +55,7 @@ class WebMapRoute: public QObject
 
 	private:
 		WebMap *m_pWebMap;
+        QWebEnginePage *m_pPage;
 		Route *m_pRoute;
 };
 

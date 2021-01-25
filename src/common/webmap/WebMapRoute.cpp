@@ -26,6 +26,7 @@
 WebMapRoute::WebMapRoute(WebMap *pWebMap)
 {
 	m_pWebMap = pWebMap;
+    m_pPage = m_pWebMap->page();
 	m_pRoute = NULL;
 }
 
@@ -36,32 +37,25 @@ WebMapRoute::~WebMapRoute()
 void WebMapRoute::init()
 {
 	QString code = "rt_init();";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code);
+    m_pPage->runJavaScript(code);
 }
 
 void WebMapRoute::setName(const QString &name)
 {
 	QString code = "rt_setName('%1');";
 	QString locName;
-	QWebEnginePage *pFrame;
 
-	pFrame = m_pWebMap->page();
 	locName = WebMap::escape(name);
-	pFrame->runJavaScript(code.arg(locName));
+    m_pPage->runJavaScript(code.arg(locName));
 }
 
 QString WebMapRoute::name() const
 {
 	QString code = "rt_getName();";
-	QWebEnginePage *pFrame;
 	QString name;
 
-	pFrame = m_pWebMap->page();
-//	name = pFrame->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
-//	name = pFrame->evaluateJavaScript(code).toString();
+//	name = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+//	name = m_pPage->evaluateJavaScript(code).toString();
 
 	return name;
 }
@@ -71,11 +65,8 @@ void WebMapRoute::setTurnPointList(const WayPoint::WayPointListType &tpList)
 	QString code = "rt_setTurnPts(%1);";
 	QString arg = "[";
 	QString argElem = "[%1,%2]";
-	QWebEnginePage *pFrame;
 	int tpNr;
 	bool first = true;
-
-	pFrame = m_pWebMap->page();
 
 	for(tpNr=0; tpNr<tpList.size(); tpNr++)
 	{
@@ -89,14 +80,13 @@ void WebMapRoute::setTurnPointList(const WayPoint::WayPointListType &tpList)
 	}
 
 	arg += "]";
-	pFrame->runJavaScript(code.arg(arg));
+    m_pPage->runJavaScript(code.arg(arg));
 }
 
 void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
 {
   QString code = "rt_getTurnPts();";
   QString wpName;
-  QWebEnginePage *pFrame;
   QVariantList tpArray;
   QVariantList tpLatLng;
   QVariantList::iterator it;
@@ -105,9 +95,8 @@ void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
 
 	wpName = "%1_" + name();
 	tpList.clear();
-  pFrame = m_pWebMap->page();
-//  tpArray = pFrame->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
-//  tpArray = pFrame->evaluateJavaScript(code).toList();
+//  tpArray = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+//  tpArray = m_pPage->evaluateJavaScript(code).toList();
 
   for(it=tpArray.begin(); it!=tpArray.end(); it++)
   {
@@ -129,30 +118,22 @@ void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
 void WebMapRoute::setEditable(bool en)
 {
 	QString code = "rt_setEditable(%1);";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code.arg(en));
+    m_pPage->runJavaScript(code.arg(en));
 }
 
 void WebMapRoute::setGlueToCenter(bool en)
 {
 	QString code = "rt_setGlueToCenter(%1);";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code.arg(en));
+    m_pPage->runJavaScript(code.arg(en));
 }
 
 Route::Type WebMapRoute::type() const
 {
 	QString code = "rt_getType();";
-	QWebEnginePage *pFrame;
 	int type;
 
-	pFrame = m_pWebMap->page();
-//	type = pFrame->evaluateJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
-//	type = pFrame->evaluateJavaScript(code).toInt();
+//	type = m_pPage->evaluateJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // see https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+//	type = m_pPage->evaluateJavaScript(code).toInt();
 
 	return (Route::Type)type;
 }

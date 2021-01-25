@@ -36,7 +36,7 @@
 WebMap::WebMap(QWidget *pParent, MapType type)
 	:QWebEngineView(pParent)
 {
-	QWebEnginePage *pFrame;
+    m_pPage = this->page();
 
   m_pAirSpace = NULL;
   m_pFlight = NULL;
@@ -49,14 +49,13 @@ WebMap::WebMap(QWidget *pParent, MapType type)
 	m_pProgress->setGeometry(LeftWidth, 0, ProgressW, ProgressH);
 	m_pProgress->show();
 
-	pFrame = page();
-	pFrame->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
+    m_pPage->settings()->setAttribute(QWebEngineSettings::ShowScrollBars, false);
 
 	// JavaScript can access this WebMap via channel.objects.WebMap
 	QWebChannel *channel = new QWebChannel();
 	channel->registerObject("WebMap", this);
 	// Set up the web channel so the page can access Qt objects
-	page()->setWebChannel(channel);
+    m_pPage->setWebChannel(channel);
 
 	connect(this, SIGNAL(loadFinished(bool)), this, SLOT(loadFinished(bool)));
 	connect(this, SIGNAL(loadProgress(int)), m_pProgress, SLOT(setValue(int)));
@@ -146,30 +145,28 @@ void WebMap::resizeEvent(QResizeEvent *pEvent)
 void WebMap::setSize(uint width, uint height)
 {
 	QString code;
-	QWebEnginePage *pFrame;
 
-	pFrame = page();
 	width = (width - LeftWidth - Margin);
 
 	switch(m_mapType)
 	{
 	  case MapFlight:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->runJavaScript(code.arg(width).arg(height - PlotHeight));
+      m_pPage->runJavaScript(code.arg(width).arg(height - PlotHeight));
       code = "fl_setPlotSize(%1, %2);";
-      pFrame->runJavaScript(code.arg(width).arg(PlotHeight));
+      m_pPage->runJavaScript(code.arg(width).arg(PlotHeight));
 	  break;
 	  case MapRoute:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->runJavaScript(code.arg(width).arg(height));
+      m_pPage->runJavaScript(code.arg(width).arg(height));
 	  break;
 	  case MapWayPoint:
       code = "wm_setMapSize(%1, %2);";
-      pFrame->runJavaScript(code.arg(width).arg(height));
+      m_pPage->runJavaScript(code.arg(width).arg(height));
 	  break;
 	  case MapAirSpace:
 	  	code = "wm_setMapSize(%1, %2);";
-      pFrame->runJavaScript(code.arg(width).arg(height));
+      m_pPage->runJavaScript(code.arg(width).arg(height));
 	  break;
 	}
 }
@@ -196,14 +193,12 @@ void WebMap::netReply(QNetworkReply *pReply)
 {
   QString code;
   QString replyStr(pReply->readAll());
-  QWebEnginePage *pFrame;
   int id;
 
   id = m_netReqList.front().id;
   code = m_netReqList.front().callback + "(%1, %2);";
   m_netReqList.pop_front();
-	pFrame = page();
-  pFrame->runJavaScript(code.arg(id).arg(replyStr));
+  m_pPage->runJavaScript(code.arg(id).arg(replyStr));
 }
 
 void WebMap::emitAppReady()

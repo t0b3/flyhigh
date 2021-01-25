@@ -27,6 +27,7 @@
 WebMapWayPoint::WebMapWayPoint(WebMap *pWebMap)
 {
 	m_pWebMap = pWebMap;
+    m_pPage = m_pWebMap->page();
 }
 
 WebMapWayPoint::~WebMapWayPoint()
@@ -36,17 +37,13 @@ WebMapWayPoint::~WebMapWayPoint()
 void WebMapWayPoint::init()
 {
 	QString code = "wp_init();";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code);
+    m_pPage->runJavaScript(code);
 }
 
 void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
 {
 	QString code = "wp_pushWayPoint({id: %1, name: '%2', spot: '%3', country: '%4',"
                  " lat: %5, lng: %6, alt: %7});";
-	QWebEnginePage *pFrame;
 	QString name;
 	QString country;
 	QString spot;
@@ -55,7 +52,6 @@ void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
 	int id;
 	int alt;
 
-  pFrame = m_pWebMap->page();
   id = wp.id();
   name = WebMap::escape(wp.name());
   spot = WebMap::escape(wp.spot());
@@ -63,38 +59,30 @@ void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
   lat = wp.lat();
   lon = wp.lon();
   alt = wp.alt();
-  pFrame->runJavaScript(code.arg(id).arg(name).arg(spot).arg(country)
+  m_pPage->runJavaScript(code.arg(id).arg(name).arg(spot).arg(country)
                              .arg(lat).arg(lon).arg(alt));
 }
 
 void WebMapWayPoint::selectWayPoint(uint id)
 {
 	QString code = "wp_selectWayPoint(%1);";
-	QWebEnginePage *pFrame;
-
-  pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code.arg(id));
+    m_pPage->runJavaScript(code.arg(id));
 }
 
 void WebMapWayPoint::setEditable(bool en)
 {
 	QString code = "wp_setEditable(%1);";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code.arg(en));
+    m_pPage->runJavaScript(code.arg(en));
 }
 
 bool WebMapWayPoint::getNextModified(WayPoint &wp)
 {
   QString code = "wp_getNextModified();";
-  QWebEnginePage *pFrame;
 	QVariantMap wpMap;
 	bool valid;
 
-	pFrame = m_pWebMap->page();
-//	wpMap = pFrame->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
-//	wpMap = pFrame->evaluateJavaScript(code).toMap();
+//	wpMap = m_pPage->runJavaScript(code, [](const QVariant &v) { qDebug() << v.toString(); }); // TODO: port to foo.someattr = "somedata" // https://myprogrammingnotes.com/communication-c-javascript-qt-webengine.html
+//	wpMap = m_pPage->evaluateJavaScript(code).toMap();
 	valid = !wpMap.empty();
 
   if(valid)

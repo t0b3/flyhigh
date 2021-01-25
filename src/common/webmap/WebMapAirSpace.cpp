@@ -26,7 +26,8 @@
 
 WebMapAirSpace::WebMapAirSpace(WebMap *pWebMap)
 {
-	m_pWebMap = pWebMap;
+    m_pWebMap = pWebMap;
+    m_pPage = m_pWebMap->page();
 }
 
 WebMapAirSpace::~WebMapAirSpace()
@@ -36,10 +37,7 @@ WebMapAirSpace::~WebMapAirSpace()
 void WebMapAirSpace::init()
 {
 	QString code = "as_init();";
-	QWebEnginePage *pFrame;
-
-	pFrame = m_pWebMap->page();
-	pFrame->runJavaScript(code);
+    m_pPage->runJavaScript(code);
 }
 
 void WebMapAirSpace::pushAirSpace(AirSpace *pAirSpace)
@@ -47,7 +45,6 @@ void WebMapAirSpace::pushAirSpace(AirSpace *pAirSpace)
 	QString code = "as_pushAirSpace(%1, {id:%2, name:'%3', low:%4, high:%5, airclass:'%6'});";
 	QString coords = "[";
 	QString coord = "[%1,%2]";
-	QWebEnginePage *pFrame;
 	uint wpNr;
 	uint wpListSize;
 	float lat;
@@ -61,7 +58,6 @@ void WebMapAirSpace::pushAirSpace(AirSpace *pAirSpace)
   QString airClass;
 	bool first = true;
 
-  pFrame = m_pWebMap->page();
   wpListSize = pAirSpace->pointList().size();
 
   if(wpListSize > 0)
@@ -98,14 +94,11 @@ void WebMapAirSpace::pushAirSpace(AirSpace *pAirSpace)
   low = pAirSpace->low();
   high = pAirSpace->high();
   airClass = WebMap::escape(pAirSpace->airspaceClass());
-  pFrame->runJavaScript(code.arg(coords).arg(id).arg(name).arg(low).arg(high).arg(airClass));
+  m_pPage->runJavaScript(code.arg(coords).arg(id).arg(name).arg(low).arg(high).arg(airClass));
 }
 
 void WebMapAirSpace::selectAirSpace(int id)
 {
-	QString code = "as_selectAirSpace(%1);";
-	QWebEnginePage *pFrame;
-
-  pFrame = m_pWebMap->page();
-  pFrame->runJavaScript(code.arg(id));
+    QString code = "as_selectAirSpace(%1);";
+  m_pPage->runJavaScript(code.arg(id));
 }
