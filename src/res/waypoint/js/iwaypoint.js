@@ -166,7 +166,7 @@ function wp_setWayPtLat(lat)
     }
     else
     {
-      wp_setLatLng(curWayPt.getPosition().lat(), curWayPt.getPosition().lng());
+      wp_setLatLng(curWayPt.getPosition().lat, curWayPt.getPosition().lng);
     }
   }
 }
@@ -187,7 +187,7 @@ function wp_setWayPtLng(lng)
     }
     else
     {
-      wp_setLatLng(curWayPt.getPosition().lat(), curWayPt.getPosition().lng());
+      wp_setLatLng(curWayPt.getPosition().lat, curWayPt.getPosition().lng);
     }
   }
 }
@@ -282,8 +282,8 @@ function wp_getNextModified()
     {
       nextModified = (nr + 1);
       opts = {id: wayPt.getId(), name: wayPt.getName(), spot: wayPt.getSpot(),
-              country: wayPt.getCountry(), lat: wayPt.getPosition().lat(),
-              lng: wayPt.getPosition().lng(), alt: wayPt.getAlt()};
+              country: wayPt.getCountry(), lat: wayPt.getPosition().lat,
+              lng: wayPt.getPosition().lng, alt: wayPt.getAlt()};
       break;
     }
   }
