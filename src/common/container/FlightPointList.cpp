@@ -29,7 +29,7 @@ FlightPointList::FlightPointList(bool dataOwner)
 
 FlightPointList::~FlightPointList()
 {
-  clear();
+//  clear();
 }
 
 void FlightPointList::setDataOwner(bool dataOwner)
