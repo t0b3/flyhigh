@@ -60,7 +60,7 @@ void WebMapFlightView::setLocation(const QString &location)
   m_location = location;
 }
 
-void WebMapFlightView::setFlightPointList(const QDate &date, const FlightPointList *pFpList)
+void WebMapFlightView::setFlightPointList(QDate date, const FlightPointList *pFpList)
 {
   m_date = date;
   m_pFpList = pFpList;

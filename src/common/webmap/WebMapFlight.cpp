@@ -41,7 +41,7 @@ void WebMapFlight::init()
   m_pPage->runJavaScript(code);
 }
 
-void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *pFpList)
+void WebMapFlight::setFlightPointList(QDate date, const FlightPointList *pFpList)
 {
   QString code;
   QString value = "%1";
@@ -56,13 +56,13 @@ void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *
   uint end;
   uint start;
   uint duration;
+  QTime startTime;
+  QTime endTime;
   double alt;
   double minAlt;
   double maxAlt;
-  int epochDate;
   int epochTime;
-  int secsOfDay;
-  int prevSecsOfDay;
+  QTime prevTime;
   bool first = true;
 
   begin = pFpList->firstValidFlightData();
@@ -72,12 +72,11 @@ void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *
   {
     minAlt = pFpList->at(begin)->alt();
     maxAlt = minAlt;
-    time = pFpList->at(begin)->time();
-    start = time.hour() * 3600 + time.minute() * 60 + time.second();
-    time = pFpList->at(end - 1)->time();
-    duration = time.hour() * 3600 + time.minute() * 60 + time.second() - start;
-    epochDate = date.startOfDay().toSecsSinceEpoch();
-    prevSecsOfDay = start;
+    startTime = pFpList->at(begin)->time();
+    start = QDateTime(date, startTime).currentSecsSinceEpoch();
+    endTime = pFpList->at(end - 1)->time();
+    duration = startTime.secsTo(endTime);
+    prevTime = startTime;
 
     for(fpNr=begin; fpNr<end; fpNr++)
     {
@@ -93,15 +92,14 @@ void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *
 
       // time
       time = pFpList->at(fpNr)->time();
-      secsOfDay = time.hour() * 3600 + time.minute() * 60 + time.second();
 
-      if(secsOfDay < prevSecsOfDay)
+      if(time < prevTime)
       {
-        epochDate += 86400; // next day
+        date = date.addDays(1); // next day
       }
 
-      epochTime = (epochDate + secsOfDay);
-      prevSecsOfDay = secsOfDay;
+      epochTime = QDateTime(date, time).currentSecsSinceEpoch();
+      prevTime = time;
       strTime += value.arg(epochTime);
 
       // altitude
