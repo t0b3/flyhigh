@@ -76,7 +76,7 @@ void WebMapFlight::setFlightPointList(const QDate &date,
     start = time.hour() * 3600 + time.minute() * 60 + time.second();
     time = pFpList->at(end - 1)->time();
     duration = time.hour() * 3600 + time.minute() * 60 + time.second() - start;
-    epochDate = QDateTime(date).toTime_t();
+    epochDate = date.startOfDay().toSecsSinceEpoch();
     prevSecsOfDay = start;
 
     for(fpNr=begin; fpNr<end; fpNr++)
