@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QtAlgorithms>
 #include "AirSpace.h"
 #include "AirSpaceList.h"
 
@@ -84,7 +83,7 @@ AirSpaceList::iterator AirSpaceList::end()
 
 void AirSpaceList::sort()
 {
-	qSort(m_airSpaceList.begin(), m_airSpaceList.end(), nameSort);
+	std::sort(m_airSpaceList.begin(), m_airSpaceList.end(), nameSort);
 }
 
 bool AirSpaceList::nameSort(const AirSpace *pAirSpace1, const AirSpace *pAirSpace2)
