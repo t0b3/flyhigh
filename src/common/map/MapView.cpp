@@ -120,6 +120,6 @@ void MapView::wheel(QWheelEvent *pEvent)
   MapWidget *pWidget;
 
   pWidget = static_cast<MapWidget*>(m_pScrollArea->widget());
-  pWidget->zoom(pEvent->pos(), (pEvent->delta() > 0));
+  pWidget->zoom(pEvent->position().toPoint(), (pEvent->angleDelta().y() > 0));
 }
 

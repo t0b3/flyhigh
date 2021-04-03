@@ -107,9 +107,9 @@ void AirSpaceView::mouseMoveEvent(QMouseEvent *pEvent)
   }
 }
 
-void AirSpaceView::wheelEvent(QWheelEvent * pEvent)
+void AirSpaceView::wheelEvent(QWheelEvent *pEvent)
 {
-  if(pEvent->delta() > 0)
+  if(pEvent->angleDelta().y() > 0)
   {
     if(m_scale < MaxScale)
     {
