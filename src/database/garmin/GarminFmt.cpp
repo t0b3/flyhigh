@@ -123,15 +123,15 @@ void GarminFmt::GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, Route::RouteListType
 					switch(way[i]->rte_prot)
 					{
 						case 200:
-							name.sprintf("Number: %d", way[i]->rte_num);
+							name = QString("Number: %1").arg(way[i]->rte_num);
 							route.setName(name);
 						break;
 						case 201:
-							name.sprintf("Number: %d Comment: %-20.20s", way[i]->rte_num, way[i]->rte_cmnt);
+							name.asprintf("Number: %d Comment: %-20.20s", way[i]->rte_num, way[i]->rte_cmnt);
 							route.setName(name);
 						break;
 						case 202:
-							name.sprintf("Comment: %s", way[i]->rte_ident);
+							name = QString("Comment: %1").arg(way[i]->rte_ident);
 							route.setName(name);
 						break;
 						default:
@@ -172,11 +172,11 @@ void GarminFmt::setBrecord(GPS_PTrack trk, QString &line)
 	// Latitude
 	if(trk->lat >= 0)
 	{
-		str.sprintf("%7fN", trk->lat);
+		str = QString("%1N").arg(trk->lat, 7);
 	}
 	else
 	{
-		str.sprintf("%7fS", - trk->lat);
+		str = QString("%1S").arg(trk->lat, 7);
 	}
 	
 	line += str;
@@ -184,17 +184,17 @@ void GarminFmt::setBrecord(GPS_PTrack trk, QString &line)
 	// Longitude
 	if(trk->lon >= 0)
 	{
-		str.sprintf("%8fE", trk->lon);
+		str = QString("%1E").arg(trk->lon, 8);
 	}
 	else
 	{
-		str.sprintf("%8fW", - trk->lon);
+		str = QString("%1W").arg(trk->lon, 8);
 	}
 	
 	line += str;
 
 	// Altitude
-	str.sprintf("%5i%5i000\n", 0, (int)roundf(trk->alt));
+	str = QString("%1%2000\n").arg(0, 5).arg((int)roundf(trk->alt), 5);
 	line += str;
 }
 

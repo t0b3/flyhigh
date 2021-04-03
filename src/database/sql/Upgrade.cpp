@@ -207,7 +207,7 @@ Upgrade::DataBaseVersion Upgrade::dataBaseVersion()
   QSqlQuery query(db());
   DataBaseVersion dbVers = DataBaseVersion_0_5_0;
 
-  sqls.sprintf("SELECT Time FROM LastModified WHERE Name = 'DataBaseVersion'");
+  sqls = QString("SELECT Time FROM LastModified WHERE Name = 'DataBaseVersion'");
 
   if(query.exec(sqls) && query.first())
   {
