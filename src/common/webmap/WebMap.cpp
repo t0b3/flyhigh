@@ -128,7 +128,17 @@ WebMapWayPoint* WebMap::getWayPoint()
 void WebMap::loadUrl(const QString &url)
 {
 	m_mapReady = false;
-	load(QUrl(url));
+    //    load(QUrl(url));
+    //    load(QUrl(":/flight/flight.html"));
+    QString path = QUrl(url).toString(QUrl::RemoveScheme);
+    qDebug() << path;
+    QString newUrl = QString(":%1").arg(path);
+    QFile *file = new QFile(newUrl);
+    file->open(QIODevice::ReadOnly);
+    QTextStream stream(file);
+    QString file_text(stream.readAll());
+    setHtml(file_text, QUrl(QString("qrc:%1").arg(path)));
+    file->close();
 }
 
 bool WebMap::isMapReady() const
