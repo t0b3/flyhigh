@@ -1,1 +1,11 @@
+# Qt project files
+*.config
+*.creator
+*.creator.*
+*.files
+*.includes
+*.cflags
+*.cxxflags
+
+# build dir
 build
