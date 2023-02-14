@@ -30,7 +30,7 @@
 #include "ISql.h"
 #include "DeviceFrame6015Impl.h"
 
-DeviceFrame6015Impl::DeviceFrame6015Impl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+DeviceFrame6015Impl::DeviceFrame6015Impl(QWidget* parent)
 : QWidget(parent)
 {
   setupUi(this);

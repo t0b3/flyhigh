@@ -22,6 +22,7 @@
 
 #include <QtCore/QPoint>
 #include <QtWidgets/QDialog>
+#include "BoundBox.h"
 
 class QPaintEvent;
 class QMouseEvent;

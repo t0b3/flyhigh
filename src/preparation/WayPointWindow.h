@@ -32,7 +32,7 @@ class WayPointWindow: public TableWindow
 	Q_OBJECT
 
 	public:
-		WayPointWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags,
+		WayPointWindow(QWidget* parent, const QString &name,
                   IDataBase::SourceType src, WayPoint::Type type);
 
 		~WayPointWindow();

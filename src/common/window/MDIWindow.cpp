@@ -22,8 +22,8 @@
 #include <QString>
 #include "MDIWindow.h"
 
-MDIWindow::MDIWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-	:QMdiSubWindow(parent, wflags)
+MDIWindow::MDIWindow(QWidget* parent, const QString &name)
+	:QMdiSubWindow(parent)
 {
   int actionNr;
 

@@ -23,7 +23,7 @@
 #include "Flytec.h"
 #include "VelocityFrame6015Impl.h"
 
-VelocityFrame6015Impl::VelocityFrame6015Impl(QWidget* parent, const char* name, Qt::WindowFlags fl)
+VelocityFrame6015Impl::VelocityFrame6015Impl(QWidget* parent)
 : QWidget(parent)
 {
   setupUi(this);

@@ -151,7 +151,6 @@ void DatabaseWidget::slotDBFileSelected()
 									IFlyHighRC::pInstance()->lastDir(),
 									tr("DB files (*.sqlite *.db)"));
 	dlg.setFileMode(QFileDialog::AnyFile);
-	dlg.setNameFilterDetailsVisible(true);
 	dlg.setOptions(QFileDialog::DontUseNativeDialog);
 	// show dialog
 	int ret = dlg.exec();

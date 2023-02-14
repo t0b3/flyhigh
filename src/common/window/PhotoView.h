@@ -35,7 +35,7 @@ class PhotoView: public QDialog
   Q_OBJECT
 
 	public:
-		PhotoView(QWidget* parent, const QString &caption, Qt::WindowFlags wflags = 0);
+		PhotoView(QWidget* parent, const QString &caption);
 
 		virtual ~PhotoView();
 

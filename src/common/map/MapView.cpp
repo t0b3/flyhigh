@@ -26,7 +26,7 @@
 
 #include <QDebug>
 
-MapView::MapView(QWidget *parent, const char *name, Qt::WindowFlags wFlags)
+MapView::MapView(QWidget *parent)
 {
   QWidget *pWidget;
 

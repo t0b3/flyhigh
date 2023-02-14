@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <QDate>
+#include <QDomDocument>
 #include <QFile>
 #include <QRegExp>
 #include <QFileDialog>
@@ -29,8 +30,8 @@
 #include "IFlyHighRC.h"
 #include "TableWindow.h"
 
-TableWindow::TableWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-  :MDIWindow(parent, name, wflags)
+TableWindow::TableWindow(QWidget* parent, const QString &name)
+  :MDIWindow(parent, name)
 {
 	m_pTable = new QTableWidget(this);
 //  m_pTable->verticalHeader()->hide();

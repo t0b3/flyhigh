@@ -23,7 +23,7 @@
 #include <QPushButton>
 #include "PhotoView.h"
 
-PhotoView::PhotoView(QWidget* parent, const QString &caption, Qt::WindowFlags wflags)
+PhotoView::PhotoView(QWidget* parent, const QString &caption)
   :QDialog(parent)
 {
   m_pPhoto = new QLabel(this);

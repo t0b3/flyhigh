@@ -26,8 +26,8 @@
 #include "ServicingWindow.h"
 #include "IServicingForm.h"
 
-ServicingWindow::ServicingWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags)
-	:TableWindow(parent, name, wflags)
+ServicingWindow::ServicingWindow(QWidget* parent, const QString &name)
+	:TableWindow(parent, name)
 {
 	QStringList nameList;
 	QTableWidget *pTable = TableWindow::getTable();

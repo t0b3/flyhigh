@@ -34,7 +34,7 @@ class FlightWindow: public TableWindow
 {
 	Q_OBJECT
 	public:
-		FlightWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags, IDataBase::SourceType src);
+		FlightWindow(QWidget* parent, const QString &name, IDataBase::SourceType src);
 
 	private slots:
 		void file_update();

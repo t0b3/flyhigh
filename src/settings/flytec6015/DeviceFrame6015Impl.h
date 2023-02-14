@@ -30,10 +30,10 @@ class DeviceFrame6015Impl: public QWidget, public Ui::DeviceFrame6015, public Fr
 	Q_OBJECT
 
 	public:
-    DeviceFrame6015Impl(QWidget* parent = 0, const char* name = 0, Qt::WindowFlags fl = 0);
+    DeviceFrame6015Impl(QWidget* parent = 0);
 
 		~DeviceFrame6015Impl();
-		
+
 		void update();
 
 		void store();
