@@ -50,9 +50,8 @@
 #include "qexifimageheader.h"
 #include "WebMapFlightView.h"
 
-
-FlightWindow::FlightWindow(QWidget* parent, const QString &name, Qt::WindowFlags wflags, IDataBase::SourceType src)
-:TableWindow(parent, name, wflags)
+FlightWindow::FlightWindow(QWidget* parent, const QString &name, IDataBase::SourceType src)
+:TableWindow(parent, name)
 {
   QStringList nameList;
   QTableWidget *pTable;
@@ -60,7 +59,7 @@ FlightWindow::FlightWindow(QWidget* parent, const QString &name, Qt::WindowFlags
 
   pTable = TableWindow::getTable();
 
-    // menu
+  // menu
   switch(src)
   {
     case IDataBase::SqlDB:
@@ -990,7 +989,9 @@ void FlightWindow::plot_OLC()
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[2])));
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[3])));
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[1])));
-          title.sprintf("fai triangle: %.3f km (%.2f pts)", dist/1000.0, dist/1000.0*1.4);
+          title = QString("fai triangle: %1 km (%2 pts)")
+                          .arg(dist/1000.0, 0, 'f', 3)
+                          .arg(dist/1000.0*1.4, 0, 'f', 2);
           plotFlighPointList(tpList, title);
 
           // flat triangle
@@ -1000,7 +1001,9 @@ void FlightWindow::plot_OLC()
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[2])));
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[3])));
           tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[1])));
-          title.sprintf("flat triangle: %.3f km (%.2f pts)", dist/1000.0, dist/1000.0*1.2);
+          title = QString("flat triangle: %1 km (%2 pts)")
+                          .arg(dist/1000.0, 0, 'f', 3)
+                          .arg(dist/1000.0*1.2, 0, 'f', 2);
           plotFlighPointList(tpList, title);
 
           // free distance
@@ -1012,7 +1015,9 @@ void FlightWindow::plot_OLC()
             tpList.push_back(new FlightPoint(olcOptimizer.flyPointList().at(fpIndexList[fpNr])));
           }
 
-          title.sprintf("free distance: %.3f km (%.2f pts)", dist/1000.0, dist/1000.0*1.0);
+          title = QString("free distance: %1 km (%2 pts)")
+                          .arg(dist/1000.0, 0, 'f', 3)
+                          .arg(dist/1000.0*1.0, 0, 'f', 2);
           plotFlighPointList(tpList, title);
 
           m_plotter.end();
