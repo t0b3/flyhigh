@@ -288,7 +288,7 @@ bool SwissMap100::tileName(uint x, uint y, QString &name)
 
 	if(exist)
 	{
-		name.sprintf("/%05d.ppm", imageNr);
+		name = QString("/%1.ppm").arg(imageNr, 5, 10, QLatin1Char('0'));
 	}
 
 	return exist;

@@ -39,7 +39,7 @@ void GarminFmt::GPS_Fmt_Print_Track(GPS_PTrack *trk, int32 n, Flight::FlightList
 		case pA300: case pA301:
 			igcDataBuff.setBuffer(const_cast<QByteArray*>(&flight.igcData()));
 			igcDataBuff.open(QIODevice::WriteOnly);
-			
+
 			for(i=0; i<n; ++i)
 			{
 				if(trk[i]->ishdr)
@@ -47,17 +47,17 @@ void GarminFmt::GPS_Fmt_Print_Track(GPS_PTrack *trk, int32 n, Flight::FlightList
 					// skip track header
 					continue;
 				}
-					
+
 				if(trk[i]->tnew)
 				{
 					flight.setIgcData(igcData);
 					flightList.push_back(flight);
 					igcData.resize(0);
-					
+
 					// new track
 					flight.setNumber(i);
 				}
-		
+
 				switch(gps_trk_type)
 				{
 					case pD300:
@@ -73,7 +73,7 @@ void GarminFmt::GPS_Fmt_Print_Track(GPS_PTrack *trk, int32 n, Flight::FlightList
 					break;
 				}
 			}
-			
+
 			igcDataBuff.close();
 			flightList.push_back(flight);
 		break;
@@ -87,7 +87,7 @@ void GarminFmt::GPS_Fmt_Print_Waypoint(GPS_PWay *way, int32 n, WayPoint::WayPoin
 {
 	WayPoint wp;
 	int i;
-	
+
 	for(i=0; i<n; i++)
 	{
 		setWayPoint(way[i], wp);
@@ -119,19 +119,19 @@ void GarminFmt::GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, Route::RouteListType
 						routeList.push_back(route);
 						route.wayPointList().clear();
 					}
-			
+
 					switch(way[i]->rte_prot)
 					{
 						case 200:
-							name.sprintf("Number: %d", way[i]->rte_num);
+							name = QString("Number: %1").arg(way[i]->rte_num);
 							route.setName(name);
 						break;
 						case 201:
-							name.sprintf("Number: %d Comment: %-20.20s", way[i]->rte_num, way[i]->rte_cmnt);
+							name.asprintf("Number: %d Comment: %-20.20s", way[i]->rte_num, way[i]->rte_cmnt);
 							route.setName(name);
 						break;
 						case 202:
-							name.sprintf("Comment: %s", way[i]->rte_ident);
+							name = QString("Comment: %1").arg(way[i]->rte_ident);
 							route.setName(name);
 						break;
 						default:
@@ -149,7 +149,7 @@ void GarminFmt::GPS_Fmt_Print_Route(GPS_PWay *way, int32 n, Route::RouteListType
 					route.wayPointList().push_back(wp);
 				}
 			}
-			
+
 			routeList.push_back(route);
 		default:
 			GPS_Error("GPS_Fmt_Print_Route: Unknown protocol");
@@ -161,40 +161,40 @@ void GarminFmt::setBrecord(GPS_PTrack trk, QString &line)
 {
 	QDateTime dateTime;
 	QString str;
-	
+
 	//	B122548 4708901N 00832137E A00977 00999 000
-	
+
 	dateTime.setTime_t(trk->Time);
-	
+
 	line = "B";
 	line += dateTime.toString("hhmmss");
-	
+
 	// Latitude
 	if(trk->lat >= 0)
 	{
-		str.sprintf("%7fN", trk->lat);
+		str = QString("%1N").arg(trk->lat, 7);
 	}
 	else
 	{
-		str.sprintf("%7fS", - trk->lat);
+		str = QString("%1S").arg(trk->lat, 7);
 	}
-	
+
 	line += str;
-	
+
 	// Longitude
 	if(trk->lon >= 0)
 	{
-		str.sprintf("%8fE", trk->lon);
+		str = QString("%1E").arg(trk->lon, 8);
 	}
 	else
 	{
-		str.sprintf("%8fW", - trk->lon);
+		str = QString("%1W").arg(trk->lon, 8);
 	}
-	
+
 	line += str;
 
 	// Altitude
-	str.sprintf("%5i%5i000\n", 0, (int)roundf(trk->alt));
+	str = QString("%1%2000\n").arg(0, 5).arg((int)roundf(trk->alt), 5);
 	line += str;
 }
 

@@ -20,6 +20,7 @@
 #include <QApplication>
 #include <QDir>
 #include <QDirIterator>
+#include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QProcess>
 #include <QUrl>

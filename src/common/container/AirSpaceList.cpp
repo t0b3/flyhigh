@@ -84,7 +84,7 @@ AirSpaceList::iterator AirSpaceList::end()
 
 void AirSpaceList::sort()
 {
-	qSort(m_airSpaceList.begin(), m_airSpaceList.end(), nameSort);
+	std::sort(m_airSpaceList.begin(), m_airSpaceList.end(), nameSort);
 }
 
 bool AirSpaceList::nameSort(const AirSpace *pAirSpace1, const AirSpace *pAirSpace2)

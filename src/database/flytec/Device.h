@@ -20,6 +20,7 @@
 #ifndef Device_h
 #define Device_h
 
+#include <chrono>
 #include <QtCore/QString>
 
 class QSerialPort;
@@ -52,7 +53,7 @@ class Device
 
     QSerialPort *m_serialPort;
     QString m_tlg;
-    int m_tout;
+    std::chrono::time_point<std::chrono::system_clock> m_tout;
 
     bool getChar(char &ch);
 

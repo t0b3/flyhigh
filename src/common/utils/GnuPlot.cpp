@@ -223,7 +223,7 @@ void GnuPlot::plotX(PlotVectorType &x, const QString &title)
   {
     for(valueNr=0; valueNr<x.size(); valueNr++)
     {
-      line.sprintf("%f\n", x[valueNr]);
+      line = QString("%1\n").arg(x[valueNr]);
       pFile->write(line.toLatin1(), line.length());
     }
 
@@ -255,7 +255,7 @@ void GnuPlot::plotXY(PlotVectorType &x, PlotVectorType &y, const QString &title)
   {
     for(valueNr=0; valueNr<x.size(); valueNr++)
     {
-      line.sprintf("%f %f\n", x[valueNr], y[valueNr]);
+      line = QString("%1 %2\n").arg(x[valueNr]).arg(y[valueNr]);
       pFile->write(line.toLatin1(), line.length());
     }
 
@@ -318,7 +318,7 @@ void GnuPlot::plotXYZ(PlotVectorType &x, PlotVectorType &y, PlotVectorType &z, c
   {
     for(valueNr=0; valueNr<x.size(); valueNr++)
     {
-      line.sprintf("%f %f %f\n", x[valueNr], y[valueNr], z[valueNr]);
+      line = QString("%1 %2 %3\n").arg(x[valueNr]).arg(y[valueNr]).arg(z[valueNr]);
       pFile->write(line.toLatin1(), line.length());
     }
 
@@ -393,13 +393,13 @@ void GnuPlot::setMinMaxXYZ(double minX, double maxX, double minY, double maxY, d
 {
   QString cmdstr;
 
-  cmdstr.sprintf("set xrange [%f:%f]\n", minX, maxX);
+  cmdstr = QString("set xrange [%1:%1]\n").arg(minX).arg(maxX);
   execCmd(cmdstr);
 
-  cmdstr.sprintf("set yrange [%f:%f]\n", minY, maxY);
+  cmdstr = QString("set yrange [%1:%2]\n").arg(minY).arg(maxY);
   execCmd(cmdstr);
 
-  cmdstr.sprintf("set zrange [%f:%f]\n", minZ, maxZ);
+  cmdstr = QString("set zrange [%1:%2]\n").arg(minZ).arg(maxZ);
   execCmd(cmdstr);
 }
 
@@ -429,20 +429,20 @@ void GnuPlot::setAxisData(const char axis, AxisDataType axisData)
 
   switch(axisData)
   {
-    case Time:
-      cmd.sprintf("set %cdata time", axis);
-      execCmd(cmd);
-      execCmd("set timefmt \"%H:%M:%S\"");
-      cmd.sprintf("set format %c ", axis);
-      cmd += "\"%H:%M:%S\"";
-      execCmd(cmd);
-    break;
-    case Float:
-      cmd.sprintf("set %cdata", axis);
-      execCmd(cmd);
-      cmd.sprintf("set format %c ", axis);
-      cmd += "\"%g\"";
-      execCmd(cmd);
-    break;
+  case Time:
+    cmd = QString("set %1data time").arg(axis);
+    execCmd(cmd);
+    execCmd("set timefmt \"%H:%M:%S\"");
+    cmd = QString("set format %1 ").arg(axis);
+    cmd += "\"%H:%M:%S\"";
+    execCmd(cmd);
+  break;
+  case Float:
+    cmd = QString("set %1data").arg(axis);
+    execCmd(cmd);
+    cmd = QString("set format %1 ").arg(axis);
+    cmd += "\"%g\"";
+    execCmd(cmd);
+  break;
   }
 }

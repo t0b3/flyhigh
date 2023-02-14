@@ -43,7 +43,7 @@ bool DeviceConnectionParameters::operator==(const DeviceConnectionParameters& ot
 
 bool DeviceConnectionParameters::operator!=(const DeviceConnectionParameters& other) const
 {
-	return !operator==(other);
+  return !operator==(other);
 }
 
 void DeviceConnectionParameters::readFromConfig()
@@ -68,7 +68,7 @@ DeviceConnectionParameters DeviceConnectionParameters::defaultParameters()
   parameters.m_port = IFlyHighRC::pInstance()->deviceLineList().first();
   parameters.m_lineSpeed = IFlyHighRC::pInstance()->deviceSpeedList().first();
 
-	return parameters;
+  return parameters;
 }
 
 QString DeviceConnectionParameters::deviceType() const

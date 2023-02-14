@@ -20,7 +20,7 @@
 
 #include <QtCore/QString>
 #include <QtSerialPort/QSerialPort>
-#include <sys/timeb.h>
+#include <chrono>
 #include "Device.h"
 
 #include <QtCore/QDebug>
@@ -28,7 +28,7 @@
 Device::Device(bool flow)
 {
   m_tlg = "";
-  m_tout = 0;
+  m_tout = std::chrono::system_clock::now();
 
   m_serialPort = new QSerialPort();
 
@@ -170,19 +170,12 @@ bool Device::writeBuffer(const char *pBuff, int len)
 
 void Device::startTimer(int tout)
 {
-  struct timeb tb;
-
-  ftime(&tb);
-  m_tout = (tb.time % 1000) * 1000 + tb.millitm + tout;
+  m_tout = std::chrono::system_clock::now() + std::chrono::milliseconds(tout);
 }
 
 bool Device::isElapsed()
 {
-  struct timeb tb;
-  int curTime;
+  bool elapsed = (std::chrono::system_clock::now() > m_tout);
 
-  ftime(&tb);
-  curTime = (tb.time % 1000) * 1000 + tb.millitm;
-
-  return (curTime >= m_tout);
+  return (elapsed);
 }

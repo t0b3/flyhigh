@@ -67,21 +67,21 @@ bool Protocol6015::parWrite(MemType memType, int par, FtDataType dataType, const
 		case MemFa:
 			switch(dataType)
 			{
-				case FtUInt8: case FtInt8:
-					writeEnableFa();
-					tlgValue.sprintf("%02X", (char)value.toUInt());
-					success = writePar(memType, par, tlgValue);
-				break;
-				case FtUInt16: case FtInt16:
-					writeEnableFa();
-					tlgValue.sprintf("%04X", bswap_16(value.toUInt()));
-					success = writePar(memType, par, tlgValue);
-				break;
-				case FtUInt32: case FtInt32:
-					writeEnableFa();
-					tlgValue.sprintf("%08X", bswap_32(value.toUInt()));
-					success = writePar(memType, par, tlgValue);
-				break;
+        case FtUInt8: case FtInt8:
+          writeEnableFa();
+          tlgValue = QString("%1").arg((char)value.toUInt(), 2, 16, QLatin1Char('0'));
+          success = writePar(memType, par, tlgValue);
+        break;
+        case FtUInt16: case FtInt16:
+          writeEnableFa();
+          tlgValue = QString("%1").arg((char)value.toUInt(), 4, 16, QLatin1Char('0'));
+          success = writePar(memType, par, tlgValue);
+        break;
+        case FtUInt32: case FtInt32:
+          writeEnableFa();
+          tlgValue = QString("%1").arg((char)value.toUInt(), 8, 16, QLatin1Char('0'));
+          success = writePar(memType, par, tlgValue);
+        break;
 				case FtString:
 					writeEnableFa();
 					success = writeParString(memType, par, value.toString());
@@ -171,7 +171,7 @@ bool Protocol6015::trackReq(int trackNr)
 	QString tlg;
 	bool success;
 
-	tlg.sprintf("ACT_21_%02x\r\n", trackNr);
+	tlg = QString("ACT_21_%1\r\n").arg(trackNr, 2, 16, QLatin1Char('0'));
 	m_device.flush();
 	success = m_device.sendTlg(tlg);
 
@@ -196,7 +196,7 @@ bool Protocol6015::wpListReq()
 	QString tlg;
 	bool success;
 
-	tlg.sprintf("ACT_31_00\r\n");
+	tlg = "ACT_31_00\r\n";
 	m_device.flush();
 	success = m_device.sendTlg(tlg);
 
@@ -267,7 +267,7 @@ bool Protocol6015::routeListReq()
 	QString tlg;
 	bool success;
 
-	tlg.sprintf("ACT_41_00\r\n");
+	tlg = "ACT_41_00\r\n";
 	m_device.flush();
 	success = m_device.sendTlg(tlg);
 
@@ -505,7 +505,7 @@ QString Protocol6015::value2ftString(int value, int length)
 	QString pad;
 	QString strValue;
 
-	strValue.sprintf("%i", value);
+	strValue = QString::number(value);
 	strValue.truncate(length);
 	pad.fill(' ', length - strValue.length());
 	ftStr = pad;
@@ -530,7 +530,7 @@ QString Protocol6015::deg2ftString(double value, int length, char dir)
 	degValue = floor(value);
 	minValue = (value - degValue) * 60;
 
-	degStr.sprintf("%.0f'%06.3f", degValue, minValue);
+	degStr.asprintf("%.0f'%06.3f", degValue, minValue);
 	pad.fill(' ', length - degStr.length() - 1);
 
 	ftStr = dir;
@@ -626,7 +626,7 @@ bool Protocol6015::writePar(MemType memType, int par, const QString &value)
 	switch(memType)
 	{
 		case MemFa:
-			tlg.sprintf("WFA_%02x_", par);
+			tlg = QString("WFA_%1_").arg(par, 2, 16, QLatin1Char('0'));
 		break;
 		default:
 		break;
@@ -687,10 +687,10 @@ bool Protocol6015::requestPar(MemType memType, int par)
 	switch(memType)
 	{
 		case MemFa:
-			tlg.sprintf("RFA_%02x\r\n", par);
+			tlg = QString("RFA_%1\r\n").arg(par, 2, 16, QLatin1Char('0'));
 		break;
 		case MemPa:
-			tlg.sprintf("RPA_%02x\r\n", par);
+			tlg = QString("RFA_%1\r\n").arg(par, 2, 16, QLatin1Char('0'));
 		break;
 		default:
       tlg = "";
