@@ -1,22 +1,24 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.1.0)
 
 project(flyhigh)
+
+set(CMAKE_CXX_STANDARD 11)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 
-# at least Qt 5.3 is required.
-find_package(Qt5Core 5.3.2 REQUIRED)
-find_package(Qt5Gui 5.3.2 REQUIRED)
-find_package(Qt5Network 5.3.2 REQUIRED)
+# at least Qt 5.15 is required.
+find_package(Qt5Core 5.15 REQUIRED)
+find_package(Qt5Gui 5.15 REQUIRED)
+find_package(Qt5Network 5.15 REQUIRED)
 find_package(Qt5PrintSupport REQUIRED)
 find_package(Qt5SerialPort REQUIRED)
-find_package(Qt5Sql 5.3.2 REQUIRED)
-find_package(Qt5Widgets 5.3.2 REQUIRED)
-find_package(Qt5Xml 5.3.2 REQUIRED)
-find_package(Qt5WebKit 5.3.2 REQUIRED)
-find_package(Qt5WebKitWidgets 5.3.2 REQUIRED)
+find_package(Qt5Sql 5.15 REQUIRED)
+find_package(Qt5Widgets 5.15 REQUIRED)
+find_package(Qt5Xml 5.15 REQUIRED)
+find_package(Qt5WebKit 5.15 REQUIRED)
+find_package(Qt5WebKitWidgets 5.15 REQUIRED)
 
 set(QT_USE_QTWEBKIT TRUE)
 
@@ -52,7 +54,9 @@ if(NOT FLYHIGH_DOC_DIR)
  set(FLYHIGH_DOC_DIR "${CMAKE_INSTALL_PREFIX}/usr/share/doc/flyhigh")
 endif()
 
-add_definitions(-Wall -fPIC -std=c++11 -msse2)
+add_definitions(-Wall -fPIC -msse2)
+
+
 
 include(Functions.cmake) # custom functions
 include_directories(${CMAKE_SOURCE_DIR}
