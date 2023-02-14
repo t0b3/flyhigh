@@ -1,7 +1,13 @@
+/usr/include/x86_64-linux-gnu/qt5
 /usr/include/x86_64-linux-gnu/qt5/QtCore
+/usr/include/x86_64-linux-gnu/qt5/QtGui
+/usr/include/x86_64-linux-gnu/qt5/QtNetwork
 /usr/include/x86_64-linux-gnu/qt5/QtSerialPort
+/usr/include/x86_64-linux-gnu/qt5/QtSql
 /usr/include/x86_64-linux-gnu/qt5/QtWebKit
+/usr/include/x86_64-linux-gnu/qt5/QtWebKitWidgets
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets
+/usr/include/x86_64-linux-gnu/qt5/QtXml
 src
 src/analysis
 src/common/container
