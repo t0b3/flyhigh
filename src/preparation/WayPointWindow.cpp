@@ -45,9 +45,8 @@ WayPointWindow::WayPointWindow(QWidget* parent, const QString &name,
 	QAction* pAction;
 	QTableWidget *pTable = TableWindow::getTable();
 
-  m_pWayPointView = NULL;
+  m_pWayPointView = nullptr;
   m_wpType = type;
-  m_pWayPointView = NULL;
   m_externSelect = false;
 
 	switch(src)
@@ -66,7 +65,7 @@ WayPointWindow::WayPointWindow(QWidget* parent, const QString &name,
 		break;
     case IDataBase::File:
 		{
-			m_pDb = NULL;
+			m_pDb = nullptr;
 		}
 		break;
 		default:
@@ -203,10 +202,12 @@ WayPointWindow::~WayPointWindow()
 
 void WayPointWindow::closeEvent(QCloseEvent *pEvent)
 {
-  if(m_pWayPointView != NULL)
+  (void)pEvent;
+
+  if(m_pWayPointView != nullptr)
   {
     delete m_pWayPointView;
-    m_pWayPointView = NULL;
+    m_pWayPointView = nullptr;
   }
 }
 
@@ -214,7 +215,7 @@ void WayPointWindow::selectionChanged()
 {
   int row;
 
-	if((m_pWayPointView != NULL) && !m_externSelect)
+	if((m_pWayPointView != nullptr) && !m_externSelect)
 	{
 	  row = getCurrentWpIndex();
 
@@ -232,7 +233,7 @@ void WayPointWindow::file_update()
 	uint wpNr;
 	uint maxWpNr;
 
-	if(m_pDb != NULL)
+	if(m_pDb != nullptr)
 	{
     pTable = TableWindow::getTable();
     pTable->setSortingEnabled(false); // prevent sorting on modification
@@ -402,7 +403,7 @@ void WayPointWindow::file_editWebMap()
 {
   int index;
 
-	if((m_pWayPointView == NULL) && (m_wpList.size() >= 0))
+	if((m_pWayPointView == nullptr) && (m_wpList.size() >= 0))
   {
     index = getCurrentWpIndex();
     m_pWayPointView = new WebMapWayPointView(tr("Edit WayPoints"), m_wpType);
@@ -421,7 +422,7 @@ void WayPointWindow::file_viewWebMap()
 {
   int index;
 
-	if((m_pWayPointView == NULL) && (m_wpList.size() > 0))
+	if((m_pWayPointView == nullptr) && (m_wpList.size() > 0))
   {
     index = getCurrentWpIndex();
     m_pWayPointView = new WebMapWayPointView(tr("View WayPoints"), m_wpType);
@@ -448,7 +449,8 @@ void WayPointWindow::wayPointViewFinished(int res)
     TableWindow::unsetCursor();
   }
 
-  m_pWayPointView = NULL;
+  delete m_pWayPointView;
+  m_pWayPointView = nullptr;
   menu()->setEnabled(true);
 }
 

@@ -270,6 +270,7 @@ void RouteWindow::file_viewWebMap()
     pView->setEditable(false);
     pView->loadMap();
     pView->exec();
+    delete pView;
 	}
 }
 

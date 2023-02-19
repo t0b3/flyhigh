@@ -44,8 +44,8 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const QString &name, IDataBase::
   QTableWidget *pTable;
 
   pTable = TableWindow::getTable();
-  m_pWebMapView = NULL;
-  m_pAirSpaceView = NULL;
+  m_pWebMapView = nullptr;
+  m_pAirSpaceView = nullptr;
   m_externSelect = false;
 
   switch(src)
@@ -84,7 +84,7 @@ AirSpaceWindow::AirSpaceWindow(QWidget* parent, const QString &name, IDataBase::
     break;
     case IDataBase::File:
     {
-      m_pDb = NULL;
+      m_pDb = nullptr;
 
       pAction = new QAction(tr("&Add to GPS..."), this);
       connect(pAction, SIGNAL(triggered()), this, SLOT(file_AddToGPS()));
@@ -171,14 +171,18 @@ AirSpaceWindow::~AirSpaceWindow()
 
 void AirSpaceWindow::closeEvent(QCloseEvent *pEvent)
 {
-  if(m_pAirSpaceView != NULL)
+  (void)pEvent;
+
+  if(m_pAirSpaceView != nullptr)
   {
     delete m_pAirSpaceView;
+    m_pAirSpaceView = nullptr;
   }
 
-  if(m_pWebMapView != NULL)
+  if(m_pWebMapView != nullptr)
   {
     delete m_pWebMapView;
+    m_pWebMapView = nullptr;
   }
 }
 
@@ -188,7 +192,7 @@ void AirSpaceWindow::file_update()
   uint airspaceNr;
   uint maxAirspaceNr;
 
-  if(m_pDb != NULL)
+  if(m_pDb != nullptr)
   {
     m_airSpaceList.clear();
     TableWindow::setNumRows(0);
@@ -336,7 +340,7 @@ void AirSpaceWindow::file_AddToGPS()
 
 void AirSpaceWindow::file_viewAirSpace()
 {
-  if((m_airSpaceList.size() > 0) && (m_pAirSpaceView == NULL))
+  if((m_airSpaceList.size() > 0) && (m_pAirSpaceView == nullptr))
   {
     m_pAirSpaceView = new AirSpaceView();
     m_pAirSpaceView->setGeometry(QRect(0, 0, 800, 800));
@@ -350,7 +354,7 @@ void AirSpaceWindow::file_viewAirSpace()
 
 void AirSpaceWindow::file_viewWebMap()
 {
-  if((m_airSpaceList.size() > 0) && (m_pWebMapView == NULL))
+  if((m_airSpaceList.size() > 0) && (m_pWebMapView == nullptr))
   {
     menu()->setEnabled(false);
     m_pWebMapView = new WebMapAirSpaceView(tr("View AirSpaces"));
@@ -372,12 +376,12 @@ void AirSpaceWindow::selectionChanged()
 
   if(row >= 0)
   {
-    if(m_pAirSpaceView != NULL)
+    if(m_pAirSpaceView != nullptr)
     {
       m_pAirSpaceView->setSelected(row);
     }
 
-    if((m_pWebMapView != NULL) && !m_externSelect)
+    if((m_pWebMapView != nullptr) && !m_externSelect)
     {
       m_pWebMapView->selectAirSpace(m_airSpaceList[row]->id());
     }
@@ -386,12 +390,12 @@ void AirSpaceWindow::selectionChanged()
 
 void AirSpaceWindow::airSpaceViewFinished(int res)
 {
-  m_pAirSpaceView = NULL;
+  m_pAirSpaceView = nullptr;
 }
 
 void AirSpaceWindow::webMapFinished(int res)
 {
-  m_pWebMapView = NULL;
+  m_pWebMapView = nullptr;
   menu()->setEnabled(true);
 }
 

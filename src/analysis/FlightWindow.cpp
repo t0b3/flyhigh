@@ -1141,6 +1141,7 @@ void FlightWindow::showOnWebMap()
 
         progDlg.endProgress();
         pView->exec();
+        delete pView;
       }
     }
 
@@ -1179,7 +1180,7 @@ void FlightWindow::showOnMap()
 
 void FlightWindow::showPhotos()
 {
-  PhotoView view(NULL, tr("Photos"));
+  PhotoView view(nullptr, tr("Photos"));
   int row;
 
   row = getCurrentFlightIndex();
