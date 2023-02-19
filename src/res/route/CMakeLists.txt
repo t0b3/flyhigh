@@ -6,7 +6,6 @@ set(route_JS
  js/measure.js
  js/optimizer.js
  js/route.js
- js/turnpt.js
- js/webmap.js)
+ js/turnpt.js)
 
 lint_jsfiles(lint_route ${route_JS})

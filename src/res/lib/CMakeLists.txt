@@ -1,5 +1,6 @@
 set(lib_JS
  photo.js
+ webmap.js
  plot/context.js
  plot/cursor.js
  plot/legend.js
