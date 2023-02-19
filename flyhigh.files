@@ -173,6 +173,8 @@ src/common/webmap/WebMapFlight.cpp
 src/common/webmap/WebMapFlight.h
 src/common/webmap/WebMapFlightView.cpp
 src/common/webmap/WebMapFlightView.h
+src/common/webmap/WebMapPage.cpp
+src/common/webmap/WebMapPage.h
 src/common/webmap/WebMapRoute.cpp
 src/common/webmap/WebMapRoute.h
 src/common/webmap/WebMapRouteView.cpp
@@ -295,6 +297,7 @@ src/preparation/WptFileParser.cpp
 src/preparation/WptFileParser.h
 src/res/airspace/CMakeLists.txt
 src/res/flight/CMakeLists.txt
+src/res/flight/flight.html
 src/res/lib/CMakeLists.txt
 src/res/route/CMakeLists.txt
 src/res/waypoint/CMakeLists.txt

@@ -17,12 +17,9 @@
  *   Free Software Foundation, Inc.,                                       *
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
-#include <QWebFrame>
 #include "WebMap.h"
 #include "WebMapWayPoint.h"
 #include "WebMapWayPointView.h"
-
-#include <QDebug>
 
 WebMapWayPointView::WebMapWayPointView(const QString &name, WayPoint::Type type)
 {
@@ -30,7 +27,7 @@ WebMapWayPointView::WebMapWayPointView(const QString &name, WayPoint::Type type)
 	resize(1000, 850);
 
   m_wpType = type;
-	m_pWpList = NULL;
+	m_pWpList = nullptr;
 	m_editable = true;
 	m_selItem = -1;
 	m_pWebMap = new WebMap(this, WebMap::MapWayPoint);
@@ -78,6 +75,7 @@ bool WebMapWayPointView::editable() const
 
 void WebMapWayPointView::resizeEvent(QResizeEvent *pEvent)
 {
+  (void)pEvent;
 	m_pWebMap->setGeometry(QRect(0, 0, width(), height()));
 }
 
@@ -94,7 +92,7 @@ void WebMapWayPointView::appReady()
   m_pWebMap->setSize(width(), height());
 	m_pWebMap->getWayPoint()->setEditable(m_editable);
 
-  if(m_pWpList != NULL)
+  if(m_pWpList != nullptr)
   {
     listSize = m_pWpList->size();
 

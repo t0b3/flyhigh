@@ -17,8 +17,8 @@ find_package(Qt5SerialPort REQUIRED)
 find_package(Qt5Sql 5.15 REQUIRED)
 find_package(Qt5Widgets 5.15 REQUIRED)
 find_package(Qt5Xml 5.15 REQUIRED)
-find_package(Qt5WebKit 5.15 REQUIRED)
-find_package(Qt5WebKitWidgets 5.15 REQUIRED)
+find_package(Qt5WebEngine 5.15 REQUIRED)
+find_package(Qt5WebEngineWidgets 5.15 REQUIRED)
 
 set(QT_USE_QTWEBKIT TRUE)
 
@@ -56,11 +56,8 @@ endif()
 
 add_definitions(-Wall -fPIC -msse2)
 
-
-
 include(Functions.cmake) # custom functions
-include_directories(${CMAKE_SOURCE_DIR}
-)
+include_directories(${CMAKE_SOURCE_DIR})
 
 add_subdirectory(src)
 add_subdirectory(tools)

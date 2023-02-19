@@ -93,6 +93,7 @@ void WebMapFlightView::loadMap()
 
 void WebMapFlightView::resizeEvent(QResizeEvent *pEvent)
 {
+  (void)pEvent;
   m_pWebMap->setGeometry(QRect(0, 0, width(), height()));
 }
 

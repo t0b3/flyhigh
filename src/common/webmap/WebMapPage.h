@@ -1,5 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2011 by Alex Graf                                       *
+ *   Copyright (C) 2023 by Alex Graf                                       *
  *   grafal@sourceforge.net                                                *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
@@ -18,38 +18,35 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#ifndef WebMapWayPoint_h
-#define WebMapWayPoint_h
+#ifndef _WebMapPage_h
+#define _WebMapPage_h
 
-#include <QObject>
-#include "WayPoint.h"
+#include <QWebEnginePage>
 
-class WebMap;
-
-class WebMapWayPoint: public QObject
+class WebMapPage: public QWebEnginePage
 {
-	Q_OBJECT
+  Q_OBJECT
 
-	public:
-		WebMapWayPoint(WebMap *pWebMap);
+  public:
+    WebMapPage(QObject *parent);
 
-		~WebMapWayPoint();
+    virtual ~WebMapPage();
 
-		void init();
+    void runJavaScriptRet(const QString &scriptSource, QVariant &value);
 
-		void pushWayPoint(const WayPoint &wp);
+  signals:
+    void appReady();
 
-    void selectWayPoint(uint id);
+    void setOk(bool ok);
 
-///    void populateObject();
+    void setLine(int line);
 
-    void setEditable(bool en);
+    void netRequest(int id, const QString &request, const QString &callback);
+  protected:
+    /**
+      Called on JavaScript confirm("msg")
+    */
+    bool javaScriptConfirm(const QUrl &securityOrigin, const QString &msg) override;
 
-    bool getNextModified(WayPoint &wp);
-
-	private:
-		WebMap *m_pWebMap;
-		WayPoint::WayPointListType m_wpList;
 };
-
 #endif

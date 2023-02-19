@@ -18,7 +18,6 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QWebFrame>
 #include "AirSpaceList.h"
 #include "Route.h"
 #include "WebMap.h"
@@ -31,8 +30,8 @@ WebMapRouteView::WebMapRouteView(const QString &name)
 	QWidget::setWindowTitle(name);
 	resize(1000, 850);
 
-	m_pRoute = NULL;
-	m_pAirSpaceList = NULL;
+	m_pRoute = nullptr;
+	m_pAirSpaceList = nullptr;
 	m_pWebMap = new WebMap(this, WebMap::MapRoute);
 	m_editable = true;
 	m_glueToCenter = false;
@@ -73,6 +72,7 @@ void WebMapRouteView::setGlueToCenter(bool en)
 
 void WebMapRouteView::resizeEvent(QResizeEvent *pEvent)
 {
+  (void)pEvent;
 	m_pWebMap->setGeometry(QRect(0, 0, width(), height()));
 }
 
@@ -87,7 +87,7 @@ void WebMapRouteView::appReady()
 
   m_pWebMap->setSize(width(), height());
 
-  if(m_pAirSpaceList != NULL)
+  if(m_pAirSpaceList != nullptr)
   {
     for(it=m_pAirSpaceList->begin(); it<m_pAirSpaceList->end(); it++)
     {
@@ -97,7 +97,7 @@ void WebMapRouteView::appReady()
 
 	m_pWebMap->getRoute()->setEditable(m_editable);
 
-	if(m_pRoute != NULL)
+	if(m_pRoute != nullptr)
 	{
 		m_pWebMap->getRoute()->setName(m_pRoute->name());
 		m_pWebMap->getRoute()->setTurnPointList(m_pRoute->wayPointList());
@@ -108,7 +108,7 @@ void WebMapRouteView::appReady()
 
 void WebMapRouteView::finished(int res)
 {
-  if((res > 0) && (m_pRoute != NULL))
+  if((res > 0) && (m_pRoute != nullptr))
   {
     m_pRoute->setName(m_pWebMap->getRoute()->name());
     m_pRoute->setType(m_pWebMap->getRoute()->type());

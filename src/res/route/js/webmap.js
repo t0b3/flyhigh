@@ -83,22 +83,30 @@ function wm_getDivValue(divId, editable)
   return value;
 }
 
-function wm_emitNetRequest(id, req, callback)
+function wm_emitNetRequest(id, req, cb)
 {
-  WebMap.netRequest(id, req, callback);
+//  WebMap.netRequest(id, req, callback);
+  var opts = {func: 'netRequest', id: id, req: req, cb: cb};
+  confirm(JSON.stringify(opts));
 }
 
 function wm_emitAppReady()
 {
-  WebMap.appReady();
+//  WebMap.appReady();
+  var opts = {func: 'appReady'};
+  confirm(JSON.stringify(opts));
 }
 
 function wm_emitLineChanged(line)
 {
-  WebMap.setLine(line);
+//  WebMap.setLine(line);
+  var opts = {func: 'setLine', line: line};
+  confirm(JSON.stringify(opts));
 }
 
 function wm_emitOk(ok)
 {
-  WebMap.setOk(ok);
+//  WebMap.setOk(ok);
+  var opts = {func: 'setOk', ok: ok};
+  confirm(JSON.stringify(opts));
 }

@@ -22,8 +22,8 @@ include_directories(${CMAKE_SOURCE_DIR}
                     ${Qt5PrintSupport_INCLUDE_DIRS}
                     ${Qt5Sql_INCLUDE_DIRS}
                     ${Qt5SerialPort_INCLUDE_DIRS}
-                    ${Qt5WebKit_INCLUDE_DIRS}
-                    ${Qt5WebKitWidgets_INCLUDE_DIRS}
+                    ${Qt5WebEngine_INCLUDE_DIRS}
+                    ${Qt5WebEngineWidgets_INCLUDE_DIRS}
                     ${Qt5Widgets_INCLUDE_DIRS}
                     ${Qt5Xml_INCLUDE_DIRS})
 
@@ -68,8 +68,8 @@ target_link_libraries(flyhigh
   res
   qextmedia
   upload
-  Qt5Core Qt5Gui Qt5Network Qt5PrintSupport Qt5Sql Qt5SerialPort Qt5WebKit
-  Qt5WebKitWidgets Qt5Widgets Qt5Xml)
+  Qt5Core Qt5Gui Qt5Network Qt5PrintSupport Qt5Sql Qt5SerialPort Qt5WebEngine
+  Qt5WebEngineWidgets Qt5Widgets Qt5Xml)
 
 # install executable
 install(TARGETS flyhigh DESTINATION ${FLYHIGH_BIN_DIR} )

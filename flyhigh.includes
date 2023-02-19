@@ -4,8 +4,8 @@
 /usr/include/x86_64-linux-gnu/qt5/QtNetwork
 /usr/include/x86_64-linux-gnu/qt5/QtSerialPort
 /usr/include/x86_64-linux-gnu/qt5/QtSql
-/usr/include/x86_64-linux-gnu/qt5/QtWebKit
-/usr/include/x86_64-linux-gnu/qt5/QtWebKitWidgets
+/usr/include/x86_64-linux-gnu/qt5/QtWebEngine
+//usr/include/x86_64-linux-gnu/qt5/QtWebEngineWidgets
 /usr/include/x86_64-linux-gnu/qt5/QtWidgets
 /usr/include/x86_64-linux-gnu/qt5/QtXml
 src
@@ -41,3 +41,4 @@ src/res/route/js
 src/res/waypoint
 src/res/waypoint/js
 src/common/parser
+src/res/flight

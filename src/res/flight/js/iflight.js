@@ -263,7 +263,7 @@ function fl_showPlot()
 
 function fl_setOk(ok)
 {
-    wm_emitOk(ok);
+  wm_emitOk(ok);
 }
 
 function fl_speedUp()

@@ -18,11 +18,12 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QWebFrame>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include "WebMap.h"
+#include "WebMapPage.h"
 #include "WebMapWayPoint.h"
-
-#include <QDebug>
 
 WebMapWayPoint::WebMapWayPoint(WebMap *pWebMap)
 {
@@ -36,17 +37,13 @@ WebMapWayPoint::~WebMapWayPoint()
 void WebMapWayPoint::init()
 {
 	QString code = "wp_init();";
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code);
+	m_pWebMap->page()->runJavaScript(code);
 }
 
 void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
 {
 	QString code = "wp_pushWayPoint({id: %1, name: '%2', spot: '%3', country: '%4',"
                  " lat: %5, lng: %6, alt: %7});";
-	QWebFrame *pFrame;
 	QString name;
 	QString country;
 	QString spot;
@@ -55,7 +52,6 @@ void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
 	int id;
 	int alt;
 
-  pFrame = m_pWebMap->page()->mainFrame();
   id = wp.id();
   name = WebMap::escape(wp.name());
   spot = WebMap::escape(wp.spot());
@@ -63,41 +59,60 @@ void WebMapWayPoint::pushWayPoint(const WayPoint &wp)
   lat = wp.lat();
   lon = wp.lon();
   alt = wp.alt();
-  pFrame->evaluateJavaScript(code.arg(id).arg(name).arg(spot).arg(country)
-                             .arg(lat).arg(lon).arg(alt));
+  m_pWebMap->page()->runJavaScript(code.arg(id).arg(name).arg(spot).arg(country)
+                                       .arg(lat).arg(lon).arg(alt));
 }
 
 void WebMapWayPoint::selectWayPoint(uint id)
 {
 	QString code = "wp_selectWayPoint(%1);";
-	QWebFrame *pFrame;
-
-  pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code.arg(id));
+  m_pWebMap->page()->runJavaScript(code.arg(id));
 }
 
+/**
 void WebMapWayPoint::populateObject()
 {
 	m_pWebMap->page()->mainFrame()->addToJavaScriptWindowObject("WebMapWayPoint", this);
 }
+*/
 
 void WebMapWayPoint::setEditable(bool en)
 {
 	QString code = "wp_setEditable(%1);";
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code.arg(en));
+  m_pWebMap->page()->runJavaScript(code.arg(en));
 }
 
 bool WebMapWayPoint::getNextModified(WayPoint &wp)
 {
+  WebMapPage *webMapPage = static_cast<WebMapPage*>(m_pWebMap->page());
   QString code = "wp_getNextModified();";
-  QWebFrame *pFrame;
+  QVariant opts;
+  QJsonDocument doc;
+  QJsonObject values;
+  bool valid;
+
+  webMapPage->runJavaScriptRet(code, opts);
+  doc = QJsonDocument::fromJson(opts.toString().toUtf8());
+  valid = doc.isObject();
+
+  if(valid)
+  {
+    values = doc.object();
+    wp.setId(values["id"].toInt());
+    wp.setName(values["name"].toString());
+    wp.setSpot(values["spot"].toString());
+    wp.setCountry(values["country"].toString());
+    wp.setCoordinates(values["lat"].toDouble(), values["lng"].toDouble(),
+                      values["alt"].toInt());
+  }
+
+  return valid;
+
+/** @TODO: find a proper solution
+  QString code = "wp_getNextModified();";
 	QVariantMap wpMap;
 	bool valid;
 
-	pFrame = m_pWebMap->page()->mainFrame();
 	wpMap = pFrame->evaluateJavaScript(code).toMap();
 	valid = !wpMap.empty();
 
@@ -111,4 +126,5 @@ bool WebMapWayPoint::getNextModified(WayPoint &wp)
 	}
 
 	return valid;
+*/
 }

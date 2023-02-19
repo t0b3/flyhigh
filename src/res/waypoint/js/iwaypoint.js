@@ -166,7 +166,7 @@ function wp_setWayPtLat(lat)
     }
     else
     {
-      wp_setLatLng(curWayPt.getPosition().lat(), curWayPt.getPosition().lng());
+      wp_setLatLng(curWayPt.getPosition().lat, curWayPt.getPosition().lng);
     }
   }
 }
@@ -187,7 +187,7 @@ function wp_setWayPtLng(lng)
     }
     else
     {
-      wp_setLatLng(curWayPt.getPosition().lat(), curWayPt.getPosition().lng());
+      wp_setLatLng(curWayPt.getPosition().lat, curWayPt.getPosition().lng);
     }
   }
 }
@@ -282,13 +282,13 @@ function wp_getNextModified()
     {
       nextModified = (nr + 1);
       opts = {id: wayPt.getId(), name: wayPt.getName(), spot: wayPt.getSpot(),
-              country: wayPt.getCountry(), lat: wayPt.getPosition().lat(),
-              lng: wayPt.getPosition().lng(), alt: wayPt.getAlt()};
+              country: wayPt.getCountry(), lat: wayPt.getPosition().lat,
+              lng: wayPt.getPosition().lng, alt: wayPt.getAlt()};
       break;
     }
   }
 
-  return opts;
+  return JSON.stringify(opts);
 }
 
 function wp_setOk(ok)
@@ -357,11 +357,10 @@ function updateWayPtAlt(wayPt)
 {
   var req;
 
-  req = "http://maps.googleapis.com/maps/api/elevation/json?locations=";
+    req = "https://api.opentopodata.org/v1/eudem25m?locations=";
   req += wayPt.getPosition().lat;
   req += ",";
   req += wayPt.getPosition().lng;
-  req += "&sensor=false";
   wm_emitNetRequest(wayPt.getId(), req, "wp_altReply");
 }
 

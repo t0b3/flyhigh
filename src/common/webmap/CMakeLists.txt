@@ -6,6 +6,7 @@ set(webmap_SRCS
   WebMapAirSpaceView.cpp
   WebMapFlight.cpp
   WebMapFlightView.cpp
+  WebMapPage.cpp
   WebMapRoute.cpp
   WebMapRouteView.cpp
   WebMapWayPoint.cpp

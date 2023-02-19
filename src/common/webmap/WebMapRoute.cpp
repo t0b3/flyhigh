@@ -18,15 +18,21 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
+#include <QApplication>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
-#include <QWebFrame>
+#include <QVariant>
+#include <QWebEnginePage>
 #include "WebMap.h"
+#include "WebMapPage.h"
 #include "WebMapRoute.h"
 
 WebMapRoute::WebMapRoute(WebMap *pWebMap)
 {
 	m_pWebMap = pWebMap;
-	m_pRoute = NULL;
+	m_pRoute = nullptr;
 }
 
 WebMapRoute::~WebMapRoute()
@@ -36,31 +42,29 @@ WebMapRoute::~WebMapRoute()
 void WebMapRoute::init()
 {
 	QString code = "rt_init();";
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code);
+	m_pWebMap->page()->runJavaScript(code);
 }
 
 void WebMapRoute::setName(const QString &name)
 {
 	QString code = "rt_setName('%1');";
-	QString locName;
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	locName = WebMap::escape(name);
-	pFrame->evaluateJavaScript(code.arg(locName));
+	QString locName = WebMap::escape(name);
+	m_pWebMap->page()->runJavaScript(code.arg(locName));
 }
 
 QString WebMapRoute::name() const
 {
+  WebMapPage *webMapPage = static_cast<WebMapPage*>(m_pWebMap->page());
 	QString code = "rt_getName();";
-	QWebFrame *pFrame;
-	QString name;
+	QVariant value;
+  QString name;
 
+/**
 	pFrame = m_pWebMap->page()->mainFrame();
 	name = pFrame->evaluateJavaScript(code).toString();
+*/
+  webMapPage->runJavaScriptRet(code, value);
+  name = value.toString();
 
 	return name;
 }
@@ -70,43 +74,63 @@ void WebMapRoute::setTurnPointList(const WayPoint::WayPointListType &tpList)
 	QString code = "rt_setTurnPts(%1);";
 	QString arg = "[";
 	QString argElem = "[%1,%2]";
-	QWebFrame *pFrame;
 	int tpNr;
 	bool first = true;
-
-	pFrame = m_pWebMap->page()->mainFrame();
 
 	for(tpNr=0; tpNr<tpList.size(); tpNr++)
 	{
 		if(!first)
-		{
 			arg += ",";
-		}
 
 		first = false;
 		arg += argElem.arg(tpList.at(tpNr).pos().lat()).arg(tpList.at(tpNr).pos().lon());
 	}
 
 	arg += "]";
-	pFrame->evaluateJavaScript(code.arg(arg));
+	m_pWebMap->page()->runJavaScript(code.arg(arg));
 }
 
 void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
 {
+  WebMapPage *webMapPage = static_cast<WebMapPage*>(m_pWebMap->page());
   QString code = "rt_getTurnPts();";
+  QVariant opts;
+  QJsonDocument doc;
+  QJsonArray::iterator it;
+  QJsonArray values;
   QString wpName;
-  QWebFrame *pFrame;
-  QVariantList tpArray;
-  QVariantList tpLatLng;
-  QVariantList::iterator it;
   WayPoint wp;
   int wpNr = 0;
 
 	wpName = "%1_" + name();
 	tpList.clear();
-  pFrame = m_pWebMap->page()->mainFrame();
-  tpArray = pFrame->evaluateJavaScript(code).toList();
 
+///  tpArray = pFrame->evaluateJavaScript(code).toList();
+  webMapPage->runJavaScriptRet(code, opts);
+  doc = QJsonDocument::fromJson(opts.toString().toUtf8());
+
+  if(doc.isArray())
+  {
+    for(const QJsonValue &tp: doc.array())
+    {
+      if(tp.isArray())
+      {
+        values = tp.toArray();
+
+        if(values.size() == 3)
+        {
+          wp.setName(wpName.arg(wpNr));
+          wp.setLat(values[0].toDouble());
+          wp.setLon(values[1].toDouble());
+          wp.setAlt(values[2].toInt());
+          wp.setType(WayPoint::TypeTurnPoint);
+          tpList.push_back(wp);
+          wpNr++;
+        }
+      }
+    }
+  }
+/**
   for(it=tpArray.begin(); it!=tpArray.end(); it++)
   {
     tpLatLng = (*it).toList();
@@ -122,34 +146,31 @@ void WebMapRoute::turnPointList(WayPoint::WayPointListType &tpList) const
       wpNr++;
     }
   }
+*/
 }
 
 void WebMapRoute::setEditable(bool en)
 {
 	QString code = "rt_setEditable(%1);";
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code.arg(en));
+	m_pWebMap->page()->runJavaScript(code.arg(en));
 }
 
 void WebMapRoute::setGlueToCenter(bool en)
 {
 	QString code = "rt_setGlueToCenter(%1);";
-	QWebFrame *pFrame;
-
-	pFrame = m_pWebMap->page()->mainFrame();
-	pFrame->evaluateJavaScript(code.arg(en));
+	m_pWebMap->page()->runJavaScript(code.arg(en));
 }
 
 Route::Type WebMapRoute::type() const
 {
+  WebMapPage *webMapPage = static_cast<WebMapPage*>(m_pWebMap->page());
 	QString code = "rt_getType();";
-	QWebFrame *pFrame;
-	int type;
+  QVariant value;
+	int type = -1;
 
-	pFrame = m_pWebMap->page()->mainFrame();
-	type = pFrame->evaluateJavaScript(code).toInt();
+//	type = pFrame->evaluateJavaScript(code).toInt();
+  webMapPage->runJavaScriptRet(code, value);
+  type = value.toInt();
 
 	return (Route::Type)type;
 }

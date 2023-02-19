@@ -18,8 +18,8 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 
-#include <QtCore/QObject>
-#include <QtWebKitWidgets/QWebFrame>
+#include <QObject>
+#include <QWebEnginePage>
 #include <math.h>
 #include "WebMap.h"
 #include "WebMapFlight.h"
@@ -37,16 +37,13 @@ WebMapFlight::~WebMapFlight()
 void WebMapFlight::init()
 {
   QString code = "fl_init();";
-  QWebFrame *pFrame;
-
-  pFrame = m_pWebMap->page()->mainFrame();
-  pFrame->evaluateJavaScript(code);
+  m_pWebMap->page()->runJavaScript(code);
 }
 
-void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *pFpList)
+void WebMapFlight::setFlightPointList(const QDate &date,
+                                      const FlightPointList *pFpList)
 {
   QString code;
-  QWebFrame *pFrame;
   QString value = "%1";
   QString latLonArg = "[%1,%2]";
   QString strTime = "";
@@ -117,21 +114,21 @@ void WebMapFlight::setFlightPointList(const QDate &date, const FlightPointList *
       strElevation += value.arg(pFpList->at(fpNr)->elevation());
 
       // lat, lon
-      strLatLon += latLonArg.arg(pFpList->at(fpNr)->pos().lat()).arg(pFpList->at(fpNr)->pos().lon());
+      strLatLon += latLonArg.arg(pFpList->at(fpNr)->pos().lat())
+                            .arg(pFpList->at(fpNr)->pos().lon());
     }
 
     minAlt = floor(minAlt / 100.0) * 100;
     maxAlt = ceil(maxAlt / 100.0) * 100;
 
-    pFrame = m_pWebMap->page()->mainFrame();
     code = "fl_setFlightTime([%1], %2, %3);";
-    pFrame->evaluateJavaScript(code.arg(strTime).arg(start).arg(duration));
+    m_pWebMap->page()->runJavaScript(code.arg(strTime).arg(start).arg(duration));
     code = "fl_setFlightAlt([%1], %2, %3);";
-    pFrame->evaluateJavaScript(code.arg(strAlt).arg(minAlt).arg(maxAlt));
+    m_pWebMap->page()->runJavaScript(code.arg(strAlt).arg(minAlt).arg(maxAlt));
     code = "fl_setFlightElevation([%1]);";
-    pFrame->evaluateJavaScript(code.arg(strElevation));
+    m_pWebMap->page()->runJavaScript(code.arg(strElevation));
     code = "fl_setFlightLatLon([%1]);";
-    pFrame->evaluateJavaScript(code.arg(strLatLon));
+    m_pWebMap->page()->runJavaScript(code.arg(strLatLon));
   }
 }
 
@@ -139,7 +136,6 @@ void WebMapFlight::setSogList(const FlightPointList::SogListType &sogList,
                               uint begin, uint end)
 {
   QString code = "fl_setSog([%1]);";
-  QWebFrame *pFrame;
   QString value = "%1";
   QString strSog = "";
   uint itemNr;
@@ -163,8 +159,7 @@ void WebMapFlight::setSogList(const FlightPointList::SogListType &sogList,
       strSog += value.arg(round(sogList.at(itemNr) * 10.0) / 10.0);
     }
 
-    pFrame = m_pWebMap->page()->mainFrame();
-    pFrame->evaluateJavaScript(code.arg(strSog));
+    m_pWebMap->page()->runJavaScript(code.arg(strSog));
   }
 }
 
@@ -172,7 +167,6 @@ void WebMapFlight::setVarioList(const FlightPointList::VarioListType &varioList,
                                 uint begin, uint end)
 {
   QString code = "fl_setVario([%1]);";
-  QWebFrame *pFrame;
   QString value = "%1";
   QString strVario = "";
   uint itemNr;
@@ -196,8 +190,7 @@ void WebMapFlight::setVarioList(const FlightPointList::VarioListType &varioList,
       strVario += value.arg(round(varioList.at(itemNr) * 10.0) / 10.0);
     }
 
-    pFrame = m_pWebMap->page()->mainFrame();
-    pFrame->evaluateJavaScript(code.arg(strVario));
+    m_pWebMap->page()->runJavaScript(code.arg(strVario));
   }
 }
 
@@ -206,7 +199,6 @@ void WebMapFlight::setVarioList(const FlightPointList::VarioListType &varioList,
 void WebMapFlight::setPhotoList(const Photo::PhotoListType &photoList)
 {
   QString code = "fl_pushPhoto({lat: %1, lng: %2, path: '%3'});";
-  QWebFrame *pFrame;
   uint listSize;
   uint itemNr;
   QString path;
@@ -217,14 +209,12 @@ void WebMapFlight::setPhotoList(const Photo::PhotoListType &photoList)
 
   if(listSize > 0)
   {
-    pFrame = m_pWebMap->page()->mainFrame();
-
     for(itemNr=0; itemNr<listSize; itemNr++)
     {
       lat = photoList.at(itemNr).pos().lat();
       lon = photoList.at(itemNr).pos().lon();
       path = photoList.at(itemNr).path();
-      pFrame->evaluateJavaScript(code.arg(lat).arg(lon).arg(path));
+      m_pWebMap->page()->runJavaScript(code.arg(lat).arg(lon).arg(path));
     }
   }
 }
@@ -232,13 +222,9 @@ void WebMapFlight::setPhotoList(const Photo::PhotoListType &photoList)
 void WebMapFlight::showPlot()
 {
   QString code = "fl_showPlot();";
-  QWebFrame *pFrame;
 
   if(m_plotEn)
-  {
-    pFrame = m_pWebMap->page()->mainFrame();
-    pFrame->evaluateJavaScript(code);
-  }
+    m_pWebMap->page()->runJavaScript(code);
 }
 
 void WebMapFlight::setPlotEnable(bool en)

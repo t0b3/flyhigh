@@ -22,7 +22,7 @@
 #define WebMap_h
 
 #include <QVector>
-#include <QWebView>
+#include <QWebEngineView>
 
 class QNetworkAccessManager;
 class QProgressBar;
@@ -31,14 +31,15 @@ class WebMapFlight;
 class WebMapRoute;
 class WebMapWayPoint;
 
-class WebMap: public QWebView
+class WebMap: public QWebEngineView
 {
 	Q_OBJECT
 
 	public:
-		typedef enum MarkerType{MarkerStart, MarkerLand, MarkerTp1, MarkerTp2, MarkerTp3, MarkerDefault}MarkerType;
+		enum MarkerType{MarkerStart, MarkerLand, MarkerTp1, MarkerTp2, MarkerTp3,
+                    MarkerDefault};
 
-		typedef enum MapType{MapFlight, MapRoute, MapWayPoint, MapAirSpace}MapType;
+		enum MapType{MapFlight, MapRoute, MapWayPoint, MapAirSpace};
 
 		WebMap(QWidget *pParent, MapType type);
 
@@ -82,11 +83,11 @@ class WebMap: public QWebView
 	private:
 		enum {ProgressW = 200, ProgressH = 15, LeftWidth = 280, PlotHeight = 140, Margin = 5};
 
-		typedef struct NetRequest
+		struct NetRequest
 		{
       int id;
       QString callback;
-		}NetRequest;
+		};
 
 		typedef QVector<NetRequest> NetRequestList;
 
@@ -105,7 +106,7 @@ class WebMap: public QWebView
 
 		void netReply(QNetworkReply *pReply);
 
-		void populateObject();
+///		void populateObject();
 };
 
 #endif

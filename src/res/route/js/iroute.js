@@ -211,7 +211,7 @@ function rt_getTurnPts()
     turnPtArray.push(new Array(turnPt.getPosition().lat, turnPt.getPosition().lng, turnPt.getAltitude()));
   }
 
-  return turnPtArray;
+  return JSON.stringify(turnPtArray);
 }
 
 function rt_getType()
