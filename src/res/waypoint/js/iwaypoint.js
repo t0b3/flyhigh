@@ -349,7 +349,7 @@ function wayPtChanged(event, wayPt)
 
 function zoomToWayPt(wayPt)
 {
-  map.setCenter(wayPt.getPosition());
+  map.panTo(wayPt.getPosition());
   map.setZoom(13);
 }
 
@@ -357,7 +357,7 @@ function updateWayPtAlt(wayPt)
 {
   var req;
 
-    req = "https://api.opentopodata.org/v1/eudem25m?locations=";
+  req = "https://api.opentopodata.org/v1/eudem25m?locations=";
   req += wayPt.getPosition().lat;
   req += ",";
   req += wayPt.getPosition().lng;

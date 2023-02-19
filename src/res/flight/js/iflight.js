@@ -409,7 +409,7 @@ function updateCursorClick(pos)
   var index;
 
   index = Math.round(pos * flight.getTrackPts().length / plot.getPlotAreaWidth());
-  map.setCenter(flight.getTrackPtAt(index));
+  map.panTo(flight.getTrackPtAt(index));
   map.setZoom(14);
 }
 
