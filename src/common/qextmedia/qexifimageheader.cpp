@@ -1771,13 +1771,15 @@ void QExifImageHeader::writeExifValue(QDataStream &stream, const QExifValue &val
 {
     switch (value.type()) {
     case QExifValue::Byte:
-        if (value.count() > 4)
+        if (value.count() > 4) {
             foreach (quint8 byte, value.toByteVector())
                 stream << byte;
+	}
         break;
     case QExifValue::Undefined:
-        if (value.count() > 4)
+        if (value.count() > 4) {
             stream.device()->write(value.toByteArray());
+	}
         break;
     case QExifValue::Ascii:
         if (value.count() > 4) {
@@ -1787,29 +1789,34 @@ void QExifImageHeader::writeExifValue(QDataStream &stream, const QExifValue &val
         }
         break;
     case QExifValue::Short:
-        if (value.count() > 2)
+        if (value.count() > 2) {
             foreach(quint16 shrt, value.toShortVector())
                 stream << shrt;
+	}
         break;
     case QExifValue::Long:
-        if(value.count() > 1)
+        if(value.count() > 1) {
             foreach (quint32 lng, value.toLongVector())
                 stream << lng;
+	}
         break;
     case QExifValue::SignedLong:
-        if (value.count() > 1)
+        if (value.count() > 1) {
             foreach(qint32 lng, value.toSignedLongVector())
                 stream << lng;
+	}
         break;
     case QExifValue::Rational:
-        if (value.count() > 0)
+        if (value.count() > 0) {
             foreach (QExifURational rational, value.toRationalVector())
                 stream << rational;
+	}
         break;
     case QExifValue::SignedRational:
-        if (value.count() > 0)
+        if (value.count() > 0) {
             foreach (QExifSRational rational, value.toSignedRationalVector())
                 stream << rational;
+	}
         break;
     default:
         qWarning() << "Invalid Ifd Type" << value.type();
