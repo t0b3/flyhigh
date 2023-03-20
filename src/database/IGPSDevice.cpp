@@ -87,7 +87,7 @@ void IGPSDevice::setLastModified(FieldType field)
 	switch(field)
 	{
 		case Flights: case WayPoints: case Routes: case AirSpaces:
-			m_lastModifiedList[field] = QDateTime::currentDateTime().toTime_t();
+			m_lastModifiedList[field] = QDateTime::currentDateTime().toSecsSinceEpoch();
 		break;
 		default:
 		break;

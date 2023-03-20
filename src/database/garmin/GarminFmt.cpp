@@ -164,7 +164,7 @@ void GarminFmt::setBrecord(GPS_PTrack trk, QString &line)
 
 	//	B122548 4708901N 00832137E A00977 00999 000
 
-	dateTime.setTime_t(trk->Time);
+	dateTime.setSecsSinceEpoch(trk->Time);
 
 	line = "B";
 	line += dateTime.toString("hhmmss");

@@ -97,7 +97,7 @@ DatabaseWidget::DatabaseWidget(QWidget* parent, const QString& title)
 	vlay->setSpacing(0);
 
 
-	layout->setMargin(0);
+	layout->setContentsMargins(0, 0, 0, 0);
 	layout->addWidget(sqliteSettings);
 	layout->addStretch();
 

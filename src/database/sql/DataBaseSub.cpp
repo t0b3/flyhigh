@@ -87,7 +87,7 @@ void DataBaseSub::setLastModified(const QString &field)
 
   curTime = QDateTime::currentDateTime();
 	date = curTime.toString("yyyy.MM.dd hh:mm:ss");
-	m_lastModified = curTime.toTime_t();
+	m_lastModified = curTime.toSecsSinceEpoch();
 
 	if(lastModified(field) > 1)
 	{
@@ -115,7 +115,7 @@ int DataBaseSub::lastModified(const QString &field)
 
   if(query.exec() && query.first())
 	{
-		time = query.value(0).toDateTime().toTime_t();
+		time = query.value(0).toDateTime().toSecsSinceEpoch();
 	}
 
 	return time;

@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1.0)
 
 project(flyhigh)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
@@ -19,8 +19,6 @@ find_package(Qt5Widgets 5.15 REQUIRED)
 find_package(Qt5Xml 5.15 REQUIRED)
 find_package(Qt5WebEngine 5.15 REQUIRED)
 find_package(Qt5WebEngineWidgets 5.15 REQUIRED)
-
-set(QT_USE_QTWEBKIT TRUE)
 
 # default build type is Release
 if(NOT CMAKE_BUILD_TYPE)
@@ -54,6 +52,7 @@ if(NOT FLYHIGH_DOC_DIR)
  set(FLYHIGH_DOC_DIR "${CMAKE_INSTALL_PREFIX}/usr/share/doc/flyhigh")
 endif()
 
+add_compile_definitions(QT_DISABLE_DEPRECATED_BEFORE=0x050F00)
 add_definitions(-Wall -fPIC -msse2)
 
 include(Functions.cmake) # custom functions

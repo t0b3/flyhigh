@@ -54,7 +54,7 @@ DeviceConnectionWidget::DeviceConnectionWidget(QWidget* parent, const QString& t
   deviceBoxLayout->addWidget(m_pDeviceLineSpeed);
   deviceBoxLayout->setSpacing(5);
 
-  layout->setMargin(0);
+  layout->setContentsMargins(0, 0, 0, 0);
   layout->addWidget(deviceSettings);
   layout->addStretch();
 
