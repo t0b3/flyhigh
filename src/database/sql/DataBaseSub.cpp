@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <QDateTime>
-#include <QRegExp>
 #include <QSqlQuery>
 #include <QVariant>
 #include "DataBaseSub.h"
