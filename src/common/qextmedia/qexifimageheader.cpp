@@ -49,7 +49,7 @@
 #include <QBuffer>
 #include <QDateTime>
 #include <QtDebug>
-#include <QTextCodec>
+//#include <QTextCodec>
 
 /*!
     \typedef QExifSRational
@@ -295,6 +295,7 @@ QExifValue::QExifValue( const QString &value, TextEncoding encoding )
     case AsciiEncoding:
         d = new QExifUndefinedValuePrivate( QByteArray::fromRawData( "ASCII\0\0\0", 8 ) + value.toLatin1() );
         break;
+/*
     case JisEncoding:
         {
             QTextCodec *codec = QTextCodec::codecForName( "JIS X 0208" );
@@ -309,6 +310,7 @@ QExifValue::QExifValue( const QString &value, TextEncoding encoding )
                 d = new QExifUndefinedValuePrivate( QByteArray::fromRawData( "UNICODE\0", 8 ) + codec->fromUnicode( value ) );
         }
         break;
+*/
     case UndefinedEncoding:
         d = new QExifUndefinedValuePrivate( QByteArray::fromRawData( "\0\0\0\0\0\0\0\\0", 8 ) + value.toLocal8Bit() );
         break;
@@ -531,6 +533,7 @@ QString QExifValue::toString() const
             {
             case AsciiEncoding:
                 return QString::fromLatin1( string.constData(), string.length() );
+/*
             case JisEncoding:
                 {
                     QTextCodec *codec = QTextCodec::codecForName( "JIS X 0208" );
@@ -544,6 +547,7 @@ QString QExifValue::toString() const
                     if( codec )
                         return codec->toUnicode( string );
                 }
+*/
             case UndefinedEncoding:
                 return QString::fromLocal8Bit( string.constData(), string.length() );
             default:
