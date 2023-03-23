@@ -1084,7 +1084,6 @@ double Protocol5020::parseDeg(const QString &degToken, const QString &dirToken)
 {
 	Tokenizer subTokenizer;
 	QString subToken;
-	QChar dir;
 	int intValue;
 	double dValue;
 	double deg;

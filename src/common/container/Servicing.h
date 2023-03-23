@@ -55,7 +55,6 @@ class Servicing
 
 	private:
 		int m_id;
-		uint m_nr;
 		Glider m_glider;
 		QDate m_date;
 		QString m_resp;
