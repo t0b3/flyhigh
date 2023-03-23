@@ -23,9 +23,9 @@
 
 #include <QDomDocument>
 #include <QPrinter>
+#include <QStringList>
 #include "MDIWindow.h"
 
-class QStringList;
 class QTableWidget;
 
 class TableWindow: public MDIWindow
