@@ -23,6 +23,7 @@
 
 #include <QVector>
 #include <QWebEngineView>
+#include <QNetworkReply>
 
 class QNetworkAccessManager;
 class QProgressBar;
