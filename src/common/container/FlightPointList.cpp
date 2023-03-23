@@ -29,7 +29,7 @@ FlightPointList::FlightPointList(bool dataOwner)
 
 FlightPointList::~FlightPointList()
 {
-//  clear();
+  clear();
 }
 
 void FlightPointList::setDataOwner(bool dataOwner)
@@ -39,7 +39,7 @@ void FlightPointList::setDataOwner(bool dataOwner)
 
 void FlightPointList::push_back(FlightPoint *pFlightPoint)
 {
-	return m_flightPointList.push_back(pFlightPoint);
+  return m_flightPointList.push_back(pFlightPoint);
 }
 
 void FlightPointList::clear()
@@ -59,27 +59,27 @@ void FlightPointList::clear()
 
 uint FlightPointList::size() const
 {
-	return m_flightPointList.size();
+  return m_flightPointList.size();
 }
 
 FlightPoint* FlightPointList::operator[] (int index)
 {
-	return m_flightPointList[index];
+  return m_flightPointList[index];
 }
 
 const FlightPoint* FlightPointList::operator[] (int index) const
 {
-	return m_flightPointList[index];
+  return m_flightPointList[index];
 }
 
 FlightPoint* FlightPointList::at(int index)
 {
-	return m_flightPointList.at(index);
+  return m_flightPointList.at(index);
 }
 
 const FlightPoint* FlightPointList::at(int index) const
 {
-	return m_flightPointList.at(index);
+  return m_flightPointList.at(index);
 }
 
 const FlightPoint* FlightPointList::at(const QTime &time) const
@@ -112,96 +112,96 @@ FlightPointList::iterator FlightPointList::end()
 
 int FlightPointList::firstValidFlightData() const
 {
-	int index = -1;
-	int lastIndex = (size() - 2);
-	int fpNr;
+  int index = -1;
+  int lastIndex = (size() - 2);
+  int fpNr;
 
-	for(fpNr=0; fpNr<lastIndex; fpNr++)
-	{
-		if(speedH(fpNr, fpNr+1) > 2.777777)
-		{
-			index = fpNr;
-			break;
-		}
-	}
+  for(fpNr=0; fpNr<lastIndex; fpNr++)
+  {
+    if(speedH(fpNr, fpNr+1) > 2.777777)
+    {
+      index = fpNr;
+      break;
+    }
+  }
 
-	return index;
+  return index;
 }
 
 int FlightPointList::lastValidFlightData() const
 {
-	int index = -1;
-	int lastIndex = (size() - 2);
-	int fpNr;
+  int index = -1;
+  int lastIndex = (size() - 2);
+  int fpNr;
 
-	for(fpNr=lastIndex; fpNr>0; fpNr--)
-	{
-		if(speedH(fpNr, fpNr+1)  > 0.5)
-		{
-			index = fpNr;
-			break;
-		}
-	}
+  for(fpNr=lastIndex; fpNr>0; fpNr--)
+  {
+    if(speedH(fpNr, fpNr+1)  > 0.5)
+    {
+      index = fpNr;
+      break;
+    }
+  }
 
-	return index;
+  return index;
 }
 
 double FlightPointList::speedH(uint index1, uint index2) const
 {
-	double deltaTime;
-	uint nFlightPoints = size();
-	double speedH = - 1.0;
-	double distance;
+  double deltaTime;
+  uint nFlightPoints = size();
+  double speedH = - 1.0;
+  double distance;
 
-	if((index1 < nFlightPoints) && (index2 < nFlightPoints))
-	{
-		distance = (double)m_flightPointList[index1]->pos().distance(m_flightPointList[index2]->pos());
-		deltaTime = (double)m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
+  if((index1 < nFlightPoints) && (index2 < nFlightPoints))
+  {
+    distance = (double)m_flightPointList[index1]->pos().distance(m_flightPointList[index2]->pos());
+    deltaTime = (double)m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
 
-		if(deltaTime > 0.0)
-		{
-			speedH = (distance / deltaTime);
-		}
-	}
+    if(deltaTime > 0.0)
+    {
+      speedH = (distance / deltaTime);
+    }
+  }
 
-	return speedH;
+  return speedH;
 }
 
 double FlightPointList::speedV(uint index1, uint index2) const
 {
-	double deltaTime;
-	uint nFlightPoints = size();
-	double speedV = - 1.0;
-	double deltaAlt;
+  double deltaTime;
+  uint nFlightPoints = size();
+  double speedV = - 1.0;
+  double deltaAlt;
 
-	if((index1 < nFlightPoints) && (index2 < nFlightPoints))
-	{
-		deltaAlt = (double)m_flightPointList[index2]->alt() - m_flightPointList[index1]->alt();
-		deltaTime = (double)m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
+  if((index1 < nFlightPoints) && (index2 < nFlightPoints))
+  {
+    deltaAlt = (double)m_flightPointList[index2]->alt() - m_flightPointList[index1]->alt();
+    deltaTime = (double)m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
 
-		if(deltaTime > 0.0)
-		{
-			speedV = (deltaAlt / deltaTime);
-		}
-	}
+    if(deltaTime > 0.0)
+    {
+      speedV = (deltaAlt / deltaTime);
+    }
+  }
 
-	return speedV;
+  return speedV;
 }
 
 int FlightPointList::duration(uint index1, uint index2) const
 {
-	int duration = -1;
-	uint nFlightPoints = size();
-	bool valid;
+  int duration = -1;
+  uint nFlightPoints = size();
+  bool valid;
 
-	valid = ((index1 < nFlightPoints) && (index2 < nFlightPoints));
+  valid = ((index1 < nFlightPoints) && (index2 < nFlightPoints));
 
-	if(valid)
-	{
-		duration = m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
-	}
+  if(valid)
+  {
+    duration = m_flightPointList[index1]->time().secsTo(m_flightPointList[index2]->time());
+  }
 
-	return duration;
+  return duration;
 }
 
 #define dot(u,v)   ((u).lon() * (v).lon() + (u).lat() * (v).lat())
@@ -222,8 +222,12 @@ void FlightPointList::simplify(FlightPointList &simpleList) const
   int prev;
   int end;
 
-  simpleList.setDataOwner(false);
   size = m_flightPointList.size();
+
+  if(size < 1)
+    return;
+
+  simpleList.setDataOwner(false);
 
   // STAGE 1. Vertex Reduction within tolerance of prior vertex cluster
   vtxBuff.push_back(m_flightPointList[0]);              // start at the beginning
@@ -264,12 +268,12 @@ void FlightPointList::simplify(FlightPointList &simpleList) const
 
 void FlightPointList::boundBox(BoundBox &bbox)
 {
-	uint index;
+  uint index;
 
-	for(index=0; index<size(); index++)
-	{
+  for(index=0; index<size(); index++)
+  {
     bbox.setMinMax(m_flightPointList[index]->pos());
-	}
+  }
 }
 
 void FlightPointList::setHasTrueAirSpeed(bool has)
@@ -280,6 +284,14 @@ void FlightPointList::setHasTrueAirSpeed(bool has)
 bool FlightPointList::hasTrueAirSpeed() const
 {
   return m_hasTas;
+}
+
+FlightPointList& FlightPointList::operator=(const FlightPointList &flightPointList)
+{
+  m_flightPointList = flightPointList.m_flightPointList;
+  m_hasTas = flightPointList.m_hasTas;
+  m_dataOwner = false;
+  return *this;
 }
 
 void FlightPointList::douglasPeucker(const FlighPointListType &ptList, int begin, int end,

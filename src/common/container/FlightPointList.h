@@ -30,62 +30,68 @@ class BoundBox;
 
 class FlightPointList
 {
-	public:
+  public:
     typedef QVector<FlightPoint*> FlighPointListType;
 
     typedef FlighPointListType::iterator iterator;
 
-		typedef QVector<float> SogListType;
+    typedef QVector<float> SogListType;
 
-		typedef QVector<float> VarioListType;
+    typedef QVector<float> VarioListType;
 
-		FlightPointList(bool dataOwner = true);
+    FlightPointList(bool dataOwner = true);
 
-		~FlightPointList();
+    ~FlightPointList();
 
-		void setDataOwner(bool dataOwner);
+    void setDataOwner(bool dataOwner);
 
-		void push_back(FlightPoint *pFlightPoint);
+    void push_back(FlightPoint *pFlightPoint);
 
-		void clear();
+    void clear();
 
-		uint size() const;
+    uint size() const;
 
-		int firstValidFlightData() const;
+    int firstValidFlightData() const;
 
-		int lastValidFlightData() const;
+    int lastValidFlightData() const;
 
-		// returns the speed in m/s
-		double speedH(uint index1, uint index2) const;
+    // returns the speed in m/s
+    double speedH(uint index1, uint index2) const;
 
-		double speedV(uint index1, uint index2) const;
+    double speedV(uint index1, uint index2) const;
 
-		// returns duration in s
-		int duration(uint index1, uint index2) const;
+    // returns duration in s
+    int duration(uint index1, uint index2) const;
 
-		FlightPoint* operator[] (int index);
+    FlightPoint* operator[] (int index);
 
-		const FlightPoint* operator[] (int index) const;
+    const FlightPoint* operator[] (int index) const;
 
     FlightPoint* at(int index);
 
-		const FlightPoint* at(int index) const;
+    const FlightPoint* at(int index) const;
 
-		const FlightPoint* at(const QTime &time) const;
+    const FlightPoint* at(const QTime &time) const;
 
-		iterator begin();
+    iterator begin();
 
-		iterator end();
+    iterator end();
 
-		void simplify(FlightPointList &fpList) const;
+    void simplify(FlightPointList &fpList) const;
 
-		void boundBox(BoundBox &bbox);
+    void boundBox(BoundBox &bbox);
 
-		void setHasTrueAirSpeed(bool has);
+    void setHasTrueAirSpeed(bool has);
 
-		bool hasTrueAirSpeed() const;
+    bool hasTrueAirSpeed() const;
 
-	private:
+    /**
+      Makes a shallow copy of the list. Ownership of content stays at
+      flightPointList.
+    */
+    FlightPointList& operator=(const FlightPointList &flightPointList);
+
+  private:
     typedef QVector<bool> MarkerBuffer;
 
     FlighPointListType m_flightPointList;
