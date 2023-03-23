@@ -21,7 +21,7 @@
 #include <QDate>
 #include <QDomDocument>
 #include <QFile>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QFileDialog>
 #include <QHeaderView>
 #include <QStringList>
@@ -174,7 +174,7 @@ void TableWindow::exportTable()
 	QDomDocument doc;
 
 	// suggest window title as filename, but replace uncommon characters
-	fileName = this->windowTitle().replace(QRegExp("[^a-zA-Z0-9-_]"), "_");
+	fileName = this->windowTitle().replace(QRegularExpression("[^a-zA-Z0-9-_]"), "_");
 	// and append date
 	fileName += QDate::currentDate().toString("_dd_MM_yyyy");
 

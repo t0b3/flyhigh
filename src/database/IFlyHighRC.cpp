@@ -21,7 +21,7 @@
 #include <QtCore/QDir>
 #include <QtCore/QStringList>
 #include <QtCore/QSettings>
-#include <QtCore/QRegExp>
+#include <QtCore/QRegularExpression>
 #include <QtSerialPort/QSerialPortInfo>
 #include "IFlyHighRC.h"
 
@@ -298,9 +298,9 @@ const QStringList& IFlyHighRC::deviceLineList() const
     // filter for /dev/ttyS* or /dev/ttyUSB* on unix-like platforms
     // else we get all the tty's and console devices, too
 #ifdef Q_OS_UNIX
-    QRegExp rx = QRegExp(".*tty(S|USB).*");
+    QRegularExpression rx = QRegularExpression(".*tty(S|USB).*");
 
-    if(rx.indexIn(port.portName()) != -1)
+    if(port.portName().indexOf(rx) != -1)
 #endif
     {
       m_deviceLineList += port.portName();

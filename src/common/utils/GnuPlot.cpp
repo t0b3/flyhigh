@@ -21,7 +21,6 @@
 #include <QTemporaryFile>
 #include <QProcess>
 #include <QStringList>
-#include <QRegExp>
 #include <QDir>
 #include <QProcess>
 #include "IFlyHighRC.h"

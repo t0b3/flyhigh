@@ -21,7 +21,7 @@
 #include <QFile>
 #include <QBuffer>
 #include <QDebug>
-#include <QRegExp>
+#include <QRegularExpression>
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
@@ -239,7 +239,7 @@ void OpenAirFileParser::parseArc(char *pRecord, OpenAir *pOpenAir)
   // DB 46:10.92N 7:13.98E 46:13.00N 7:13.33E
   // DB 48:50:07 N 002:57:55 E,48:52:28 N 003:02:09 E
 	parseCoordinate(pRecord + 3, beginLat, beginLon);
-  parseCoordinate(pRecord + str.indexOf(QRegExp("[EW]")) + 1, endLat, endLon);
+  parseCoordinate(pRecord + str.indexOf(QRegularExpression("[EW]")) + 1, endLat, endLon);
 
 	// center
 	pCenter = new OpenAirItemPoint(OpenAirItem::Center);
@@ -283,8 +283,8 @@ bool OpenAirFileParser::parseCoordinate(char *pRecord, double &lat, double &lon)
   bool success;
 
   str = pRecord;
-  begin = str.indexOf(QRegExp("[0-9]"));
-  end = str.indexOf(QRegExp("[NS]"));
+  begin = str.indexOf(QRegularExpression("[0-9]"));
+  end = str.indexOf(QRegularExpression("[NS]"));
   success = ((end > 0) && (end < str.size()));
 
   if(success)
@@ -312,8 +312,8 @@ bool OpenAirFileParser::parseCoordinate(char *pRecord, double &lat, double &lon)
 
   if(success)
   {
-    begin = str.indexOf(QRegExp("[0-9]"), end);
-    end = str.indexOf(QRegExp("[EW]"), begin);
+    begin = str.indexOf(QRegularExpression("[0-9]"), end);
+    end = str.indexOf(QRegularExpression("[EW]"), begin);
     success = ((end > 0) && (end < str.size()));
 
     if(success)

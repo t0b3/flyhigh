@@ -238,7 +238,7 @@ void AirSpaceWindow::file_open()
     IFlyHighRC::pInstance()->setLastDir(QFileInfo(fileName).absoluteDir().absolutePath());
     TableWindow::setCursor(QCursor(Qt::WaitCursor));
 
-    if(fileName.contains(QRegExp("faf$|fas$")))
+    if(fileName.contains(QRegularExpression("faf$|fas$")))
     {
       parser.setDefaultUnit(OpenAirFileParser::Meter);
     }

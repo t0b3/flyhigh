@@ -21,6 +21,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QProgressBar>
+#include <QRegularExpression>
 #include <QWebEnginePage>
 #include <QWebEngineSettings>
 #include <math.h>
@@ -180,7 +181,7 @@ QString WebMap::escape(const QString &str)
   QString locStr;
 
   locStr = str;
-  locStr.replace(QRegExp("('|\")"), "\\\\1");
+  locStr.replace(QRegularExpression("('|\")"), "\\\\1");
 
   return locStr;
 }

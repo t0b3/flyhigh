@@ -19,7 +19,6 @@
  ***************************************************************************/
 
 #include <QDateTime>
-#include <QRegExp>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QVariant>

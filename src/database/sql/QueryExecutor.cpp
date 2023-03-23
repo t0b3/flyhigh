@@ -20,6 +20,8 @@
 
 #include <QDebug>
 #include <QSqlError>
+#include <QRegularExpression>
+#include <QRegularExpressionMatch>
 #include "QueryStore.h"
 #include "QueryExecutor.h"
 
@@ -109,13 +111,14 @@ QSqlQuery QueryExecutor::executeStatement(const QString& sql,
 	if (!bindings.empty())
 	{
 		// binding parameters must follow this pattern:
-		QRegExp paramPat(":[A-Za-z0-9]+");
+		QRegularExpression paramPat(":[A-Za-z0-9]+");
 		int pos=0;
+		QRegularExpressionMatch match;
 
 		// check for all parameters
-		while ((pos=paramPat.indexIn(sql, pos))!=-1)
+		while ((pos=sql.indexOf(paramPat, pos, &match))!=-1)
 		{
-				QString param = paramPat.cap(0);
+				QString param = match.captured();
 
 				TBindMap::const_iterator binditer = bindings.constFind(param);
 				if (binditer == bindings.constEnd())
@@ -128,7 +131,7 @@ QSqlQuery QueryExecutor::executeStatement(const QString& sql,
 					query.bindValue(param, binditer.value());
 				}
 				// move on
-				pos += paramPat.matchedLength();
+				pos += match.capturedLength();
 		}
 	}
 
