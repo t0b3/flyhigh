@@ -9,9 +9,16 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 
-# at least Qt 5.15 is required.
-set(QT_MIN_VERSION 5.15.0)
-set(QT_VERSION_BASE "Qt5")
+set (BUILD_WITH_QT6 FALSE CACHE BOOL "Enable (experimental) Qt6 support")
+if (BUILD_WITH_QT6)
+  set(QT_MIN_VERSION 6.4.0)
+  set(QT_VERSION_BASE "Qt6")
+else()
+  # at least Qt 5.15 is required.
+  set(QT_MIN_VERSION 5.15.0)
+  set(QT_VERSION_BASE "Qt5")
+endif()
+
 find_package(${QT_VERSION_BASE} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Network
 	PrintSupport SerialPort Sql WebEngineWidgets Widgets Xml)
 

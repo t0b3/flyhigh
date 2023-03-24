@@ -19,7 +19,11 @@
 ***************************************************************************/
 
 #include <QNetworkAccessManager>
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+#include <QNetworkInformation>
+#else
 #include <QNetworkConfigurationManager>
+#endif
 #include <QEventLoop>
 #include <QUrl>
 #include <QNetworkRequest>
@@ -47,9 +51,14 @@ const QString XContestUploader::XCONTEST_API_KEY = "75F62615B235B6A0-C139EAE8D66
 XContestUploader::XContestUploader(Account* pAccount)
 {
   m_pManager = new QNetworkAccessManager();
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+  m_pNetworkInformation = QNetworkInformation::instance();
+  m_pNetworkInformation->loadDefaultBackend();
+#else
   // with these 2 lines, network availability may be checked _before_ doing any requests:
   QNetworkConfigurationManager netConfig;
   m_pManager->setConfiguration(netConfig.defaultConfiguration());
+#endif
 
   // network reply triggers our state machine:
   QObject::connect(m_pManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(handleEvent(QNetworkReply*)));
@@ -79,7 +88,11 @@ void XContestUploader::uploadFlight(Flight* pFlight)
   m_pFlight = pFlight;
 
   // check network availability
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+  if(m_pNetworkInformation->reachability()==QNetworkInformation::Reachability::Online)
+#else
   if(m_pManager->networkAccessible()==QNetworkAccessManager::NotAccessible)
+#endif
   {
     emit error(tr("Network not accessible. Check connections!"));
     return;

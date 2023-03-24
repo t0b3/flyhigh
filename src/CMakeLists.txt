@@ -75,6 +75,7 @@ target_link_libraries(flyhigh
   ${QT_VERSION_BASE}Sql
   ${QT_VERSION_BASE}SerialPort
   ${QT_VERSION_BASE}WebEngineWidgets
+  ${QT_VERSION_BASE}WebEngineCore
   ${QT_VERSION_BASE}Widgets
   ${QT_VERSION_BASE}Xml)
 

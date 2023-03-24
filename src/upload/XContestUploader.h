@@ -31,6 +31,9 @@ class QHttpMultiPart;
 class QNetworkRequest;
 class QNetworkReply;
 class QNetworkAccessManager;
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+class QNetworkInformation;
+#endif
 class QByteArray;
 class QJsonDocument;
 class QJsonObject;
@@ -93,6 +96,9 @@ private:
   QString m_SessionId;
   Flight* m_pFlight;
   QNetworkAccessManager* m_pManager;
+#if QT_VERSION > QT_VERSION_CHECK(6, 0, 0)
+  QNetworkInformation* m_pNetworkInformation;
+#endif
   XContestAdditionalInfoDlg* m_pInfoDlg;
   QMap<QString,QString> m_Controls;
 
