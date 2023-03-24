@@ -321,14 +321,17 @@
    <slot>newGlider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>370</x>
+     <y>82</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>278</x>
+     <y>84</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>newGlider()</slot>
+ </slots>
 </ui>

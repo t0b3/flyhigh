@@ -184,12 +184,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>310</x>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>283</x>
+     <y>354</y>
     </hint>
    </hints>
   </connection>
@@ -200,12 +200,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>370</x>
+     <y>315</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>423</x>
+     <y>360</y>
     </hint>
    </hints>
   </connection>
@@ -216,14 +216,17 @@
    <slot>newGlider()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>390</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>244</x>
+     <y>35</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>newGlider()</slot>
+ </slots>
 </ui>

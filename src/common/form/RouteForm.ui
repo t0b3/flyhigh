@@ -246,12 +246,12 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>430</x>
+     <y>445</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>410</x>
+     <y>483</y>
     </hint>
    </hints>
   </connection>
@@ -262,12 +262,12 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>490</x>
+     <y>445</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>536</x>
+     <y>487</y>
     </hint>
    </hints>
   </connection>
@@ -278,12 +278,12 @@
    <slot>toRight()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>250</x>
+     <y>227</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>176</x>
+     <y>290</y>
     </hint>
    </hints>
   </connection>
@@ -294,12 +294,12 @@
    <slot>down()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>520</x>
+     <y>270</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>507</x>
+     <y>369</y>
     </hint>
    </hints>
   </connection>
@@ -310,12 +310,12 @@
    <slot>up()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>520</x>
+     <y>187</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>492</x>
+     <y>105</y>
     </hint>
    </hints>
   </connection>
@@ -326,14 +326,20 @@
    <slot>remove()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>520</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>463</x>
+     <y>243</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>toRight()</slot>
+  <slot>down()</slot>
+  <slot>up()</slot>
+  <slot>remove()</slot>
+ </slots>
 </ui>

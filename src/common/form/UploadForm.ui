@@ -202,12 +202,12 @@
    <slot>newAccount()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>352</x>
+     <y>50</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>179</x>
+     <y>36</y>
     </hint>
    </hints>
   </connection>
@@ -218,14 +218,18 @@
    <slot>validate()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>234</x>
-     <y>35</y>
+     <x>282</x>
+     <y>42</y>
     </hint>
     <hint type="destinationlabel">
-     <x>219</x>
-     <y>74</y>
+     <x>280</x>
+     <y>108</y>
     </hint>
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>newAccount()</slot>
+  <slot>validate()</slot>
+ </slots>
 </ui>

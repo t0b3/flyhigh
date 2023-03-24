@@ -50,7 +50,7 @@
        <x>0</x>
        <y>0</y>
        <width>141</width>
-       <height>352</height>
+       <height>348</height>
       </rect>
      </property>
      <attribute name="label">
@@ -77,7 +77,7 @@
      <x>0</x>
      <y>0</y>
      <width>585</width>
-     <height>19</height>
+     <height>30</height>
     </rect>
    </property>
    <widget class="QMenu" name="File">
@@ -223,4 +223,8 @@
    </hints>
   </connection>
  </connections>
+ <slots>
+  <slot>read()</slot>
+  <slot>write()</slot>
+ </slots>
 </ui>
