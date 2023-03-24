@@ -64,7 +64,7 @@ DeviceConnectionParameters DeviceConnectionParameters::defaultParameters()
 {
   DeviceConnectionParameters parameters;
 
-  parameters.m_deviceType = IFlyHighRC::DevFlytec6015;
+  parameters.m_deviceType = IFlyHighRC::pInstance()->deviceNameList()[IFlyHighRC::DevFlytec6015];
   parameters.m_port = IFlyHighRC::pInstance()->deviceLineList().first();
   parameters.m_lineSpeed = IFlyHighRC::pInstance()->deviceSpeedList().first();
 
