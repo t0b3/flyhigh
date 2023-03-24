@@ -15,17 +15,17 @@ include_directories(${CMAKE_SOURCE_DIR}
                     ${CMAKE_SOURCE_DIR}/src/settings/flytec6015
                     ${CMAKE_SOURCE_DIR}/src/tools/dbmigrator
                     ${CMAKE_SOURCE_DIR}/src/upload
-                    ${Qt5_INCLUDE_DIRS}
-                    ${Qt5Core_INCLUDE_DIRS}
-                    ${Qt5Gui_INCLUDE_DIRS}
-                    ${Qt5Network_INCLUDE_DIRS}
-                    ${Qt5PrintSupport_INCLUDE_DIRS}
-                    ${Qt5Sql_INCLUDE_DIRS}
-                    ${Qt5SerialPort_INCLUDE_DIRS}
-                    ${Qt5WebEngine_INCLUDE_DIRS}
-                    ${Qt5WebEngineWidgets_INCLUDE_DIRS}
-                    ${Qt5Widgets_INCLUDE_DIRS}
-                    ${Qt5Xml_INCLUDE_DIRS})
+                    ${${QT_VERSION_BASE}_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Core_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Gui_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Network_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}PrintSupport_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}SerialPort_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Sql_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}WebEngineWidgets_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Widgets_INCLUDE_DIRS}
+                    ${${QT_VERSION_BASE}Xml_INCLUDE_DIRS}
+                    )
 
 add_subdirectory(analysis)
 add_subdirectory(common)
@@ -68,8 +68,15 @@ target_link_libraries(flyhigh
   res
   qextmedia
   upload
-  Qt5Core Qt5Gui Qt5Network Qt5PrintSupport Qt5Sql Qt5SerialPort Qt5WebEngine
-  Qt5WebEngineWidgets Qt5Widgets Qt5Xml)
+  ${QT_VERSION_BASE}Core
+  ${QT_VERSION_BASE}Gui
+  ${QT_VERSION_BASE}Network
+  ${QT_VERSION_BASE}PrintSupport
+  ${QT_VERSION_BASE}Sql
+  ${QT_VERSION_BASE}SerialPort
+  ${QT_VERSION_BASE}WebEngineWidgets
+  ${QT_VERSION_BASE}Widgets
+  ${QT_VERSION_BASE}Xml)
 
 # install executable
 install(TARGETS flyhigh DESTINATION ${FLYHIGH_BIN_DIR} )

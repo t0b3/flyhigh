@@ -3,22 +3,17 @@ cmake_minimum_required(VERSION 3.1.0)
 project(flyhigh)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(CMAKE_AUTOMOC ON)
 SET(CMAKE_AUTOUIC ON)
 
 # at least Qt 5.15 is required.
-find_package(Qt5Core 5.15 REQUIRED)
-find_package(Qt5Gui 5.15 REQUIRED)
-find_package(Qt5Network 5.15 REQUIRED)
-find_package(Qt5PrintSupport REQUIRED)
-find_package(Qt5SerialPort REQUIRED)
-find_package(Qt5Sql 5.15 REQUIRED)
-find_package(Qt5Widgets 5.15 REQUIRED)
-find_package(Qt5Xml 5.15 REQUIRED)
-find_package(Qt5WebEngine 5.15 REQUIRED)
-find_package(Qt5WebEngineWidgets 5.15 REQUIRED)
+set(QT_MIN_VERSION 5.15.0)
+set(QT_VERSION_BASE "Qt5")
+find_package(${QT_VERSION_BASE} ${QT_MIN_VERSION} REQUIRED COMPONENTS Core Gui Network
+	PrintSupport SerialPort Sql WebEngineWidgets Widgets Xml)
 
 # default build type is Release
 if(NOT CMAKE_BUILD_TYPE)

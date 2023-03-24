@@ -6,7 +6,7 @@ add_subdirectory(waypoint)
 
 set(res_RC res.qrc)
 
-qt5_add_resources(res_RC_SRCS ${res_RC})
+qt_add_resources(res_RC_SRCS ${res_RC})
 
 add_library(res ${res_RC_SRCS})
 
