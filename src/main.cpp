@@ -20,7 +20,7 @@
 
 #include <QApplication>
 #include <QIcon>
-#include <QTextCodec>
+//#include <QTextCodec>
 #include "MainWindow.h"
 #include "IDbFile.h"
 #include "IFlyHighRC.h"
