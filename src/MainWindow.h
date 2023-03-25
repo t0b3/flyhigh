@@ -91,7 +91,7 @@ class MainWindow: public QMainWindow
 
     void updateMenuWindow();
 
-    void setActiveSubWindow(QWidget *pWin);
+    void setActiveSubWindow(QObject *pWin);
 
     void subWindowActivated(QMdiSubWindow *pSubWin);
 

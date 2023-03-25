@@ -76,7 +76,7 @@ MainWindow::MainWindow()
   connect(m_pMdiArea, SIGNAL(subWindowActivated(QMdiSubWindow*)), this, SLOT(subWindowActivated(QMdiSubWindow*)));
 
   m_pWinMapper = new QSignalMapper(this);
-  connect(m_pWinMapper, SIGNAL(mapped(QWidget*)), this, SLOT(setActiveSubWindow(QWidget*)));
+  connect(m_pWinMapper, SIGNAL(mappedObject(QObject*)), this, SLOT(setActiveSubWindow(QObject*)));
 
   QMainWindow::setWindowTitle("FlyHigh");
 
@@ -628,7 +628,7 @@ void MainWindow::updateMenuWindow()
   }
 }
 
-void MainWindow::setActiveSubWindow(QWidget *pWin)
+void MainWindow::setActiveSubWindow(QObject *pWin)
 {
   if(pWin != NULL)
   {
